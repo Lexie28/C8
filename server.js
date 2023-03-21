@@ -10,7 +10,7 @@ const knex = require('knex')({
     port : 3306,
     user : 'root',
     password : process.env.DATABASE_PASSWORD,
-    database : 'circle8'
+    database : 'world'
   }
 });
 
@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/helloworld', (req, res) => {
-  knex.select("*").from("product").then((result) => {
+  knex.select("*").from("country").then((result) => {
     res.send(result)
   })
 });
