@@ -37,6 +37,30 @@ app.get('/helloworld', (req, res) => {
   })
 });
 
+
+//Editing product
+app.patch('/products/:product_id', (req, res) => {
+  const { product_id } = req.params;
+  const { product_name, product_desc, product_price } = req.body;
+  
+  knex('product')
+    .where({ product_id })
+    .update({ product_name, product_desc, product_price })
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'Product updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the product' });
+    });
+});
+
+
+
 app.post('/register', (req, res) => {
   // Handle user registration
 });
