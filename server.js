@@ -14,13 +14,14 @@ const knex = require('knex')({
   }
 });
 
+
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
 
 const product = {
-  product_name: "Äpple",
+  product_name: "Banana",
   product_desc: "God",
   product_price: 100
 }
