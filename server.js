@@ -23,11 +23,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-const product = {
-  product_name: "Banana",
-  product_desc: "God",
-  product_price: 100
-}
 
 // Routes
 app.get('/', (req, res) => {
@@ -42,6 +37,26 @@ app.get('/helloworld', (req, res) => {
   knex.select("*").from("product").then((result) => {
     res.send(result)
   })
+});
+
+
+//Create a new product
+app.post('/product/create', (req, res) => {
+  const { product_name, product_desc, product_price } = req.body;
+  
+  knex('product')
+    .insert({ product_name, product_desc, product_price })
+    .then(result => {
+      if (result) {
+        res.status(200).json({ message: 'Product created successfully' });
+      } else {
+        res.status(500).json({ message: 'An error occurred while creating the product' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while creating the product' });
+    });
 });
 
 
@@ -65,9 +80,6 @@ app.patch('/products/:product_id', (req, res) => {
       res.status(500).json({ message: 'An error occurred while updating the product' });
     });
 });
-
-
-
 
 
 //------- USER -------
