@@ -1,3 +1,5 @@
+//import * as routes from C8/routes/user.js;
+
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,6 +17,7 @@ const knex = require('knex')({
 });
 
 
+
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
@@ -30,6 +33,10 @@ const product = {
 app.get('/', (req, res) => {
   res.send('Welcome to Circle Eight!');
 });
+
+
+//-------PRODUCT-------
+
 
 app.get('/helloworld', (req, res) => {
   knex.select("*").from("product").then((result) => {
@@ -60,8 +67,29 @@ app.patch('/products/:product_id', (req, res) => {
 });
 
 
-//user registration
-app.post('/userregistration', (req, res) => {
+
+
+
+//------- USER -------
+
+
+
+
+
+//app.route("/user").get(users.getUsers).post(users.addUser);
+//const user = require("./routes/user");
+//app.route("/users").get(user.get_users);
+
+//Get all users in the database
+app.get('/user/users', (req, res) => {
+  knex.select("*").from("user").then((result) => {
+    res.send(result)
+  })
+});
+
+
+//Registering a new user
+app.post('/user/registration', (req, res) => {
   const { user_name } = req.body;
   
   knex('user')
@@ -80,6 +108,49 @@ app.post('/userregistration', (req, res) => {
 });
 
 
+//Adding a like (/thumbs up) to a user
+app.patch('/user/like/:user_id', (req, res) => {
+  const { user_id } = req.params;
+
+  knex('user')
+    .where({ user_id })
+    .increment('num_likes', 1) // use the `increment` method to add 1 to `num_likes`
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'Product updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the product' });
+    });
+});
+
+
+//Adding a dislike (/thumbs down) to a user
+app.patch('/user/dislike/:user_id', (req, res) => {
+  const { user_id } = req.params;
+
+  knex('user')
+    .where({ user_id })
+    .increment('num_dislikes', 1) // use the `increment` method to add 1 to `num_likes`
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'Product updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the product' });
+    });
+});
+
+
+//-----------------
 
 app.post('/login', (req, res) => {
   // Handle user login
