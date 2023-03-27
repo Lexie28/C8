@@ -20,11 +20,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-const product = {
-  product_name: "Banana",
-  product_desc: "God",
-  product_price: 100
-}
+
 
 // Routes
 app.get('/', (req, res) => {
@@ -39,13 +35,13 @@ app.get('/helloworld', (req, res) => {
 
 
 //Editing product
-app.patch('/products/:product_id', (req, res) => {
-  const { product_id } = req.params;
-  const { product_name, product_desc, product_price } = req.body;
+app.patch('/products/:ID', (req, res) => {
+  const { ID } = req.params;
+  const { Name, CountryCode, District, Population } = req.body;
   
-  knex('product')
-    .where({ product_id })
-    .update({ product_name, product_desc, product_price })
+  knex('world')
+    .where({ ID })
+    .update({ Name, CountryCode, District, Population })
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'Product updated successfully' });
