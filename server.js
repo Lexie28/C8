@@ -101,4 +101,15 @@ wss.on('connection', function(ws, req) {
     var dataString = message.toString();
     console.log(dataString)
   })
+
+  ws.on('message', message => {
+    var dataString = message.toString();
+    if (dataString == "Hello") {
+        console.log(dataString)
+        ws.send("Hi from Node.js");
+    } else{
+        console.log(dataString)
+        ws.send("Are you not saying hi to me 🥺👉👈");
+    }
+}) 
 })
