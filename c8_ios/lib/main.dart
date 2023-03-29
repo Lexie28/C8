@@ -1,9 +1,15 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/io.dart';
+//import 'package:english_words/english_words.dart';
+//import 'dart:async';
+// for access to jsonEncode to encode the data
 
-void main() {
-  runApp(C8iOS());
+void main() async {
+  runApp(const C8iOS());
 }
 
 class C8iOS extends StatelessWidget {
@@ -14,11 +20,11 @@ class C8iOS extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'Circle Eight',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromARGB(255, 80, 125, 175)),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
         ),
         home: HomePage(),
       ),
@@ -27,64 +33,92 @@ class C8iOS extends StatelessWidget {
 }
 
 //  defines the data the app needs to function
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
+class MyAppState extends ChangeNotifier {}
 
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
-
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
-  }
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
 }
 
-class HomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> {
+  String? _message;
+
+  // this function will send message to our backend
+  void sendMessage(msg) {
+    IOWebSocketChannel? channel;
+
+    // connection might fail
+    try {
+      channel = IOWebSocketChannel.connect('ws://localhost:3000');
+    } catch (e) {
+      print("Error on connecting to websocket: " + e.toString());
+    }
+
+    channel?.sink.add(msg);
+
+    channel?.stream.listen((event) {
+      if (event!.isNotEmpty) {
+        print(event);
+        channel!.sink.close();
+      }
+    });
+
+    print(msg);
+  }
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var pair = appState.current;
-
-    IconData icon;
-    if (appState.favorites.contains(pair)) {
-      icon = Icons.favorite;
-    } else {
-      icon = Icons.favorite_border;
-    }
+    //var appState = context.watch<MyAppState>();
 
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BigCard(pair: pair),
+            Expanded(
+              child: Center(
+                child: TextField(
+                  onChanged: (e) => _message = e,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: TextButton(
+                  child: const Text("Send"),
+                  onPressed: () {
+                    if (_message!.isNotEmpty) {
+                      sendMessage(_message);
+                    }
+                  },
+                ),
+              ),
+            ),
+            BigCard(string: 'Circle Eight'),
+            SizedBox(height: 80),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Log In')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => const CreateAccount(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Create Account')),
             SizedBox(height: 30),
             Row(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    appState.toggleFavorite();
-                  },
-                  icon: Icon(icon),
-                  label: Text('Like'),
-                ), /*
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    appState.getNext();
-                  },
-                  child: Text('Next'),
-                ),*/
-              ],
+              children: [],
             ),
           ],
         ),
@@ -95,11 +129,10 @@ class HomePage extends StatelessWidget {
 
 class BigCard extends StatelessWidget {
   const BigCard({
-    super.key,
-    required this.pair,
+    required this.string,
   });
 
-  final WordPair pair;
+  final String string;
 
   @override
   Widget build(BuildContext context) {
@@ -114,129 +147,83 @@ class BigCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(40.0),
         child: Text(
-          'Circle Eight',
-          //pair.asPascalCase,
+          string,
           style: style,
-          semanticsLabel: "${pair.first} ${pair.second}",
         ),
       ),
     );
   }
 }
 
+class SmallCard extends StatelessWidget {
+  SmallCard({required this.string});
 
-/* import 'package:flutter/material.dart';
+  final String string;
 
-void main() {
-  runApp(const C8iOS());
-}
-
-class C8iOS extends StatelessWidget {
-  const C8iOS({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Nu testar vi Flutter',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blueGrey,
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displaySmall!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+
+    return Card(
+      color: theme.colorScheme.inversePrimary,
+      elevation: 5,
+      child: SizedBox(
+        height: 80,
+        width: 270,
+        child: Center(
+          child: Text(
+            string,
+            style: style,
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class LogIn extends StatelessWidget {
+  // TODO Logga in med Google!!
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  const LogIn({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have clicked the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        appBar: AppBar(
+          title: Text('Log In'),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            SizedBox(
+              height: 200,
+            ),
+            BigCard(string: 'Placeholder for Google login')
+          ]),
+        ));
   }
-}*/
+}
+
+class CreateAccount extends StatelessWidget {
+  // TODO Skapa konto med Google!!
+
+  const CreateAccount({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Log In'),
+        ),
+        body: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            SizedBox(
+              height: 200,
+            ),
+            BigCard(string: 'Placeholder for Google login')
+          ]),
+        ));
+  }
+}

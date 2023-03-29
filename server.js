@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express');
+const { Server } = require('ws');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
@@ -84,6 +85,20 @@ app.patch('/transactions/:id', (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+/*app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-});
+});*/
+
+
+const server = express()
+  .use((req, res) => res.send("Hejsan"))
+  .listen(PORT, () => console.log('Listening on ${PORT}'));
+
+const wss = new Server({ server });
+
+wss.on('connection', function(ws, req) {
+  ws.on('message', message => {
+    var dataString = message.toString();
+    console.log(dataString)
+  })
+})
