@@ -26,178 +26,58 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
+//init är att skapa alla tables med dom kolumnerna som vi bestämt
+//scaling (relational?) med MySQL eller i servern?
 
-// Routes
+
+// Basic trial
 app.get('/', (req, res) => {
   res.send('Welcome to Circle Eight!');
 });
 
 
+
+
+
 //-------PRODUCT-------
 
+//test, get all info from product table
 app.get('/helloworld', (req, res) => product.get_product(req, res, knex));
 
 //Create a new product
-app.post('/product/create', (req, res) => {
-  const { product_name, product_desc, product_price } = req.body;
-
-  knex('product')
-    .insert({ product_name, product_desc, product_price })
-    .then(result => {
-      if (result) {
-        res.status(200).json({ message: 'Product created successfully' });
-      } else {
-        res.status(500).json({ message: 'An error occurred while creating the product' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while creating the product' });
-    });
-});
-
+app.post('/product/create', (req,res) => product.create_product(req, res, knex));
 
 //Editing product
-app.patch('/products/:product_id', (req, res) => {
-  const { product_id } = req.params;
-  const { product_name, product_desc, product_price } = req.body;
-
-  knex('product')
-    .where({ product_id })
-    .update({ product_name, product_desc, product_price })
-    .then(result => {
-      if (result === 1) {
-        res.status(200).json({ message: 'Product updated successfully' });
-      } else {
-        res.status(404).json({ message: 'Product not found' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while updating the product' });
-    });
-});
-
+app.patch('/product/edit/:product_id', (req, res) => product.edit_product_all(req, res, knex));
 
 //Deleting product
-app.delete('/product/delete/:product_id', (req, res) => {
-  const { product_id } = req.params;
+app.delete('/product/delete/:product_id', (req, res) => product.delete_product(req, res, knex));
 
-  knex('product')
-    .where({ product_id })
-    .del()
-    .then(result => {
-      if (result) {
-        res.status(200).json({ message: 'Product deleted successfully' });
-      } else {
-        res.status(404).json({ message: 'Product not found' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while deleting the product' });
-    });
-});
 
 
 
 //------- USER -------
 
-
-
-//app.route("/user").get(users.getUsers).post(users.addUser);
-//const user = require("./routes/user");
-//app.route("/users").get(user.get_users);
-
 //Get all users in the database
-app.get('/user/users', (req, res) => {
-  knex.select("*").from("user").then((result) => {
-    res.send(result)
-  })
-});
-
+app.get('/user/users', (req, res) => user.get_users(req, res, knex));
 
 //Registering a new user
-app.post('/user/registration', (req, res) => {
-  const { user_name } = req.body;
-
-  knex('user')
-    .insert({ user_name })
-    .then(result => {
-      if (result) {
-        res.status(200).json({ message: 'User created successfully' });
-      } else {
-        res.status(500).json({ message: 'An error occurred while creating the user' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while creating the user' });
-    });
-});
-
+app.post('/user/registration', (req, res) => user.user_registration(req, res, knex));
 
 //Adding a like (/thumbs up) to a user
-app.patch('/user/like/:user_id', (req, res) => {
-  const { user_id } = req.params;
-
-  knex('user')
-    .where({ user_id })
-    .increment('num_likes', 1) // use the `increment` method to add 1 to `num_likes`
-    .then(result => {
-      if (result === 1) {
-        res.status(200).json({ message: 'User likes updated successfully' });
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while updating the user likes' });
-    });
-});
+app.patch('/user/like/:user_id', (req, res) => user.user_like(req, res, knex));
 
 
 //Adding a dislike (/thumbs down) to a user
-app.patch('/user/dislike/:user_id', (req, res) => {
-  const { user_id } = req.params;
-
-  knex('user')
-    .where({ user_id })
-    .increment('num_dislikes', 1) // use the `increment` method to add 1 to `num_likes`
-    .then(result => {
-      if (result === 1) {
-        res.status(200).json({ message: 'User dislikes updated successfully' });
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while updating the user dislikes' });
-    });
-});
-
+app.patch('/user/dislike/:user_id', (req, res) => user.user_dislike(req, res, knex));
 
 //Deleting user
-app.delete('/user/delete/:user_id', (req, res) => {
-  const { user_id } = req.params;
+app.delete('/user/delete/:user_id', (req, res) => user.user_delete(req, res, knex));
 
-  knex('user')
-    .where({ user_id })
-    .del()
-    .then(result => {
-      if (result) {
-        res.status(200).json({ message: 'User deleted successfully' });
-      } else {
-        res.status(404).json({ message: 'User not found' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while deleting the user' });
-    });
-});
+
+
+
+
 
 //-----------------
 
