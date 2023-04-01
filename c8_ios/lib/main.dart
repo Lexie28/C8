@@ -20,6 +20,7 @@ class C8iOS extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Circle Eight',
         theme: ThemeData(
           useMaterial3: true,
@@ -75,46 +76,27 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Center(
-                child: TextField(
-                  onChanged: (e) => _message = e,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: TextButton(
-                  child: const Text("Send"),
-                  onPressed: () {
-                    if (_message!.isNotEmpty) {
-                      sendMessage(_message);
-                    }
-                  },
-                ),
-              ),
-            ),
             BigCard(string: 'Circle Eight'),
             SizedBox(height: 80),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const LogIn(),
+                      builder: (BuildContext context) => const OtherProduct(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'Log In')),
+                child: SmallCard(string: '9. Annan produkt')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const CreateAccount(),
+                      builder: (BuildContext context) => const OtherProfile(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'Create Account')),
+                child: SmallCard(string: '9.5 Other Account')),
             SizedBox(height: 30),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -127,6 +109,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+////////////////////////BIG CARD////////////////////////////////////////
 class BigCard extends StatelessWidget {
   const BigCard({
     required this.string,
@@ -155,6 +138,7 @@ class BigCard extends StatelessWidget {
   }
 }
 
+////////////////////////////SMALL CARD//////////////////////////////
 class SmallCard extends StatelessWidget {
   SmallCard({required this.string});
 
@@ -184,33 +168,108 @@ class SmallCard extends StatelessWidget {
   }
 }
 
-class LogIn extends StatelessWidget {
+//////////////////////////////OTHER PRODUCT/////////////////////////////////////
+
+class OtherProduct extends StatefulWidget {
   // TODO Logga in med Google!!
 
-  const LogIn({super.key});
+  const OtherProduct({super.key});
 
+  @override
+  State<OtherProduct> createState() => _OtherProductState();
+}
+
+class _OtherProductState extends State<OtherProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Log In'),
-        ),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            SizedBox(
-              height: 200,
+      appBar: AppBar(
+        title: Text('Listing'),
+      ),
+      body: Center(
+        child: Row(
+          children: [
+            Align(
+              alignment: FractionalOffset.topLeft,
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 60, horizontal: 30),
+                height: MediaQuery.of(context).size.height * 0.25,
+                width: MediaQuery.of(context).size.height * 0.25,
+                
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 2.2,
+                    color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(17.0),
+                  
+                  child: Image.asset(
+                    'images/shoes.jpg',
+                    fit: BoxFit.cover,
+                    
+                  ),
+                ),
+              ),
             ),
-            BigCard(string: 'Placeholder for Google login')
-          ]),
-        ));
+            Align(
+              alignment: FractionalOffset.topRight,
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(10, 90, 10, 0),
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    width: MediaQuery.of(context).size.width * 0.2,
+
+
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      
+                      child: Image.asset(
+                        'images/man.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    width: MediaQuery.of(context).size.width * 0.2,
+
+                    child: Column(
+                      children: [
+                        Text(
+                          "Lars",
+                        ),
+                        Text(
+                          "50% (12)"
+                          )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            
+              ),
+          ],
+        ),
+
+      ),
+    );
   }
 }
 
-class CreateAccount extends StatelessWidget {
+////////////////////////OTHER PROFILE/////////////////////////////////
+class OtherProfile extends StatefulWidget {
   // TODO Skapa konto med Google!!
 
-  const CreateAccount({super.key});
+  const OtherProfile({super.key});
 
+  @override
+  State<OtherProfile> createState() => _OtherProfileState();
+}
+
+class _OtherProfileState extends State<OtherProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
