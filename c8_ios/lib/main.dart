@@ -4,6 +4,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
+
+import 'package:c8_ios/login.dart';
+import 'package:c8_ios/createprofile.dart';
+import 'package:c8_ios/editprofile.dart';
+import 'package:c8_ios/addlisting.dart';
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
@@ -100,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => const LogIn(),
+                      builder: (BuildContext context) =>  AddListing(),
                     ),
                   );
                 },
@@ -181,28 +186,6 @@ class SmallCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class LogIn extends StatelessWidget {
-  // TODO Logga in med Google!!
-
-  const LogIn({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Log In'),
-        ),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            SizedBox(
-              height: 200,
-            ),
-            BigCard(string: 'Placeholder for Google login')
-          ]),
-        ));
   }
 }
 

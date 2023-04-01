@@ -41,6 +41,7 @@ dependencies:
   mysql1: ^0.20.0
   http: ^0.13.5
   web_socket_channel: ^2.3.0
+  image_picker: ^0.8.7+1
 
 dev_dependencies:
   flutter_test:

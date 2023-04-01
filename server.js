@@ -196,7 +196,6 @@ wss.on('connection', function(ws, req) {
         var dataString = message.toString();
         console.log(dataString)
     })
-})
 
   ws.on('message', message => {
     var dataString = message.toString();
@@ -208,3 +207,4 @@ wss.on('connection', function(ws, req) {
         ws.send("Are you not saying hi to me 🥺👉👈");
     }
 }) 
+})
