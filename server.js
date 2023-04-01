@@ -1,3 +1,5 @@
+//import * as routes from C8/routes/user.js;
+
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,10 +17,10 @@ const knex = require('knex')({
 });
 
 
+
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
-
 
 
 
@@ -27,6 +29,10 @@ app.get('/', (req, res) => {
   res.send('Welcome to Circle Eight!');
 });
 
+
+//-------PRODUCT-------
+
+
 app.get('/helloworld', (req, res) => {
   knex.select("*").from("city").then((result) => {
     res.send(result)
@@ -34,14 +40,34 @@ app.get('/helloworld', (req, res) => {
 });
 
 
-//Editing product
-app.patch('/products/:ID', (req, res) => {
-  const { ID } = req.params;
-  const { Name, CountryCode, District, Population } = req.body;
+//Create a new product
+app.post('/product/create', (req, res) => {
+  const { product_name, product_desc, product_price } = req.body;
   
-  knex('world')
-    .where({ ID })
-    .update({ Name, CountryCode, District, Population })
+  knex('product')
+    .insert({ product_name, product_desc, product_price })
+    .then(result => {
+      if (result) {
+        res.status(200).json({ message: 'Product created successfully' });
+      } else {
+        res.status(500).json({ message: 'An error occurred while creating the product' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while creating the product' });
+    });
+});
+
+
+//Editing product
+app.patch('/products/:product_id', (req, res) => {
+  const { product_id } = req.params;
+  const { product_name, product_desc, product_price } = req.body;
+  
+  knex('product')
+    .where({ product_id })
+    .update({ product_name, product_desc, product_price })
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'Product updated successfully' });
@@ -56,10 +82,87 @@ app.patch('/products/:ID', (req, res) => {
 });
 
 
+//------- USER -------
 
-app.post('/register', (req, res) => {
-  // Handle user registration
+
+
+
+
+//app.route("/user").get(users.getUsers).post(users.addUser);
+//const user = require("./routes/user");
+//app.route("/users").get(user.get_users);
+
+//Get all users in the database
+app.get('/user/users', (req, res) => {
+  knex.select("*").from("user").then((result) => {
+    res.send(result)
+  })
 });
+
+
+//Registering a new user
+app.post('/user/registration', (req, res) => {
+  const { user_name } = req.body;
+  
+  knex('user')
+    .insert({ user_name })
+    .then(result => {
+      if (result) {
+        res.status(200).json({ message: 'Product created successfully' });
+      } else {
+        res.status(500).json({ message: 'An error occurred while creating the product' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while creating the product' });
+    });
+});
+
+
+//Adding a like (/thumbs up) to a user
+app.patch('/user/like/:user_id', (req, res) => {
+  const { user_id } = req.params;
+
+  knex('user')
+    .where({ user_id })
+    .increment('num_likes', 1) // use the `increment` method to add 1 to `num_likes`
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'Product updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the product' });
+    });
+});
+
+
+//Adding a dislike (/thumbs down) to a user
+app.patch('/user/dislike/:user_id', (req, res) => {
+  const { user_id } = req.params;
+
+  knex('user')
+    .where({ user_id })
+    .increment('num_dislikes', 1) // use the `increment` method to add 1 to `num_likes`
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'Product updated successfully' });
+      } else {
+        res.status(404).json({ message: 'Product not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the product' });
+    });
+});
+
+
+//-----------------
 
 app.post('/login', (req, res) => {
   // Handle user login
