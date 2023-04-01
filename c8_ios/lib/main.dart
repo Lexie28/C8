@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
+import 'toolbar.dart';
+import 'otherProduct.dart';
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
@@ -168,96 +170,7 @@ class SmallCard extends StatelessWidget {
   }
 }
 
-//////////////////////////////OTHER PRODUCT/////////////////////////////////////
 
-class OtherProduct extends StatefulWidget {
-  // TODO Logga in med Google!!
-
-  const OtherProduct({super.key});
-
-  @override
-  State<OtherProduct> createState() => _OtherProductState();
-}
-
-class _OtherProductState extends State<OtherProduct> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Listing'),
-      ),
-      body: Center(
-        child: Row(
-          children: [
-            Align(
-              alignment: FractionalOffset.topLeft,
-              child: Container(
-                margin: const EdgeInsets.symmetric(vertical: 60, horizontal: 30),
-                height: MediaQuery.of(context).size.height * 0.25,
-                width: MediaQuery.of(context).size.height * 0.25,
-                
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 2.2,
-                    color: Colors.black),
-                    borderRadius: BorderRadius.all(Radius.circular(20.0))
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(17.0),
-                  
-                  child: Image.asset(
-                    'images/shoes.jpg',
-                    fit: BoxFit.cover,
-                    
-                  ),
-                ),
-              ),
-            ),
-            Align(
-              alignment: FractionalOffset.topRight,
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(10, 90, 10, 0),
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    width: MediaQuery.of(context).size.width * 0.2,
-
-
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100.0),
-                      
-                      child: Image.asset(
-                        'images/man.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    width: MediaQuery.of(context).size.width * 0.2,
-
-                    child: Column(
-                      children: [
-                        Text(
-                          "Lars",
-                        ),
-                        Text(
-                          "50% (12)"
-                          )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            
-              ),
-          ],
-        ),
-
-      ),
-    );
-  }
-}
 
 ////////////////////////OTHER PROFILE/////////////////////////////////
 class OtherProfile extends StatefulWidget {
