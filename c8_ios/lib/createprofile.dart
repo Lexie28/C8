@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import '../toolbar.dart';
 
 class CreateProfile extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -15,7 +15,7 @@ class CreateProfile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Profile'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFFA2BABF),
 
       ),
       body: Padding(

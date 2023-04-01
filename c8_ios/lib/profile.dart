@@ -26,11 +26,8 @@ class EditProfile extends StatelessWidget {
         child: Column(
             children: [
               // Profile picture
-              GestureDetector(
-                onTap: () {
-                  // TODO: Implement change profile picture logic
-                },
-                  child: Center(
+
+                 Center(
                     child: TextButton(
                         onPressed: () {
                       // TODO: Implement camera logic
@@ -38,7 +35,6 @@ class EditProfile extends StatelessWidget {
                         child: const Text('Todo, hämta bild')
                     ),
                   ),
-                ),
               
               SizedBox(height: 16.0),
               // Name field

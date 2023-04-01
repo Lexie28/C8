@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import '../toolbar.dart';
 
 class AddListing extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -13,32 +13,7 @@ class AddListing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-                    bottomNavigationBar: Container( 
-                color: Colors.blue,
-                child: BottomAppBar(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.home),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.recycling),
-                      onPressed: () {},
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.person),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-              ),
-              ),
+      bottomNavigationBar: toolbar(),
       appBar: AppBar(
         title: Text('Add Listing'),
         backgroundColor: Colors.blue,
@@ -66,34 +41,8 @@ class AddListing extends StatelessWidget {
                   ),
                 ),
                 ),
-              
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Product name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              // Bio field
-              TextField(
-                controller: _contactController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: 'Product description',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              // Save button
-              ElevatedButton(
-                onPressed: () {
-                  // TODO: Implement save changes logic
-                },
-                child: Text('Save Listing'),
-              ),
+
+                //TODO lägg till alla varor man har som man kan scrolla ner på
             ],
           ), 
       ),   
