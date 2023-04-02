@@ -10,6 +10,7 @@ import 'package:c8_ios/createprofile.dart';
 import 'package:c8_ios/editprofile.dart';
 import 'package:c8_ios/addlisting.dart';
 import 'package:c8_ios/toolbar.dart';
+import 'package:c8_ios/Profile.dart';
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) =>  EditProfile(),
+                      builder: (BuildContext context) =>  Profile(),
                     ),
                   );
                 },

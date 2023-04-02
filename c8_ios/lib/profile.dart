@@ -5,19 +5,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../toolbar.dart';
 
-class EditProfile extends StatelessWidget {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  //Någon variabel som håller bilden kanske
+class Profile extends StatelessWidget {
+  //Variabler som namn och bilder
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: toolbar(),
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: Text('Your Profile'),
         backgroundColor: Color(0xFFA2BABF),
+        actions: [
+          IconButton(onPressed: () {
+            //TODO implement settings frame
+          }
+          , icon: Icon(Icons.settings))
+        ],
       ),
       
       body: Padding(
@@ -26,7 +28,6 @@ class EditProfile extends StatelessWidget {
         child: Column(
             children: [
               // Profile picture
-
                  Center(
                     child: TextButton(
                         onPressed: () {
@@ -34,48 +35,105 @@ class EditProfile extends StatelessWidget {
                         },
                         child: const Text('Todo, hämta bild')
                     ),
+                  
                   ),
-              
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
+                  Center(
+                    child: Text(
+                      style: TextStyle(fontSize: 25),
+                      'Name')
+                  ),
+                  Center(
+                    child: Text('Location')
+                  ),
+                  Center(
+                    child: Text('Amount of likes: xx')
+                  ),
+                  Card(),
+                  Text('Your products'),
+
+
+                SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                  ],
                 ),
-              ),
-              
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: 'Location',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              // Bio field
-              TextField(
-                controller: _contactController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: 'Contact details',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              // Save button
-              ElevatedButton(
-                onPressed: () {
-                  // TODO: Implement save changes logic
-                },
-                child: Text('Save Changes'),
-              ),
+                )
+
+
+          
             ],
           ), 
       ),   
+      bottomNavigationBar: toolbar(),
     );
   }
+}
+
+class ProfileProducts extends StatelessWidget{
+  final String string;
+
+
+  const ProfileProducts({
+    required this.string,
+  });
+
+
+  @override
+  Widget build(BuildContext context) {
+      final theme = Theme.of(context);
+      final style = theme.textTheme.displayMedium!.copyWith(
+        color: theme.colorScheme.onPrimary,
+      );
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 30.0,
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Card(
+                        elevation: 10.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(25.0),
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Text(
+                                string,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+        );
+  }
+  
+
+
 }
