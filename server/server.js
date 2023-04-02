@@ -42,16 +42,16 @@ app.get('/', (req, res) => {
 //-------PRODUCT-------
 
 //test, get all info from product table
-app.get('/helloworld', (req, res) => product.get_product(req, res, knex));
+app.get('/helloworld', (req, res) => product.product_get(req, res, knex));
 
 //Create a new product
-app.post('/product/create', (req,res) => product.create_product(req, res, knex));
+app.post('/product/create', (req,res) => product.product_create(req, res, knex));
 
 //Editing product
 app.patch('/product/edit/:product_id', (req, res) => product.edit_product_all(req, res, knex));
 
 //Deleting product
-app.delete('/product/delete/:product_id', (req, res) => product.delete_product(req, res, knex));
+app.delete('/product/delete/:product_id', (req, res) => product.product_delete(req, res, knex));
 
 
 
@@ -67,15 +67,11 @@ app.post('/user/registration', (req, res) => user.user_registration(req, res, kn
 //Adding a like (/thumbs up) to a user
 app.patch('/user/like/:user_id', (req, res) => user.user_like(req, res, knex));
 
-
 //Adding a dislike (/thumbs down) to a user
 app.patch('/user/dislike/:user_id', (req, res) => user.user_dislike(req, res, knex));
 
 //Deleting user
 app.delete('/user/delete/:user_id', (req, res) => user.user_delete(req, res, knex));
-
-
-
 
 
 

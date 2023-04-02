@@ -8,10 +8,10 @@ function product_get(req, res, knex) {
 
 
 function product_create(req, res, knex) {
-  const { product_name, product_desc, product_price } = req.body;
+  const { user_id, product_name, product_description, product_category } = req.body;
 
   knex('product')
-    .insert({ product_name, product_desc, product_price })
+    .insert({ user_id, product_name, product_description, product_category })
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'Product created successfully' });
@@ -27,11 +27,11 @@ function product_create(req, res, knex) {
 
 function edit_product_all(req, res, knex) {
   const { product_id } = req.params;
-  const { product_name, product_desc, product_price } = req.body;
+  const { product_name, product_description, product_category } = req.body;
 
   knex('product')
     .where({ product_id })
-    .update({ product_name, product_desc, product_price })
+    .update({ product_name, product_description, product_category })
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'Product updated successfully' });
