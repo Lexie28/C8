@@ -1,3 +1,4 @@
+import 'package:c8_ios/otherProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
@@ -17,6 +18,7 @@ class _OtherProductState extends State<OtherProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
         backgroundColor: Color(0xFFA2BABF),
         title: Text('Listing'),
@@ -28,67 +30,11 @@ class _OtherProductState extends State<OtherProduct> {
               children: [
                 Align(
                   alignment: FractionalOffset.topLeft,
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(30, 60, 30, 20),
-                    //margin: const EdgeInsets.symmetric(
-                    //    vertical: 60, horizontal: 30),
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    width: MediaQuery.of(context).size.height * 0.25,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 2.2, color: Colors.white),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20.0),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 113, 113, 113),
-                          blurRadius: 2.0,
-                          spreadRadius: 0.0,
-                          offset: Offset(
-                              1.5, 1.5), // shadow direction: bottom right
-                        )
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(17.0),
-                      child: Image.asset(
-                        'images/shoes.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  child: productListing(string: 'images/shoes.jpg'),
                 ),
                 Align(
-                  alignment: FractionalOffset.topRight,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 90, 10, 0),
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100.0),
-                          child: Image.asset(
-                            'images/man.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        child: Column(
-                          children: [
-                            Text(
-                              "Lars",
-                            ),
-                            Text("50% (12)")
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                    alignment: FractionalOffset.topRight,
+                    child: listingProfile(string: 'Lars')),
                 //CardProduct(string: 'Hej'),
               ],
             ),
@@ -98,7 +44,7 @@ class _OtherProductState extends State<OtherProduct> {
             ),
             Align(
               alignment: FractionalOffset.topLeft,
-              child: CardProduct(
+              child: ProductInfo(
                   string:
                       'Nice pair of shoes. Bought 2 months ago and only worn twice.'),
             ),
@@ -112,14 +58,18 @@ class _OtherProductState extends State<OtherProduct> {
                 ),
               ),
             ),
-            Align(
-              alignment: FractionalOffset.topLeft,
-              child: numBids(),
+            Row(
+              children: [
+                Align(
+                  alignment: FractionalOffset.topLeft,
+                  child: numBids(string: '5'),
+                ),
+                Align(
+                  alignment: FractionalOffset.center,
+                  child: BidButton(),
+                )
+              ],
             ),
-            Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: BidButton(),
-            )
           ],
         ),
       ),
@@ -152,8 +102,8 @@ class ProductName extends StatelessWidget {
   }
 }
 
-class CardProduct extends StatelessWidget {
-  const CardProduct({
+class ProductInfo extends StatelessWidget {
+  const ProductInfo({
     required this.string,
   });
 
@@ -186,9 +136,11 @@ class CardProduct extends StatelessWidget {
   }
 }
 
-
 class numBids extends StatefulWidget {
-  const numBids({super.key});
+  const numBids({required this.string,
+  });
+
+  final String string;
 
   @override
   State<numBids> createState() => _numBidsState();
@@ -205,7 +157,6 @@ class _numBidsState extends State<numBids> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.1,
       width: MediaQuery.of(context).size.width * 0.32,
-     
       child: Card(
         margin: const EdgeInsets.fromLTRB(30, 0, 10, 0),
         color: theme.colorScheme.primary,
@@ -216,7 +167,7 @@ class _numBidsState extends State<numBids> {
         child: Padding(
           padding: const EdgeInsets.fromLTRB(23, 15, 15, 15),
           child: Text(
-            '5',
+            '5', //TODO: Kan inte ges som argument. Förmodligen pga stateful widget.
             style: style,
           ),
         ),
@@ -224,7 +175,6 @@ class _numBidsState extends State<numBids> {
     );
   }
 }
-
 
 class BidButton extends StatefulWidget {
   const BidButton({super.key});
@@ -239,18 +189,115 @@ class _BidButtonState extends State<BidButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(200, 0, 10, 0), 
+      margin: const EdgeInsets.fromLTRB(80, 40, 10, 0),
       height: MediaQuery.of(context).size.height * 0.09,
       width: MediaQuery.of(context).size.height * 0.17,
       child: ElevatedButton(
-        
-        onPressed: (){
+        onPressed: () {
           setState(() {
             buttonName = "Bidded";
           });
-        } ,
+        },
         child: Text(buttonName),
       ),
+    );
+  }
+}
+
+class productListing extends StatelessWidget {
+  const productListing({
+    required this.string,
+  });
+
+  final String string;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(30, 60, 30, 20),
+      //margin: const EdgeInsets.symmetric(
+      //    vertical: 60, horizontal: 30),
+      height: MediaQuery.of(context).size.height * 0.25,
+      width: MediaQuery.of(context).size.height * 0.25,
+      decoration: BoxDecoration(
+        border: Border.all(width: 2.2, color: Colors.white),
+        borderRadius: BorderRadius.all(
+          Radius.circular(20.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(255, 113, 113, 113),
+            blurRadius: 2.0,
+            spreadRadius: 0.0,
+            offset: Offset(1.5, 1.5), // shadow direction: bottom right
+          )
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(17.0),
+        child: Image.asset(
+          string,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
+class listingProfile extends StatelessWidget {             //TODO: Fetch data från databas
+  const listingProfile({
+    required this.string,
+  });
+
+  final String string;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.fromLTRB(10, 65, 10, 0),
+          height: MediaQuery.of(context).size.height * 0.1,
+          width: MediaQuery.of(context).size.width * 0.2,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100.0),
+            child: Image.asset(
+              'images/man.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => const otherProfile(),
+              ),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+            width: MediaQuery.of(context).size.width * 0.2,
+            child: Column(
+              children: [
+                Text(
+                  style: TextStyle(fontSize: 20),
+                  string,
+                ),
+                Text("50% (12)"),       //TODO
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  width: MediaQuery.of(context).size.width * 0.07,
+                  child: Image.asset(
+                    'images/like.png',              //TODO
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
     );
   }
 }

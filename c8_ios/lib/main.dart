@@ -6,6 +6,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import 'toolbar.dart';
 import 'otherProduct.dart';
+import 'categories.dart';
+import 'otherProfile.dart';
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
@@ -81,24 +83,37 @@ class _HomePageState extends State<HomePage> {
             BigCard(string: 'Circle Eight'),
             SizedBox(height: 80),
             GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const OtherProduct(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: '9. Annan produkt')),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const OtherProduct(),
+                  ),
+                );
+              },
+              child: SmallCard(string: '9. Annan produkt'),
+            ),
             SizedBox(height: 15),
             GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const OtherProfile(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: '9.5 Other Account')),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const Categories(),
+                  ),
+                );
+              },
+              child: SmallCard(string: 'Categories'),
+            ),
+            SizedBox(height: 15),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const otherProfile(),
+                  ),
+                );
+              },
+              child: SmallCard(string: '9.5 Other Profile'),
+            ),
             SizedBox(height: 30),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -170,32 +185,5 @@ class SmallCard extends StatelessWidget {
   }
 }
 
-
-
 ////////////////////////OTHER PROFILE/////////////////////////////////
-class OtherProfile extends StatefulWidget {
-  // TODO Skapa konto med Google!!
 
-  const OtherProfile({super.key});
-
-  @override
-  State<OtherProfile> createState() => _OtherProfileState();
-}
-
-class _OtherProfileState extends State<OtherProfile> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Log In'),
-        ),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            SizedBox(
-              height: 200,
-            ),
-            BigCard(string: 'Placeholder for Google login')
-          ]),
-        ));
-  }
-}
