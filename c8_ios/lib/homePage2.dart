@@ -1,3 +1,4 @@
+import 'package:c8_ios/categories.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
@@ -36,7 +37,15 @@ class HomePage2 extends StatelessWidget {
             children: [
               Category(string: 'Food'),
               SizedBox(width: 10),
-              Category(string: 'All categories'),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Categories(),
+                      ),
+                    );
+                  },
+                  child: Category(string: 'All categories')),
             ],
           ),
           SizedBox(height: 10),
