@@ -1,7 +1,13 @@
 
 export { get_users, user_registration, user_like, user_dislike, user_delete }
 
-//get user
+/**
+Retrieves all records from the "user" table using Knex.js and sends the result back to the client as a response.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function get_users(req, res, knex)
 {
         knex.select("*").from("user").then((result) => {
@@ -9,6 +15,13 @@ function get_users(req, res, knex)
         })
 };
 
+/**
+Registers a new user in the 'user' table.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function user_registration(req, res, knex) {
   const { user_name, user_location, user_phone, user_email } = req.body;
 
@@ -27,6 +40,13 @@ function user_registration(req, res, knex) {
     });
 };
 
+/**
+Adds a like to the user of a certain user id.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function user_like(req, res, knex) {
   const { user_id } = req.params;
 
@@ -46,6 +66,13 @@ function user_like(req, res, knex) {
     });
 };
 
+/**
+Adds a dislike to the user of a certain user id.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function user_dislike(req, res, knex) {
   const { user_id } = req.params;
 
@@ -65,6 +92,13 @@ function user_dislike(req, res, knex) {
     });
 };
 
+/**
+Deletes a user of a certain user id.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function user_delete(req, res, knex) {
   const { user_id } = req.params;
 

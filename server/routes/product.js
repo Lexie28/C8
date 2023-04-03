@@ -1,13 +1,26 @@
 export { product_get, product_create, edit_product_all, product_delete }
 
 
+/**
+Retrieves all records from the "product" table using Knex.js and sends the result back to the client as a response.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function product_get(req, res, knex) {
     knex.select("*").from("product").then((result) => {
       res.send(result)
     })
 }
 
-
+/**
+Creates a new product using imput received from the client.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function product_create(req, res, knex) {
   const { user_id, product_name, product_description, product_category } = req.body;
 
@@ -26,6 +39,13 @@ function product_create(req, res, knex) {
     });
 };
 
+/**
+Edits all editable fields in a product (name, description and category)
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function edit_product_all(req, res, knex) {
   const { product_id } = req.params;
   const { product_name, product_description, product_category } = req.body;
@@ -46,6 +66,13 @@ function edit_product_all(req, res, knex) {
     });
 };
 
+/**
+Deletes a product from the 'product' table.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function product_delete(req, res, knex) {
   const { product_id } = req.params;
 
