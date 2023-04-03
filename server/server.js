@@ -7,6 +7,7 @@ const require = createRequire(import.meta.url);
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const { Server } = require('ws');
 const cors = require('cors');
 const app = express();
 const knex = require('knex')({
@@ -99,7 +100,37 @@ app.patch('/transactions/:id', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3000;
+
+// Elsa har kommenterat ut detta för att det där nere ska funka, kan inte lyssna två ggr
+/*app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-});
+});*/
+
+
+var mes;
+
+const server = express()
+  .use((req, res) => res.send(mes.toString()))
+  .listen(PORT, () => console.log('Listening on ${PORT}'));
+
+const wss = new Server({ server });
+
+wss.on('connection', function(ws, req) {
+  ws.on('message', message => {
+    var dataString = message.toString();
+    console.log(dataString)
+  })
+
+  ws.on('message', message => {
+    var dataString = message.toString();
+    if (dataString == "Hello") {
+        console.log(dataString)
+        ws.send("Hi from Node.js");
+    } else{
+        mes = message;
+        console.log(dataString)
+        ws.send("Are you not saying hi to me 🥺👉👈");
+    }
+}) 
+})

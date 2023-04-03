@@ -14,6 +14,7 @@ import 'package:c8_ios/Profile.dart';
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
+import 'homePage2.dart';
 
 void main() async {
   runApp(const C8iOS());
@@ -48,30 +49,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String? _message;
-
   // this function will send message to our backend
-  void sendMessage(msg) {
-    IOWebSocketChannel? channel;
-
-    // connection might fail
-    try {
-      channel = IOWebSocketChannel.connect('ws://localhost:3000');
-    } catch (e) {
-      print("Error on connecting to websocket: " + e.toString());
-    }
-
-    channel?.sink.add(msg);
-
-    channel?.stream.listen((event) {
-      if (event!.isNotEmpty) {
-        print(event);
-        channel!.sink.close();
-      }
-    });
-
-    print(msg);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,25 +60,6 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Center(
-                child: TextField(
-                  onChanged: (e) => _message = e,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: TextButton(
-                  child: const Text("Send"),
-                  onPressed: () {
-                    if (_message!.isNotEmpty) {
-                      sendMessage(_message);
-                    }
-                  },
-                ),
-              ),
-            ),
             BigCard(string: 'Circle Eight'),
             SizedBox(height: 10),
             GestureDetector(
@@ -138,32 +97,86 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) =>  AddListing(),
+                      // JOHN 1 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'Add listing')),
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 2 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 1 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 3 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      // TOVA HÄR1
                       builder: (BuildContext context) => const CreateAccount(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'Create Account')),
-            SizedBox(height: 30),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [],
-            ),
+                child: SmallCard(string: 'Tova')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // TOVA HÄR2
+                      builder: (BuildContext context) => const CreateAccount(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Tova 2')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HomePage2(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Elsa')),
           ],
         ),
       ),
     );
   }
 }
+
+/*----------------------------------------------------------------------
+
+                        Grafiska klasser
+                      
+-----------------------------------------------------------------------*/
 
 class BigCard extends StatelessWidget {
   const BigCard({
@@ -222,10 +235,39 @@ class SmallCard extends StatelessWidget {
   }
 }
 
-class CreateAccount extends StatelessWidget {
-  // TODO Skapa konto med Google!!
+/*----------------------------------------------------------------------
 
-  const CreateAccount({super.key});
+                        LogIn-sida
+                      
+-----------------------------------------------------------------------*/
+
+class LogIn extends StatelessWidget {
+  // TODO Logga in med Google!!
+
+  LogIn({super.key});
+  String? _message;
+
+  void sendMessage(msg) {
+    IOWebSocketChannel? channel;
+
+    // connection might fail
+    try {
+      channel = IOWebSocketChannel.connect('ws://localhost:3000');
+    } catch (e) {
+      print("Error on connecting to websocket: " + e.toString());
+    }
+
+    channel?.sink.add(msg);
+
+    channel?.stream.listen((event) {
+      if (event!.isNotEmpty) {
+        print(event);
+        channel!.sink.close();
+      }
+    });
+
+    print(msg);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +280,58 @@ class CreateAccount extends StatelessWidget {
             SizedBox(
               height: 200,
             ),
-            BigCard(string: 'Placeholder for Google login')
+            BigCard(string: 'Placeholder for Google login'),
+            SizedBox(
+              height: 30,
+            ),
+            SmallCard(string: 'username:'),
+            Expanded(
+              child: Center(
+                child: TextField(
+                  onChanged: (e) => _message = e,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: TextButton(
+                  child: const Text("Send"),
+                  onPressed: () {
+                    if (_message!.isNotEmpty) {
+                      sendMessage(_message);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ]),
+        ));
+  }
+}
+
+/*----------------------------------------------------------------------
+
+                        CreateAccount-sida
+                      
+-----------------------------------------------------------------------*/
+
+class CreateAccount extends StatelessWidget {
+  // TODO Skapa konto med Google!!
+
+  const CreateAccount({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Create account'),
+        ),
+        body: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            SizedBox(
+              height: 200,
+            ),
+            BigCard(string: 'Placeholder for Google create account'),
           ]),
         ));
   }
