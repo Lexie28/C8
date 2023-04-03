@@ -102,7 +102,27 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             BigCard(string: 'Circle Eight'),
-            SizedBox(height: 80),
+            SizedBox(height: 10),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>  CreateProfile(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Create profile')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>  EditProfile(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Edit Profile')),
+            SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
@@ -111,7 +131,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 },
-                child: SmallCard(string: 'Log In')),
+                child: SmallCard(string: 'Profile')),
+            SizedBox(height: 15),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>  AddListing(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Add listing')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {

@@ -16,7 +16,7 @@ class AddListing extends StatelessWidget {
       bottomNavigationBar: toolbar(),
       appBar: AppBar(
         title: Text('Add Listing'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFFA2BABF),
 
       ),
       body: Padding(

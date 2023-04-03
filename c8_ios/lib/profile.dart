@@ -25,6 +25,8 @@ class Profile extends StatelessWidget {
       body: Padding(
         
         padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+
         child: Column(
             children: [
               // Profile picture
@@ -51,21 +53,23 @@ class Profile extends StatelessWidget {
                   Card(),
                   Text('Your products'),
 
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+ 
 
-                SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',),
-                  ],
-                ),
-                )
+
+
 
 
           
             ],
           ), 
       ),   
+                ),
       bottomNavigationBar: toolbar(),
     );
   }
@@ -101,8 +105,6 @@ class ProfileProducts extends StatelessWidget{
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Column(
-                    children: [
                       Card(
                         elevation: 10.0,
                         shape: RoundedRectangleBorder(
@@ -124,8 +126,6 @@ class ProfileProducts extends StatelessWidget{
                           ),
                         ),
                       ),
-                    ],
-                  ),
                 ],
               ),
             ],
