@@ -84,10 +84,6 @@ app.patch('/products/:product_id', (req, res) => {
 
 //------- USER -------
 
-
-
-
-
 //app.route("/user").get(users.getUsers).post(users.addUser);
 //const user = require("./routes/user");
 //app.route("/users").get(user.get_users);
