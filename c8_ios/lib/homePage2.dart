@@ -1,4 +1,5 @@
 import 'package:c8_ios/categories.dart';
+import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
@@ -52,7 +53,15 @@ class HomePage2 extends StatelessWidget {
           Header(string: 'Popular items'),
           SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Item(string: 'Shoes'),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => OtherProduct(),
+                    ),
+                  );
+                },
+                child: Item(string: 'Shoes')),
             SizedBox(width: 10),
             Item(string: 'Flaming tequila'),
             SizedBox(width: 10),
