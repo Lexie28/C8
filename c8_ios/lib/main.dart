@@ -59,26 +59,74 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      // JOHN 1 ÄMNDRAR HÄR
                       builder: (BuildContext context) => LogIn(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'Log In')),
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 2 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 1 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 3 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      // TOVA HÄR1
                       builder: (BuildContext context) => const CreateAccount(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'Create Account')),
-            SizedBox(height: 30),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [],
-            ),
+                child: SmallCard(string: 'Tova')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // TOVA HÄR2
+                      builder: (BuildContext context) => const CreateAccount(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Tova 2')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HomePage2(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Elsa')),
           ],
         ),
       ),
@@ -246,15 +294,6 @@ class CreateAccount extends StatelessWidget {
               height: 200,
             ),
             BigCard(string: 'Placeholder for Google create account'),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePage2(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'HomePage2')),
           ]),
         ));
   }
