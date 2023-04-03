@@ -122,10 +122,11 @@ app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
 
+var mes;
 
 /*
 const server = express()
-  .use((req, res) => res.send("Hejsan"))
+  .use((req, res) => res.send(mes.toString()))
   .listen(PORT, () => console.log('Listening on ${PORT}'));
 
 const wss = new Server({ server });
@@ -142,6 +143,7 @@ wss.on('connection', function(ws, req) {
         console.log(dataString)
         ws.send("Hi from Node.js");
     } else{
+        mes = message;
         console.log(dataString)
         ws.send("Are you not saying hi to me 🥺👉👈");
     }

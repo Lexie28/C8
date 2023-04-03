@@ -8,6 +8,14 @@ import 'package:web_socket_channel/io.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
 import 'homePage2.dart';
+//Tovas sidor
+import 'otherProduct.dart';
+import 'otherProfile.dart';
+import 'categories.dart';
+import 'addlisting.dart';
+import 'editprofile.dart';
+import 'createprofile.dart';
+import 'profile.dart';
 
 void main() async {
   runApp(const C8iOS());
@@ -21,6 +29,7 @@ class C8iOS extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Circle Eight',
         theme: ThemeData(
           useMaterial3: true,
@@ -50,36 +59,86 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BigCard(string: 'Circle Eight'),
-            SizedBox(height: 80),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => LogIn(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Log In')),
-            SizedBox(height: 15),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => const CreateAccount(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Create Account')),
-            SizedBox(height: 30),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [],
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BigCard(string: 'Circle Eight'),
+              SizedBox(height: 80),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 1 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => CreateProfile(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'Create profile')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 2 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => AddListing(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'add listinf')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 1 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => Profile(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'profile')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 3 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => EditProfile(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'edit profile')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // TOVA HÄR1
+                        builder: (BuildContext context) => const OtherProduct(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: '9. Other product')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // TOVA HÄR2
+                        builder: (BuildContext context) => const Categories(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: '4.1 Categories')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => HomePage2(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'Elsa')),
+            ],
+          ),
         ),
       ),
     );
@@ -246,15 +305,6 @@ class CreateAccount extends StatelessWidget {
               height: 200,
             ),
             BigCard(string: 'Placeholder for Google create account'),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePage2(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'HomePage2')),
           ]),
         ));
   }
