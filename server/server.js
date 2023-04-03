@@ -1,5 +1,6 @@
 import * as product from "./routes/product.js";
 import * as user from "./routes/user.js";
+import * as pages from "./routes/pages.js";
 import { createRequire } from "module"
 
 const require = createRequire(import.meta.url);
@@ -35,6 +36,15 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.send('Welcome to Circle Eight!');
 });
+
+
+//-------PAGES OF APP-------
+
+//your own profile page, retrieves your user information and all of your products (aka. products with your user_id)
+app.get('/profilepage/:user_id', (req, res) => pages.get_user_with_products(req, res, knex));
+
+
+
 
 
 
