@@ -14,6 +14,10 @@ import 'package:c8_ios/Profile.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
 import 'homePage2.dart';
+//Tovas sidor
+import 'otherProduct.dart';
+import 'otherProfile.dart';
+import 'categories.dart';
 
 void main() async {
   runApp(const C8iOS());
@@ -27,6 +31,7 @@ class C8iOS extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Circle Eight',
         theme: ThemeData(
           useMaterial3: true,
@@ -45,6 +50,7 @@ class MyAppState extends ChangeNotifier {}
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
+  
 }
 
 class _HomePageState extends State<HomePage> {
