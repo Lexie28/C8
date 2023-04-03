@@ -62,4 +62,3 @@ class toolbar extends StatelessWidget {
       backgroundColor: Color(0xFFA2BABF),
     );
   }
-}

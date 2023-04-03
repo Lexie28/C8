@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 
-import 'package:c8_ios/login.dart';
 import 'package:c8_ios/createprofile.dart';
 import 'package:c8_ios/editprofile.dart';
 import 'package:c8_ios/addlisting.dart';
@@ -61,37 +60,6 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             BigCard(string: 'Circle Eight'),
-            SizedBox(height: 10),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>  CreateProfile(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Create profile')),
-            SizedBox(height: 15),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>  EditProfile(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Edit Profile')),
-            SizedBox(height: 15),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>  Profile(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Profile')),
-            SizedBox(height: 15),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
@@ -102,44 +70,44 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 },
-                child: SmallCard(string: 'John')),
+                child: SmallCard(string: 'Create Profile')),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       // JOHN 2 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
+                      builder: (BuildContext context) => CreateProfile(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'John')),
+                child: SmallCard(string: 'Edit Profile')),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       // JOHN 1 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
+                      builder: (BuildContext context) => EditProfile(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'John')),
+                child: SmallCard(string: 'Add Listing')),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       // JOHN 3 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
+                      builder: (BuildContext context) => AddListing(),
                     ),
                   );
                 },
-                child: SmallCard(string: 'John')),
+                child: SmallCard(string: 'Profile')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       // TOVA HÄR1
-                      builder: (BuildContext context) => const CreateAccount(),
+                      builder: (BuildContext context) => Profile(),
                     ),
                   );
                 },
