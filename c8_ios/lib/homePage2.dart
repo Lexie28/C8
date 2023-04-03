@@ -85,12 +85,14 @@ class Item extends StatelessWidget {
     );
 
     return Container(
+      height: MediaQuery.of(context).size.height * 0.2,
+      width: MediaQuery.of(context).size.width * 0.2,
       color: Color.fromARGB(255, 195, 195, 195),
       child: Column(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(30.0),
-            child: Image.asset('assets/shoes.png'),
+            child: Image.asset('assets/shoes.png', fit: BoxFit.cover),
           ),
           Text(string),
         ],
