@@ -32,7 +32,7 @@ exports.up = function(knex) {
 		table.string("name")
 		    .notNullable();
 		table.string("description");
-		table.date("creation_date");
+		table.datetime("creation_date");
 		table.string("image_path");
 		table.string("category");
 		
@@ -92,22 +92,25 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return dropUserTable()
-	.then(dropListingTable())
-	.then(dropOfferTable())
-	.then(dropOfferListingTable());
+    return dropOfferListingTable()
+	.then(dropListingTable)
+	.then(dropOfferTable)
+	.then(dropUserTable)
+	.catch((err) => {
+	    console.log(err);
+	});
     
     function dropUserTable() {
 	return knex.schema.dropTable("user");
     }
     function dropListingTable() {
-	return knex.schema.dropTable("table");
+	return knex.schema.dropTable("listing");
     }
     function dropOfferTable() {
 	return knex.schema.dropTable("offer");
     }
     function dropOfferListingTable() {
-	return kenx.schema.dropTable("offer_listing");
+	return knex.schema.dropTable("offer_listing");
     }
 
 };
