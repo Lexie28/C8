@@ -21,78 +21,74 @@ class Profile extends StatelessWidget {
         ],
       ),
       
-      body: Padding(
-        
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
 
-        child: Column(
-            children: [
-              // Profile picture
-                 Center(
-                    child: TextButton(
-                        onPressed: () {
-                      // TODO: Implement camera logic
-                        },
-                        child: const Text('Todo, hämta bild')
-                    ),
-                  
+      child: Column(
+          children: [
+            // Profile picture
+               Center(
+                  child: TextButton(
+                      onPressed: () {
+                    // TODO: Implement camera logic
+                      },
+                      child: const Text('Todo, hämta bild')
                   ),
-                  Center(
-                    child: Text(
-                      style: TextStyle(fontSize: 25),
-                      'Name')
-                  ),
-                  Center(
-                    child: Text('Location')
-                  ),
-                  Center(
-                    child: Text('Amount of likes: xx')
-                  ),
-                  
-                  Text('Your products'),
-                  Center(
-                    child: Row(
-                      children: [ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',)
-                    ],
-                    ),
-                  ),
-                  Center(
-                    child: Row(
-                      children: [ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',)
-                    ],
-                    ),
-                  ),
-                  Center(
-                    child: Row(
-                      children: [ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',)
-                    ],
-                    ),
-                  ),
-                  Center(
-                    child: Row(
-                      children: [ProfileProducts(string: 'a product',),
-                      ProfileProducts(string: 'a product',),
-                    ],
-                    ),
-                  ),
-                  
-
-
-
-
-
-          
-            ],
-          ), 
-      ),   
+                
                 ),
+                Center(
+                  child: Text(
+                    style: TextStyle(fontSize: 25),
+                    'Name')
+                ),
+                Center(
+                  child: Text('Location')
+                ),
+                Center(
+                  child: Text('Amount of likes: xx')
+                ),
+                
+                Text('Your products'),
+                Center(
+                  child: Row(
+                    children: [ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',)
+                  ],
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    children: [ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',)
+                  ],
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    children: [ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',)
+                  ],
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    children: [ProfileProducts(string: 'a product',),
+                    ProfileProducts(string: 'a product',),
+                  ],
+                  ),
+                ),
+                
+
+
+
+
+
+        
+          ],
+        ), 
+      ),
       bottomNavigationBar: toolbar(),
     );
   }
