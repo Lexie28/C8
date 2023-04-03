@@ -12,6 +12,10 @@ import 'homePage2.dart';
 import 'otherProduct.dart';
 import 'otherProfile.dart';
 import 'categories.dart';
+import 'addlisting.dart';
+import 'editprofile.dart';
+import 'createprofile.dart';
+import 'profile.dart';
 
 void main() async {
   runApp(const C8iOS());
@@ -44,7 +48,6 @@ class MyAppState extends ChangeNotifier {}
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
-  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -67,41 +70,41 @@ class _HomePageState extends State<HomePage> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         // JOHN 1 ÄMNDRAR HÄR
-                        builder: (BuildContext context) => LogIn(),
+                        builder: (BuildContext context) => CreateProfile(),
                       ),
                     );
                   },
-                  child: SmallCard(string: 'John')),
+                  child: SmallCard(string: 'Create profile')),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         // JOHN 2 ÄMNDRAR HÄR
-                        builder: (BuildContext context) => LogIn(),
+                        builder: (BuildContext context) => AddListing(),
                       ),
                     );
                   },
-                  child: SmallCard(string: 'John')),
+                  child: SmallCard(string: 'add listinf')),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         // JOHN 1 ÄMNDRAR HÄR
-                        builder: (BuildContext context) => LogIn(),
+                        builder: (BuildContext context) => Profile(),
                       ),
                     );
                   },
-                  child: SmallCard(string: 'John')),
+                  child: SmallCard(string: 'profile')),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         // JOHN 3 ÄMNDRAR HÄR
-                        builder: (BuildContext context) => LogIn(),
+                        builder: (BuildContext context) => EditProfile(),
                       ),
                     );
                   },
-                  child: SmallCard(string: 'John')),
+                  child: SmallCard(string: 'edit profile')),
               SizedBox(height: 15),
               GestureDetector(
                   onTap: () {
