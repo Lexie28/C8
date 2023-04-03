@@ -59,6 +59,37 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      // JOHN 1 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 2 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 1 ÄMNDRAR HÄR
+                      builder: (BuildContext context) => LogIn(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'John')),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // JOHN 3 ÄMNDRAR HÄR
                       builder: (BuildContext context) => LogIn(),
                     ),
                   );
@@ -69,11 +100,23 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
+                      // TOVA HÄR1
                       builder: (BuildContext context) => const CreateAccount(),
                     ),
                   );
                 },
                 child: SmallCard(string: 'Tova')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      // TOVA HÄR2
+                      builder: (BuildContext context) => const CreateAccount(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Tova 2')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
