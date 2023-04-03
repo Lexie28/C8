@@ -1,7 +1,14 @@
 export { get_user_with_products }
 
 
-
+/**
+Retrieves the user of a certain user_id from the user table, together with all their products (corresponding user_id) in the
+product table. Useful for profile page where all user info is displayed and all of the products listed.
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function get_user_with_products(req, res, knex) {
     const user_id = req.params.user_id;
 

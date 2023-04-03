@@ -45,9 +45,6 @@ app.get('/profilepage/:user_id', (req, res) => pages.get_user_with_products(req,
 
 
 
-
-
-
 //-------PRODUCT-------
 
 //test, get all info from product table

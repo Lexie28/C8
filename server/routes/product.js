@@ -15,6 +15,13 @@ function get_products(req, res, knex) {
 }
 
 
+/**
+Gets a  product of a certain product_id
+ @param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
 function get_product(req, res, knex) {
   const product_id = req.params.product_id;
 
