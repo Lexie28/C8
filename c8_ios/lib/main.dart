@@ -8,6 +8,10 @@ import 'package:web_socket_channel/io.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
 import 'homePage2.dart';
+//Tovas sidor
+import 'otherProduct.dart';
+import 'otherProfile.dart';
+import 'categories.dart';
 
 void main() async {
   runApp(const C8iOS());
@@ -21,6 +25,7 @@ class C8iOS extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Circle Eight',
         theme: ThemeData(
           useMaterial3: true,
@@ -39,6 +44,7 @@ class MyAppState extends ChangeNotifier {}
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
+  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -50,84 +56,86 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BigCard(string: 'Circle Eight'),
-            SizedBox(height: 80),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      // JOHN 1 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'John')),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      // JOHN 2 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'John')),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      // JOHN 1 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'John')),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      // JOHN 3 ÄMNDRAR HÄR
-                      builder: (BuildContext context) => LogIn(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'John')),
-            SizedBox(height: 15),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      // TOVA HÄR1
-                      builder: (BuildContext context) => const CreateAccount(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Tova')),
-            SizedBox(height: 15),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      // TOVA HÄR2
-                      builder: (BuildContext context) => const CreateAccount(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Tova 2')),
-            SizedBox(height: 15),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePage2(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'Elsa')),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BigCard(string: 'Circle Eight'),
+              SizedBox(height: 80),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 1 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => LogIn(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'John')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 2 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => LogIn(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'John')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 1 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => LogIn(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'John')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // JOHN 3 ÄMNDRAR HÄR
+                        builder: (BuildContext context) => LogIn(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'John')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // TOVA HÄR1
+                        builder: (BuildContext context) => const OtherProduct(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: '9. Other product')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        // TOVA HÄR2
+                        builder: (BuildContext context) => const Categories(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: '4.1 Categories')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => HomePage2(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'Elsa')),
+            ],
+          ),
         ),
       ),
     );
