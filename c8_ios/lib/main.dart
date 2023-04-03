@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 },
-                child: SmallCard(string: 'Log In')),
+                child: SmallCard(string: 'John')),
             SizedBox(height: 15),
             GestureDetector(
                 onTap: () {
@@ -73,12 +73,17 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
                 },
-                child: SmallCard(string: 'Create Account')),
-            SizedBox(height: 30),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [],
-            ),
+                child: SmallCard(string: 'Tova')),
+            SizedBox(height: 15),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HomePage2(),
+                    ),
+                  );
+                },
+                child: SmallCard(string: 'Elsa')),
           ],
         ),
       ),
@@ -246,15 +251,6 @@ class CreateAccount extends StatelessWidget {
               height: 200,
             ),
             BigCard(string: 'Placeholder for Google create account'),
-            GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => HomePage2(),
-                    ),
-                  );
-                },
-                child: SmallCard(string: 'HomePage2')),
           ]),
         ));
   }

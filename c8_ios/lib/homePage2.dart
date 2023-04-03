@@ -17,9 +17,9 @@ class HomePage2 extends StatelessWidget {
       ),
       bottomNavigationBar: toolbar(),
       body: Center(
+          child: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           // Här är alla widgetar
-
           Header(string: 'Categories'),
           SizedBox(height: 10),
           Row(
@@ -57,8 +57,17 @@ class HomePage2 extends StatelessWidget {
             SizedBox(width: 10),
             Item(string: 'Product name'),
           ]),
+          SizedBox(height: 10),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            SizedBox(height: 50),
+            Item(string: 'Product name'),
+            SizedBox(width: 10),
+            Item(string: 'Product name'),
+            SizedBox(width: 10),
+            Item(string: 'Product name')
+          ]),
         ]),
-      ),
+      )),
     );
   }
 }
