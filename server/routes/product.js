@@ -1,5 +1,6 @@
 export { product_get, product_create, edit_product_all, product_delete }
 
+
 function product_get(req, res, knex) {
     knex.select("*").from("product").then((result) => {
       res.send(result)
