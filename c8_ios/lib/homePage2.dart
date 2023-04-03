@@ -90,7 +90,7 @@ class Item extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(30.0),
-            child: Image.asset('assets/shoes.png'),
+            child: Image.asset('images/shoes.png'),
           ),
           Text(string),
         ],
