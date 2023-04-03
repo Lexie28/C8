@@ -137,7 +137,8 @@ class ProductInfo extends StatelessWidget {
 }
 
 class numBids extends StatefulWidget {
-  const numBids({required this.string,
+  const numBids({
+    required this.string,
   });
 
   final String string;
@@ -244,7 +245,8 @@ class productListing extends StatelessWidget {
   }
 }
 
-class listingProfile extends StatelessWidget {             //TODO: Fetch data från databas
+class listingProfile extends StatelessWidget {
+  //TODO: Fetch data från databas
   const listingProfile({
     required this.string,
   });
@@ -261,9 +263,18 @@ class listingProfile extends StatelessWidget {             //TODO: Fetch data fr
           width: MediaQuery.of(context).size.width * 0.2,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: Image.asset(
-              'images/man.jpg',
-              fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => otherProfile(),
+                  ),
+                );
+              },
+              child: Image.asset(
+                'images/man.jpg',
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -284,12 +295,12 @@ class listingProfile extends StatelessWidget {             //TODO: Fetch data fr
                   style: TextStyle(fontSize: 20),
                   string,
                 ),
-                Text("50% (12)"),       //TODO
+                Text("50% (12)"), //TODO
                 Container(
                   height: MediaQuery.of(context).size.height * 0.05,
                   width: MediaQuery.of(context).size.width * 0.07,
                   child: Image.asset(
-                    'images/like.png',              //TODO
+                    'images/like.png', //TODO
                     fit: BoxFit.contain,
                   ),
                 ),

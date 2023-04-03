@@ -18,69 +18,68 @@ class EditProfile extends StatelessWidget {
         title: Text('Edit Profile'),
         backgroundColor: Color(0xFFA2BABF),
       ),
-      
       body: Padding(
-        
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-              children: [
-                // Profile picture
-                GestureDetector(
-                  onTap: () {
-                    // TODO: Implement change profile picture logic
-                  },
-                    child: Center(
-                      child: TextButton(
-                          onPressed: () {
+            children: [
+              // Profile picture
+              GestureDetector(
+                onTap: () {
+                  // TODO: Implement change profile picture logic
+                },
+                child: Center(
+                  child: TextButton(
+                      onPressed: () {
                         // TODO: Implement camera logic
-                          },
-                          child: const Text('Todo, hämta bild')
-                      ),
-                    ),
-                  ),
-                
-                SizedBox(height: 16.0),
-                // Name field
-                TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                  ),
+                      },
+                      child: const Text('Todo, hämta bild')),
                 ),
-                
-                SizedBox(height: 16.0),
-                // Name field
-                TextField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    labelText: 'Location',
-                    border: OutlineInputBorder(),
-                  ),
+              ),
+
+              // TODO: knapp för ändra profil
+
+              SizedBox(height: 16.0),
+              // Name field
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
                 ),
-                SizedBox(height: 16.0),
-                // Bio field
-                TextField(
-                  controller: _contactController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    labelText: 'Contact details',
-                    border: OutlineInputBorder(),
-                  ),
+              ),
+
+              SizedBox(height: 16.0),
+              // Name field
+              TextField(
+                controller: _locationController,
+                decoration: InputDecoration(
+                  labelText: 'Location',
+                  border: OutlineInputBorder(),
                 ),
-                SizedBox(height: 16.0),
-                // Save button
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: Implement save changes logic
-                  },
-                  child: Text('Save Changes'),
+              ),
+              SizedBox(height: 16.0),
+              // Bio field
+              TextField(
+                controller: _contactController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: 'Contact details',
+                  border: OutlineInputBorder(),
                 ),
-              ],
-            ),
-        ), 
-      ),   
+              ),
+              SizedBox(height: 16.0),
+              // Save button
+              ElevatedButton(
+                onPressed: () {
+                  // TODO: Implement save changes logic
+                },
+                child: Text('Save Changes'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
