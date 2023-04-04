@@ -1,3 +1,4 @@
+import 'package:c8_ios/offer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,7 @@ import 'addlisting.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
 import 'profile.dart';
+import 'offer.dart';
 
 void main() async {
   runApp(const C8iOS());
@@ -138,6 +140,16 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                   child: SmallCard(string: 'Elsa')),
+              SizedBox(height: 15),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Offer(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(string: 'Offer')),
             ],
           ),
         ),
