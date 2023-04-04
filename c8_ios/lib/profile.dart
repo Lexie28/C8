@@ -10,6 +10,11 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displaySmall!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Profile'),
@@ -27,74 +32,85 @@ class Profile extends StatelessWidget {
               icon: Icon(Icons.settings))
         ],
       ),
-      
       body: SingleChildScrollView(
-
-      child: Column(
+        child: Column(
           children: [
             // Profile picture
-               Center(
-                  child: TextButton(
-                      onPressed: () {
+            Center(
+              child: TextButton(
+                  onPressed: () {
                     // TODO: Implement camera logic
-                      },
-                      child: const Text('Todo, hämta bild')
-                  ),
-                
-                ),
-                Center(
-                  child: Text(
-                    style: TextStyle(fontSize: 25),
-                    'Name')
-                ),
-                Center(
-                  child: Text('Location')
-                ),
-                Center(
-                  child: Text('Amount of likes: xx')
-                ),
-                
-                Text('Your products'),
-                Center(
-                  child: Row(
-                    children: [ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',)
-                  ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    children: [ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',)
-                  ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    children: [ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',)
-                  ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    children: [ProfileProducts(string: 'a product',),
-                    ProfileProducts(string: 'a product',),
-                  ],
-                  ),
-                ),
-                
+                  },
+                  child: const Text('Todo, hämta bild')),
+            ),
+            Center(child: Text(style: style, 'Name')),
+            Center(child: Text('Location')),
+            Center(child: Text('Amount of likes: xx')),
 
-
-
-
-
-        
+            Text('Your products'),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  )
+                ],
+              ),
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  )
+                ],
+              ),
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  )
+                ],
+              ),
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                  ProfileProducts(
+                    string: 'a product',
+                  ),
+                ],
+              ),
+            ),
           ],
-        ), 
+        ),
       ),
       bottomNavigationBar: toolbar(),
     );
@@ -115,43 +131,32 @@ class ProfileProducts extends StatelessWidget {
       color: theme.colorScheme.onPrimary,
     );
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 30.0,
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Card(
-                  elevation: 10.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(25.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        Text(
-                          string,
-                        ),
-                      ],
-                    ),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Card(
+                elevation: 10.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                child: Padding(
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.03),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        string,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ],
     );

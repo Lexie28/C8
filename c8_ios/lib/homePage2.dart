@@ -38,34 +38,17 @@ class _HomePage extends State<HomePage2> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           // Här är alla widgetar
           Header(string: 'Categories'),
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Category(string: 'Clothes'),
-              SizedBox(width: 10),
               Category(string: 'Shoes'),
             ],
           ),
-          FutureBuilder<Album>(
-            future: futureAlbum,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data!.id.toString());
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Category(string: 'Food'),
-              SizedBox(width: 10),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
@@ -77,9 +60,7 @@ class _HomePage extends State<HomePage2> {
                   child: Category(string: 'All categories')),
             ],
           ),
-          SizedBox(height: 10),
           Header(string: 'Popular items'),
-          SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             GestureDetector(
                 onTap: () {
@@ -90,26 +71,17 @@ class _HomePage extends State<HomePage2> {
                   );
                 },
                 child: Item(string: 'Shoes')),
-            SizedBox(width: 10),
             Item(string: 'Flaming tequila'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
           ]),
-          SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
           ]),
-          SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(height: 50),
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name')
           ]),
         ]),
@@ -119,6 +91,8 @@ class _HomePage extends State<HomePage2> {
 }
 
 class Item extends StatelessWidget {
+  // TODO se till att strängen int är längre än en rad för då blir rutan ful
+
   Item({required this.string});
 
   final String string;
@@ -131,12 +105,16 @@ class Item extends StatelessWidget {
     );
 
     return Container(
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
       color: Color.fromARGB(255, 195, 195, 195),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(30.0),
-            child: Image.asset('images/shoes.png'),
+          Padding(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(30.0),
+              child: Image.asset('images/shoes.png'),
+            ),
           ),
           Text(string),
         ],
@@ -163,8 +141,9 @@ class Header extends StatelessWidget {
       ),
       color: theme.colorScheme.tertiary,
       elevation: 10,
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
       child: SizedBox(
-        height: 70,
+        height: MediaQuery.of(context).size.height * 0.07,
         child: Center(
           child: Text(
             string,
@@ -191,9 +170,10 @@ class Category extends StatelessWidget {
     return Card(
       color: theme.colorScheme.inversePrimary,
       elevation: 5,
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
       child: SizedBox(
-        height: 80,
-        width: 150,
+        height: MediaQuery.of(context).size.width * 0.2,
+        width: MediaQuery.of(context).size.width * 0.35,
         child: Center(
           child: Text(
             string,
