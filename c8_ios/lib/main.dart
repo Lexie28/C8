@@ -69,9 +69,13 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
+
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Color(0xFFA2BABF),
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
         showSelectedLabels: false,
+        showUnselectedLabels: false,
         onTap: onTappedBar,
         currentIndex: _currentIndex,
         items: [
@@ -92,7 +96,6 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
             label: 'My profile',
           ),
         ],
-        backgroundColor: Colors.red,
       ),
     );
   }
