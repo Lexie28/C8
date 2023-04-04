@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:http/http.dart' as http;
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
