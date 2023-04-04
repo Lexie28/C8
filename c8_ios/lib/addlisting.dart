@@ -25,27 +25,27 @@ class AddListing extends StatelessWidget {
               // TODO: Implement change profile picture logic
             },
             child: Center(
-                child: Container(
-                  margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.width * 0.1,
+              child: Container(
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width *0.1,
+                ),
+                child: IconButton(
+                  onPressed: () {
+                    // TODO: Implement camera logic
+                  },
+                  icon: const Icon(
+                    Icons.camera_alt,
+                    color: Colors.blue,
+                    //size: 120,
                   ),
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: IconButton(
-                    onPressed: () {  },
-                    icon:  Icon(
-                      Icons.camera_alt,
-                      color: Colors.blue,
-                    ),
-                    iconSize: MediaQuery.of(context).size.width * 0.3,
-                  ),
+                  iconSize:MediaQuery.of(context).size.width * 0.3,
                 ),
               ),
             ),
-          
+          ),
 
-        ],
           //TODO lägg till alla varor man har som man kan scrolla ner på
+        ],
       ),
     );
   }
