@@ -18,49 +18,62 @@ class EditProfile extends StatelessWidget {
         title: Text('Edit Profile'),
         backgroundColor: Color(0xFFA2BABF),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Profile picture
-              GestureDetector(
-                onTap: () {
-                  // TODO: Implement change profile picture logic
-                },
-                child: Center(
-                  child: TextButton(
-                      onPressed: () {
-                        // TODO: Implement camera logic
-                      },
-                      child: const Text('Todo, hämta bild')),
-                ),
-              ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Profile picture
+            GestureDetector(
+              onTap: () {
+                // TODO: Implement change profile picture logic
+              },
+              child: Container(
+                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1,),
+                  child: ElevatedButton( 
+                    onPressed: () {  },
+                    child: Container(                      
+                      child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                        child: Image.asset(
+                         'images/man.jpg',
+                          fit: BoxFit.cover,
+                           ),
+                        ),
+                    ),
+            ),
+            ),
+            ),
 
-              // TODO: knapp för ändra profil
+            // TODO: knapp för ändra profil
+            // Name field
+            Container(
+                margin: EdgeInsets.all( MediaQuery.of(context).size.width * 0.01,),
 
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
+              child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
               ),
+            ),
 
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
+            // Name field
+            Container(
+              margin: EdgeInsets.all( MediaQuery.of(context).size.width * 0.01,),
+
+              child: TextField(
                 controller: _locationController,
                 decoration: InputDecoration(
                   labelText: 'Location',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              // Bio field
-              TextField(
+            ),
+            // Bio field
+            Container(
+              margin: EdgeInsets.all( MediaQuery.of(context).size.width * 0.01,),
+            
+              child: TextField(
                 controller: _contactController,
                 maxLines: 3,
                 decoration: InputDecoration(
@@ -68,16 +81,19 @@ class EditProfile extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              // Save button
-              ElevatedButton(
+            ),
+            // Save button
+            Container(
+                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
+
+              child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement save changes logic
                 },
                 child: Text('Save Changes'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

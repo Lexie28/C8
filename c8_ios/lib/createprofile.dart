@@ -17,52 +17,58 @@ class CreateProfile extends StatelessWidget {
         title: Text('Create Profile'),
         backgroundColor: Color(0xFFA2BABF),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Profile picture
-              GestureDetector(
-                onTap: () {
-                  // TODO: Implement change profile picture logic
-                },
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      // TODO: Implement camera logic
-                    },
-                    icon: const Icon(
-                      Icons.camera_alt,
-                      color: Colors.blue,
-                      size: 120,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+              Center(
+                child: IconButton(
+                  onPressed: () {
+                    // TODO: Implement camera logic
+                  },
+                  icon: Container(
+                    margin: EdgeInsets.only(top :MediaQuery.of(context).size.width * 0.1,),
+                    child: IconButton(
+                      onPressed: () { 
+                        //TODO implement adding a profilepic
+                       },
+                      icon:  Icon(
+                        Icons.camera_alt,
+                        color: Colors.blue,
+                      ), 
+                      iconSize: MediaQuery.of(context).size.width * 0.3,
                     ),
                   ),
                 ),
               ),
+            // Name field
+            Container(
+              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
 
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
+              child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
               ),
-
-              SizedBox(height: 16.0),
-              // Name field
-              TextField(
+            ),
+            // Name field
+            Container(
+            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
+            
+              child: TextField(
                 controller: _locationController,
                 decoration: InputDecoration(
                   labelText: 'Location',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              // Bio field
-              TextField(
+            ),
+            // Bio field
+            Container(
+            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
+            
+              child: TextField(
                 controller: _contactController,
                 maxLines: 3,
                 decoration: InputDecoration(
@@ -70,9 +76,12 @@ class CreateProfile extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              // Save button
-              ElevatedButton(
+            ),
+            // Save button
+            Container(
+              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1,),
+            
+              child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement save changes logic
                   Navigator.of(context).push(
@@ -83,8 +92,8 @@ class CreateProfile extends StatelessWidget {
                 },
                 child: Text('Save Changes'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
