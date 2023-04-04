@@ -5,9 +5,24 @@ import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../main.dart';
 import '../toolbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class HomePage2 extends StatelessWidget {
+class HomePage2 extends StatefulWidget {
   const HomePage2({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage2> {
+  late Future<Album> futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = fetchAlbum();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +46,19 @@ class HomePage2 extends StatelessWidget {
               SizedBox(width: 10),
               Category(string: 'Shoes'),
             ],
+          ),
+          FutureBuilder<Album>(
+            future: futureAlbum,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.id.toString());
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
           ),
           SizedBox(height: 10),
           Row(
@@ -173,6 +201,38 @@ class Category extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+Future<Album> fetchAlbum() async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+
+  if (response.statusCode == 200) {
+    // allt är lugnt
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  const Album({
+    required this.userId,
+    required this.id,
+    required this.title,
+  });
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
     );
   }
 }
