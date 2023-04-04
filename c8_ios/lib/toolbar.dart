@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../main.dart';
+import 'offers.dart';
 
 class toolbar extends StatefulWidget {
   const toolbar({super.key});
@@ -61,11 +62,11 @@ class _Toolbar extends State<toolbar> {
             );
             break;
           case 2:
-            /*Navigator.of(context).push(
+            Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomePage2(),
+                builder: (BuildContext context) => Offers(),
               ),
-            );*/
+            );
             break;
           case 3:
             Navigator.of(context).push(
