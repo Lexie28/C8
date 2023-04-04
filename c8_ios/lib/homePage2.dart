@@ -112,9 +112,11 @@ class Item extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(40.0),
+              //borderRadius: BorderRadius.circular(50.0),
               child: Image.asset(
                 'images/shoes.png',
+                height: MediaQuery.of(context).size.width * 0.25,
+                width: MediaQuery.of(context).size.width * 0.25,
               ),
             ),
           ),
