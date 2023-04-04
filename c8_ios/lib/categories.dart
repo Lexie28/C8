@@ -30,7 +30,6 @@ class Categories extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: toolbar(),
     );
   }
 }
