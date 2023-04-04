@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../main.dart';
+import 'secondmain.dart';
 import '../toolbar.dart';
 
 class otherProfile extends StatelessWidget {

@@ -12,7 +12,7 @@ class AddListing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: toolbar(),
+      //bottomNavigationBar: toolbar(),
       appBar: AppBar(
         title: Text('Add Listing'),
         backgroundColor: Color(0xFFA2BABF),

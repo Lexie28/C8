@@ -112,7 +112,7 @@ class Profile extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: toolbar(),
+      //bottomNavigationBar: toolbar(),
     );
   }
 }

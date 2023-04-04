@@ -4,8 +4,9 @@ import 'package:c8_ios/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../main.dart';
+import 'secondmain.dart';
 import 'offers.dart';
+
 
 class toolbar extends StatefulWidget {
   const toolbar({super.key});

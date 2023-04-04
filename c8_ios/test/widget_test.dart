@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:c8_ios/main.dart';
+import 'package:c8_ios/secondmain.dart';
 
 void main() {
   testWidgets('First page test', (WidgetTester tester) async {
