@@ -30,6 +30,13 @@ class C8 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Circle Eight',
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
+      ),
       home: MyBottomNavigationbar(),
     );
   }
