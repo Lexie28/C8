@@ -1,5 +1,6 @@
 import * as product from "./routes/product.js";
 import * as user from "./routes/user.js";
+import * as pages from "./routes/pages.js";
 import { createRequire } from "module"
 
 const require = createRequire(import.meta.url);
@@ -7,7 +8,7 @@ const require = createRequire(import.meta.url);
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const { Server } = require('ws');
+//const { Server } = require('ws');
 const cors = require('cors');
 const app = express();
 const knex = require('knex')({
@@ -37,24 +38,38 @@ app.get('/', (req, res) => {
 });
 
 
+//-------PAGES OF APP-------
+
+//your own profile page, retrieves your user information and all of your products (aka. products with your user_id)
+app.get('/profilepage/:user_id', (req, res) => pages.get_user_with_products(req, res, knex));
 
 
 
 //-------PRODUCT-------
 
 //test, get all info from product table
-app.get('/helloworld', (req, res) => product.get_product(req, res, knex));
+app.get('/helloworld', (req, res) => product.get_products(req, res, knex));
+
+//Get a product of a certain product_id from product table
+app.get('/product/get/:product_id', (req, res) => product.get_product(req, res, knex));
 
 //Create a new product
-app.post('/product/create', (req,res) => product.create_product(req, res, knex));
+app.post('/product/create', (req,res) => product.product_create(req, res, knex));
 
 //Editing product
 app.patch('/product/edit/:product_id', (req, res) => product.edit_product_all(req, res, knex));
 
 //Deleting product
-app.delete('/product/delete/:product_id', (req, res) => product.delete_product(req, res, knex));
+app.delete('/product/delete/:product_id', (req, res) => product.product_delete(req, res, knex));
 
+//Retrieve the 5 most popular products
+app.get('/product/top5popular', (req, res) => product.product_top5popular(req, res, knex));
 
+//Retrieve the products in order of popularity
+app.get('/product/popular', (req, res) => product.product_popular(req, res, knex));
+
+//Updates number of bid by 1 for a certain product_id
+app.patch('/product/updatebid/:product_id', (req, res) => product.product_bid(req, res, knex));
 
 
 //------- USER -------
@@ -62,21 +77,20 @@ app.delete('/product/delete/:product_id', (req, res) => product.delete_product(r
 //Get all users in the database
 app.get('/user/users', (req, res) => user.get_users(req, res, knex));
 
+//Get a specific user from the user table
+app.get('/user/:user_id', (req, res) => user.get_user(req, res, knex))
+
 //Registering a new user
 app.post('/user/registration', (req, res) => user.user_registration(req, res, knex));
 
 //Adding a like (/thumbs up) to a user
 app.patch('/user/like/:user_id', (req, res) => user.user_like(req, res, knex));
 
-
 //Adding a dislike (/thumbs down) to a user
 app.patch('/user/dislike/:user_id', (req, res) => user.user_dislike(req, res, knex));
 
 //Deleting user
 app.delete('/user/delete/:user_id', (req, res) => user.user_delete(req, res, knex));
-
-
-
 
 
 
@@ -100,16 +114,14 @@ app.patch('/transactions/:id', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-
-// Elsa har kommenterat ut detta för att det där nere ska funka, kan inte lyssna två ggr
-/*app.listen(PORT, () => {
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
-});*/
-
+});
 
 var mes;
 
+/*
 const server = express()
   .use((req, res) => res.send(mes.toString()))
   .listen(PORT, () => console.log('Listening on ${PORT}'));
@@ -133,4 +145,4 @@ wss.on('connection', function(ws, req) {
         ws.send("Are you not saying hi to me 🥺👉👈");
     }
 }) 
-})
+})*/
