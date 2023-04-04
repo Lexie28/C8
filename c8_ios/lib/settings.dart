@@ -27,7 +27,6 @@ class Settings extends StatelessWidget {
               icon: Icon(Icons.settings))
         ],
       ),
-      bottomNavigationBar: toolbar(),
     );
   }
 }

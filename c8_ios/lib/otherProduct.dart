@@ -15,6 +15,9 @@ class OtherProduct extends StatefulWidget {
 }
 
 class _OtherProductState extends State<OtherProduct> {
+  int _currentIndex = 4;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
