@@ -1,4 +1,4 @@
-import * as product from "./routes/product.js";
+import * as listing from "./routes/listing.js";
 import * as user from "./routes/user.js";
 import * as pages from "./routes/pages.js";
 import { createRequire } from "module"
@@ -40,37 +40,39 @@ app.get('/', (req, res) => {
 
 //-------PAGES OF APP-------
 
-//your own profile page, retrieves your user information and all of your products (aka. products with your user_id)
-app.get('/profilepage/:user_id', (req, res) => pages.get_user_with_products(req, res, knex));
+//your own profile page, retrieves your user information and all of your listings (aka. listings with your user_id)
+app.get('/profilepage/:user_id', (req, res) => pages.get_user_with_listings(req, res, knex));
 
 
 
-//-------PRODUCT-------
+//-------listing-------
 
-//test, get all info from product table
-app.get('/helloworld', (req, res) => product.get_products(req, res, knex));
+//test, get all info from listing table
+app.get('/helloworld', (req, res) => listing.get_listings(req, res, knex));
 
-//Get a product of a certain product_id from product table
-app.get('/product/get/:product_id', (req, res) => product.get_product(req, res, knex));
+//Get a listing of a certain listing_id from listing table
+app.get('/listing/get/:listing_id', (req, res) => listing.get_listing(req, res, knex));
 
-//Create a new product
-app.post('/product/create', (req,res) => product.product_create(req, res, knex));
+//Create a new listing
+app.post('/listing/create', (req,res) => listing.listing_create(req, res, knex));
 
-//Editing product
-app.patch('/product/edit/:product_id', (req, res) => product.edit_product_all(req, res, knex));
+//Editing listing
+app.patch('/listing/edit/:listing_id', (req, res) => listing.edit_listing_all(req, res, knex));
 
-//Deleting product
-app.delete('/product/delete/:product_id', (req, res) => product.product_delete(req, res, knex));
+//Deleting listing
+app.delete('/listing/delete/:listing_id', (req, res) => listing.listing_delete(req, res, knex));
 
-//Retrieve the 5 most popular products
-app.get('/product/top5popular', (req, res) => product.product_top5popular(req, res, knex));
+//Retrieve the 5 most popular listings
+app.get('/listing/top5popular', (req, res) => listing.listing_top5popular(req, res, knex));
 
-//Retrieve the products in order of popularity
-app.get('/product/popular', (req, res) => product.product_popular(req, res, knex));
+//Retrieve the listings in order of popularity
+app.get('/listing/popular', (req, res) => listing.listing_popular(req, res, knex));
 
-//Updates number of bid by 1 for a certain product_id
-app.patch('/product/updatebid/:product_id', (req, res) => product.product_bid(req, res, knex));
+//Updates number of bid by 1 for a certain listing_id
+app.patch('/listing/updatebid/:listing_id', (req, res) => listing.listing_bid(req, res, knex));
 
+//Retrieves all items of a certain category
+app.get('/listing/category/:listing_category', (req, res) => listing.listing_category(req, res, knex));
 
 //------- USER -------
 
