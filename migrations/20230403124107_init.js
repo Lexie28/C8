@@ -16,10 +16,12 @@ exports.up = function(knex) {
 		    .primary();
 		table.string("name")
 		    .notNullable();
-		table.integer("likes");
-		table.integer("dislikes");
+		table.integer("likes")
+		    .defaultTo(0);
+		table.integer("dislikes")
+		    .defaultTo(0);
 		table.string("profile_picture_path");
-		table.string("phone_number");
+		table.string("phone_number", 12);
 		table.string("email");
 	    })
     }
@@ -50,7 +52,7 @@ exports.up = function(knex) {
 	return knex.schema
 	    .createTable("offer", (table) => {
 		table.increments("id").primary();
-		table.boolean("accepted").notNullable();
+		table.boolean("accepted");		
 		
 		//FK
 		table.integer("user_making_offer")
