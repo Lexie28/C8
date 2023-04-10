@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
 
 class EditProfile extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -13,7 +12,6 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: toolbar(),
       appBar: AppBar(
         title: Text('Edit Profile'),
         backgroundColor: Color(0xFFA2BABF),
@@ -27,27 +25,23 @@ class EditProfile extends StatelessWidget {
                 // TODO: Implement change profile picture logic
               },
               child: Container(
-                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1,),
-                  child: ElevatedButton( 
-                    onPressed: () {  },
-                    child: Container(                      
-                      child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100.0),
-                        child: Image.asset(
-                         'images/man.jpg',
-                          fit: BoxFit.cover,
-                           ),
-                        ),
-                    ),
-            ),
-            ),
+                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(120.0),
+                  child: Image.asset(
+                    'images/man.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
 
             // TODO: knapp för ändra profil
             // Name field
             Container(
-                margin: EdgeInsets.all( MediaQuery.of(context).size.width * 0.01,),
-
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -59,8 +53,9 @@ class EditProfile extends StatelessWidget {
 
             // Name field
             Container(
-              margin: EdgeInsets.all( MediaQuery.of(context).size.width * 0.01,),
-
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: TextField(
                 controller: _locationController,
                 decoration: InputDecoration(
@@ -71,8 +66,9 @@ class EditProfile extends StatelessWidget {
             ),
             // Bio field
             Container(
-              margin: EdgeInsets.all( MediaQuery.of(context).size.width * 0.01,),
-            
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: TextField(
                 controller: _contactController,
                 maxLines: 3,
@@ -84,8 +80,9 @@ class EditProfile extends StatelessWidget {
             ),
             // Save button
             Container(
-                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
-
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement save changes logic
