@@ -13,7 +13,7 @@ class Offers extends StatelessWidget {
         title: Text('Offers'),
         backgroundColor: Color(0xFFA2BABF),
       ),
-      bottomNavigationBar: toolbar(),
+      //bottomNavigationBar: toolbar(),
     );
   }
 }

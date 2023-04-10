@@ -3,7 +3,7 @@ import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../main.dart';
+import 'secondmain.dart';
 import '../toolbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -32,7 +32,7 @@ class _HomePage extends State<HomePage2> {
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
         backgroundColor: Color.fromARGB(255, 162, 186, 191),
       ),
-      bottomNavigationBar: toolbar(),
+      //bottomNavigationBar: toolbar(),
       body: Center(
           child: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
