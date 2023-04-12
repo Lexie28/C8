@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:c8_ios/editprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../toolbar.dart';
@@ -17,6 +18,7 @@ class Profile extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Your Profile'),
         backgroundColor: Color(0xFFA2BABF),
         actions: [
@@ -24,7 +26,15 @@ class Profile extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    // JOHN 1 ÄMNDRAR HÄR
+                    builder: (BuildContext context) => EditProfile(),
+                  ),
+                );
+              },
+              icon: Icon(Icons.edit)),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (BuildContext context) => Settings(),
                   ),
                 );
@@ -37,12 +47,22 @@ class Profile extends StatelessWidget {
           children: [
             // Profile picture
             Center(
-              child: TextButton(
-                  onPressed: () {
-                    // TODO: Implement camera logic
-                  },
-                  child: const Text('Todo, hämta bild')),
-            ),
+                child: TextButton(
+              onPressed: () {
+                // TODO: Implement camera logic
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(
+                    vertical: MediaQuery.of(context).size.width * 0.02,
+                    horizontal: MediaQuery.of(context).size.width * 0.08),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(120),
+                  child: Image.asset(
+                    'images/man.jpg',
+                  ),
+                ),
+              ),
+            )),
             Center(child: Text(style: style, 'Name')),
             Center(child: Text('Location')),
             Center(child: Text('Amount of likes: xx')),
