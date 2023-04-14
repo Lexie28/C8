@@ -1,11 +1,28 @@
+import 'package:c8_ios/categories.dart';
+import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../main.dart';
+import 'secondmain.dart';
 import '../toolbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class HomePage2 extends StatelessWidget {
+class HomePage2 extends StatefulWidget {
   const HomePage2({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _HomePage();
+}
+
+class _HomePage extends State<HomePage2> {
+  late Future<Album> futureAlbum;
+
+  @override
+  void initState() {
+    super.initState();
+    futureAlbum = fetchAlbum();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,55 +32,56 @@ class HomePage2 extends StatelessWidget {
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
         backgroundColor: Color.fromARGB(255, 162, 186, 191),
       ),
-      bottomNavigationBar: toolbar(),
+      //bottomNavigationBar: toolbar(),
       body: Center(
           child: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           // Här är alla widgetar
           Header(string: 'Categories'),
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Category(string: 'Clothes'),
-              SizedBox(width: 10),
               Category(string: 'Shoes'),
             ],
           ),
-          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Category(string: 'Food'),
-              SizedBox(width: 10),
-              Category(string: 'All categories'),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Categories(),
+                      ),
+                    );
+                  },
+                  child: Category(string: 'All categories')),
             ],
           ),
-          SizedBox(height: 10),
           Header(string: 'Popular items'),
-          SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Item(string: 'Shoes'),
-            SizedBox(width: 10),
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => OtherProduct(),
+                    ),
+                  );
+                },
+                child: Item(string: 'Shoes')),
             Item(string: 'Flaming tequila'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
           ]),
-          SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
           ]),
-          SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            SizedBox(height: 50),
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name'),
-            SizedBox(width: 10),
             Item(string: 'Product name')
           ]),
         ]),
@@ -73,6 +91,8 @@ class HomePage2 extends StatelessWidget {
 }
 
 class Item extends StatelessWidget {
+  // TODO se till att strängen int är längre än en rad för då blir rutan ful
+
   Item({required this.string});
 
   final String string;
@@ -85,12 +105,20 @@ class Item extends StatelessWidget {
     );
 
     return Container(
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
       color: Color.fromARGB(255, 195, 195, 195),
       child: Column(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(30.0),
-            child: Image.asset('assets/shoes.png'),
+          Padding(
+            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
+            child: ClipRRect(
+              //borderRadius: BorderRadius.circular(50.0),
+              child: Image.asset(
+                'images/shoes.png',
+                height: MediaQuery.of(context).size.width * 0.25,
+                width: MediaQuery.of(context).size.width * 0.25,
+              ),
+            ),
           ),
           Text(string),
         ],
@@ -117,8 +145,9 @@ class Header extends StatelessWidget {
       ),
       color: theme.colorScheme.tertiary,
       elevation: 10,
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
       child: SizedBox(
-        height: 70,
+        height: MediaQuery.of(context).size.height * 0.07,
         child: Center(
           child: Text(
             string,
@@ -145,9 +174,10 @@ class Category extends StatelessWidget {
     return Card(
       color: theme.colorScheme.inversePrimary,
       elevation: 5,
+      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
       child: SizedBox(
-        height: 80,
-        width: 150,
+        height: MediaQuery.of(context).size.width * 0.2,
+        width: MediaQuery.of(context).size.width * 0.35,
         child: Center(
           child: Text(
             string,
@@ -155,6 +185,38 @@ class Category extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+Future<Album> fetchAlbum() async {
+  final response = await http
+      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+
+  if (response.statusCode == 200) {
+    // allt är lugnt
+    return Album.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
+class Album {
+  final int userId;
+  final int id;
+  final String title;
+
+  const Album({
+    required this.userId,
+    required this.id,
+    required this.title,
+  });
+
+  factory Album.fromJson(Map<String, dynamic> json) {
+    return Album(
+      userId: json['userId'],
+      id: json['id'],
+      title: json['title'],
     );
   }
 }
