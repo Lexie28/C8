@@ -16,9 +16,9 @@ const knex = require('knex')({
   connection: {
     host: process.env.DATABASE_HOST,
     port: 3306,
-    user: 'root',
+    user: process.env.USER_NAME,
     password: process.env.DATABASE_PASSWORD,
-    database: 'circle8'
+    database: process.env.DATABASE_NAME
   }
 });
 
@@ -45,10 +45,10 @@ app.get('/profilepage/:user_id', (req, res) => pages.get_user_with_listings(req,
 
 
 
-//-------listing-------
+//-------LISTING-------
 
 //test, get all info from listing table
-app.get('/helloworld', (req, res) => listing.get_listings(req, res, knex));
+app.get('/listings/', (req, res) => listing.get_listings(req, res, knex));
 
 //Get a listing of a certain listing_id from listing table
 app.get('/listing/get/:listing_id', (req, res) => listing.get_listing(req, res, knex));
@@ -65,7 +65,7 @@ app.delete('/listing/delete/:listing_id', (req, res) => listing.listing_delete(r
 //Retrieve the 5 most popular listings
 app.get('/listing/top5popular', (req, res) => listing.listing_top5popular(req, res, knex));
 
-//Retrieve the listings in order of popularity
+//Retrieve the listings in order of popularity based on number of bids
 app.get('/listing/popular', (req, res) => listing.listing_popular(req, res, knex));
 
 //Updates number of bid by 1 for a certain listing_id
@@ -74,13 +74,16 @@ app.patch('/listing/updatebid/:listing_id', (req, res) => listing.listing_bid(re
 //Retrieves all items of a certain category
 app.get('/listing/category/:listing_category', (req, res) => listing.listing_category(req, res, knex));
 
-//------- USER -------
+
+
+
+//-------USER-------
 
 //Get all users in the database
 app.get('/user/users', (req, res) => user.get_users(req, res, knex));
 
 //Get a specific user from the user table
-app.get('/user/:user_id', (req, res) => user.get_user(req, res, knex))
+app.get('/user/get/:user_id', (req, res) => user.get_user(req, res, knex))
 
 //Registering a new user
 app.post('/user/registration', (req, res) => user.user_registration(req, res, knex));
