@@ -8,12 +8,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:c8_ios/secondmain.dart';
 import 'package:c8_ios/main.dart';
 
 void main() {
   testWidgets('First page test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const C8iOS());
+    await tester.pumpWidget(const C8());
 
     expect(find.text('Circle Eight'), findsOneWidget);
     expect(find.text('Log In'), findsOneWidget);

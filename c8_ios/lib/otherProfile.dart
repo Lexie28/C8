@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../main.dart';
+import 'secondmain.dart';
 import '../toolbar.dart';
 
 class otherProfile extends StatelessWidget {
@@ -41,7 +41,7 @@ class otherProfile extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: toolbar(),
+      //bottomNavigationBar: toolbar(),
     );
   }
 }
@@ -52,7 +52,12 @@ class profilePicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 60, 10, 0),
+      margin: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.06,
+        MediaQuery.of(context).size.width * 0.18,
+        MediaQuery.of(context).size.width * 0.06,
+        MediaQuery.of(context).size.width * 0,
+      ),
       height: MediaQuery.of(context).size.height * 0.2,
       width: MediaQuery.of(context).size.width * 0.4,
       child: ClipRRect(
@@ -76,15 +81,21 @@ class profileName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      //margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      margin: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.06,
+        MediaQuery.of(context).size.width * 0.06,
+        MediaQuery.of(context).size.width * 0.06,
+        MediaQuery.of(context).size.width * 0,
+      ),
       width: MediaQuery.of(context).size.width * 1,
       child: Column(
         children: [
           Text(
-            style: TextStyle(fontSize: 25),
+            style: TextStyle(fontSize: MediaQuery.of(context).size.width *0.07),
             string,
           ),
-          Text(style: TextStyle(fontSize: 18), "50% (12)"),
+          Text(style: TextStyle(fontSize: MediaQuery.of(context).size.width *0.05), "50% (12)"),
           Container(
             height: MediaQuery.of(context).size.height * 0.05,
             width: MediaQuery.of(context).size.width * 0.07,
@@ -100,7 +111,8 @@ class profileName extends StatelessWidget {
 }
 
 class productProfile extends StatelessWidget {
-  const productProfile({required this.string,
+  const productProfile({
+    required this.string,
   });
 
   final String string;
@@ -108,11 +120,14 @@ class productProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(30, 60, 10, 20),
-      //margin: const EdgeInsets.symmetric(
-      //    vertical: 60, horizontal: 30),
+      margin: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width *0.07,
+        MediaQuery.of(context).size.width *0.1,
+        MediaQuery.of(context).size.width *0.05,
+        MediaQuery.of(context).size.width *0.02,
+      ),
       height: MediaQuery.of(context).size.height * 0.17,
-      width: MediaQuery.of(context).size.height * 0.17 ,
+      width: MediaQuery.of(context).size.height * 0.17,
       decoration: BoxDecoration(
         border: Border.all(width: 2.2, color: Colors.white),
         borderRadius: BorderRadius.all(

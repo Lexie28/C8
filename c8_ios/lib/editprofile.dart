@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
 
 class EditProfile extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -13,13 +12,11 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: toolbar(),
       appBar: AppBar(
         title: Text('Edit Profile'),
         backgroundColor: Color(0xFFA2BABF),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
         child: Column(
           children: [
             // Profile picture
@@ -27,51 +24,71 @@ class EditProfile extends StatelessWidget {
               onTap: () {
                 // TODO: Implement change profile picture logic
               },
-              child: Center(
-                child: TextButton(
-                    onPressed: () {
-                      // TODO: Implement camera logic
-                    },
-                    child: const Text('Todo, hämta bild')),
+              child: Container(
+                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(120.0),
+                  child: Image.asset(
+                    'images/man.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
 
-            SizedBox(height: 16.0),
+            // TODO: knapp för ändra profil
             // Name field
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
+            Container(
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
+              child: TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
 
-            SizedBox(height: 16.0),
             // Name field
-            TextField(
-              controller: _locationController,
-              decoration: InputDecoration(
-                labelText: 'Location',
-                border: OutlineInputBorder(),
+            Container(
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
+              child: TextField(
+                controller: _locationController,
+                decoration: InputDecoration(
+                  labelText: 'Location',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
-            SizedBox(height: 16.0),
             // Bio field
-            TextField(
-              controller: _contactController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'Contact details',
-                border: OutlineInputBorder(),
+            Container(
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
+              child: TextField(
+                controller: _contactController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: 'Contact details',
+                  border: OutlineInputBorder(),
+                ),
               ),
             ),
-            SizedBox(height: 16.0),
             // Save button
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implement save changes logic
-              },
-              child: Text('Save Changes'),
+            Container(
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  // TODO: Implement save changes logic
+                },
+                child: Text('Save Changes'),
+              ),
             ),
           ],
         ),
