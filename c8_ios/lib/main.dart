@@ -58,6 +58,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
     Profile(),
   ];
 
+
   void onTappedBar(int index) {
     setState(() {
       _currentIndex = index;

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../toolbar.dart';
 import 'settings.dart';
+import 'yourProduct.dart';
 
 class Profile extends StatelessWidget {
   //Variabler som namn och bilder
@@ -58,7 +59,7 @@ class Profile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.asset(
-                    'images/man.jpg',
+                    'images/woman.jpg',
                   ),
                 ),
               ),
@@ -72,8 +73,17 @@ class Profile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ProfileProducts(
-                    string: 'a product',
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => YourProduct(),
+                        ),
+                      );
+                    },
+                    child: ProfileProducts(
+                      string: 'a product',
+                    ),
                   ),
                   ProfileProducts(
                     string: 'a product',
