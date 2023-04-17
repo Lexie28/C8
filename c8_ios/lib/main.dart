@@ -27,6 +27,7 @@ void main() {
 
 class C8 extends StatelessWidget {
   const C8({super.key});
+  final String userId = '1';
 
   @override
   Widget build(BuildContext context) {
