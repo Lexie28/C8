@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
-import 'homePage2.dart';
+//import 'homePage2.dart';
 //Tovas sidor
 import 'otherProduct.dart';
 import 'otherProfile.dart';
@@ -17,6 +17,7 @@ import 'addlisting.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
 import 'profile.dart';
+import 'hometest.dart';
 
 //  defines the data the app needs to function
 class MyAppState extends ChangeNotifier {}
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage2(),
+                        builder: (BuildContext context) => HomePage3(),
                       ),
                     );
                   },

@@ -8,6 +8,8 @@ import '../toolbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'clothingcategory.dart';
+import 'specificitem.dart';
+
 
 class HomePage3 extends StatefulWidget {
   const HomePage3({Key? key}) : super(key: key);
@@ -18,7 +20,134 @@ class HomePage3 extends StatefulWidget {
 
 class _HomePageState extends State<HomePage3> {
   late Future<List<dynamic>> _futureListings;
-  
+
+  void initState() {
+    super.initState();
+    _futureListings = fetchPopular();
+  }
+
+  Future<List<dynamic>> fetchPopular() async {
+    final response = await http
+        .get(Uri.parse('http://130.243.238.100:5000/listing/top5popular'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch listings');
+    }
+  }
+
+  void _navigateToListingsPage(String category) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (BuildContext context) => ListingsPage(category: category),
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Circle 8'),
+        foregroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: Color.fromARGB(255, 162, 186, 191),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Header(string: 'Categories'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _navigateToListingsPage('Clothes');
+                  },
+                  child: Category(string: 'Clothes'),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _navigateToListingsPage('Shoes');
+                  },
+                  child: Category(string: 'Shoes'),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _navigateToListingsPage('Food');
+                  },
+                  child: Category(string: 'Food'),
+                ),
+                TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                    builder: (BuildContext context) => Categories(),
+                  )
+
+                  );
+                },
+                child: Category(string: 'All categories'),
+              ),
+              ],
+            ),
+            Header(string: 'Popular items'),
+            FutureBuilder<List<dynamic>>(
+              future: _futureListings,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final listings = snapshot.data!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: listings.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final listing = listings[index];
+                      return ListTile(
+                        title: Text(listing['listing_name']),
+                        subtitle: Text(listing['listing_description']),
+                        trailing: Text(listing['listing_category']),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ListingDetailPage(
+                                listingId: listing['listing_id'].toString(),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Failed to fetch listings');
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+class HomePage3 extends StatefulWidget {
+  const HomePage3({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage3> {
+  late Future<List<dynamic>> _futureListings;
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +155,8 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http.get(Uri.parse('http://130.243.238.100:5000/listing/top5popular'));
+    final response = await http
+        .get(Uri.parse('http://130.243.238.100:5000/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -96,9 +226,11 @@ class _HomePageState extends State<HomePage3> {
                         subtitle: Text(listing['listing_description']),
                         trailing: Text(listing['listing_category']),
                         onTap: () {
-                          Navigator.of(context).push(
+                          Navigator.push(
+                            context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) => OtherProduct(),
+                              builder: (context) => ListingDetailPage(
+                                  listingId: listing['listing_id'].toString()),
                             ),
                           );
                         },
@@ -117,8 +249,7 @@ class _HomePageState extends State<HomePage3> {
       ),
     );
   }
-}
-
+}*/
 
 class Item extends StatelessWidget {
   // TODO se till att strängen int är längre än en rad för då blir rutan ful
