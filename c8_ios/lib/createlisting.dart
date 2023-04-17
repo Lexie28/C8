@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'hometest.dart';
+import 'api.dart';
 
 class CreateListingPage extends StatefulWidget {
   @override
@@ -15,10 +16,11 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _listingName = '';
   String _listingDescription = '';
   String _listingCategory = '';
+  Api _api = new Api();
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('http://130.243.238.100:5000/listing/create');
+      final url = Uri.parse('${_api.getApiHost()}/listing/create');
       final headers = {'Content-Type': 'application/json'};
       final body = {
         'user_id': _userId,

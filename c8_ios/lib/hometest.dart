@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'listingscategory.dart';
 import 'specificitem.dart';
+import 'api.dart';
+
 
 
 class HomePage3 extends StatefulWidget {
@@ -20,6 +22,7 @@ class HomePage3 extends StatefulWidget {
 
 class _HomePageState extends State<HomePage3> {
   late Future<List<dynamic>> _futureListings;
+  Api _api = Api();
 
   void initState() {
     super.initState();
@@ -27,8 +30,8 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http
-        .get(Uri.parse('http://130.243.238.100:5000/listing/top5popular'));
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -82,16 +85,13 @@ class _HomePageState extends State<HomePage3> {
                   child: Category(string: 'Food'),
                 ),
                 TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                    builder: (BuildContext context) => Categories(),
-                  )
-
-                  );
-                },
-                child: Category(string: 'All categories'),
-              ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => Categories(),
+                    ));
+                  },
+                  child: Category(string: 'All categories'),
+                ),
               ],
             ),
             Header(string: 'Popular items'),

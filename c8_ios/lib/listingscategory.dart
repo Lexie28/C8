@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'specificitem.dart';
+import 'api.dart';
 
 class ListingsPage extends StatefulWidget {
   final String category;
@@ -14,6 +15,7 @@ class ListingsPage extends StatefulWidget {
 
 class _ListingsPageState extends State<ListingsPage> {
   List<dynamic> listings = [];
+  Api _api = Api();
 
   @override
   void initState() {
@@ -22,8 +24,8 @@ class _ListingsPageState extends State<ListingsPage> {
   }
 
   Future<void> fetchListings() async {
-    final response = await http.get(
-        Uri.parse('http://130.243.238.100:5000/listing/category/${widget.category}'));
+    final response = await http.get(Uri.parse(
+        '${_api.getApiHost()}/listing/category/${widget.category}'));
     if (response.statusCode == 200) {
       setState(() {
         listings = jsonDecode(response.body);

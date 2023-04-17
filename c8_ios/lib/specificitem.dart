@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'api.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -13,6 +14,7 @@ class ListingDetailPage extends StatefulWidget {
 
 class _ListingDetailPageState extends State<ListingDetailPage> {
   Map<String, dynamic> listing = {};
+  Api _api = Api();
 
   @override
   void initState() {
@@ -21,23 +23,24 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   }
 
   Future<void> fetchListingDetails() async {
-    final response = await http.get(Uri.parse('http://130.243.238.100:5000/listing/get/${widget.listingId}'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
     if (response.statusCode == 200) {
-  setState(() {
-    var decoded = jsonDecode(response.body);
-    if (decoded is List) {
-      if (decoded.isNotEmpty) {
-        listing = decoded[0];
-      } else {
-        throw Exception('Failed to fetch listing details');
-      }
+      setState(() {
+        var decoded = jsonDecode(response.body);
+        if (decoded is List) {
+          if (decoded.isNotEmpty) {
+            listing = decoded[0];
+          } else {
+            throw Exception('Failed to fetch listing details');
+          }
+        } else {
+          throw Exception('Failed to fetch listing details');
+        }
+      });
     } else {
       throw Exception('Failed to fetch listing details');
     }
-  });
-} else {
-  throw Exception('Failed to fetch listing details');
-}
   }
 
   @override
