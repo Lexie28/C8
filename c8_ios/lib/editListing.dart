@@ -1,19 +1,30 @@
 import 'dart:io';
 
+import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 
-class EditProfile extends StatelessWidget {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
+class EditListing extends StatelessWidget {
+  final TextEditingController _titleController = TextEditingController();
+
+  final TextEditingController _descController = TextEditingController();
   //Någon variabel som håller bilden kanske
+
+  void changeTitle() {
+  print('New product title: ${_titleController.text}');
+  //Ändra namnet i databasen
+}
+
+  void changeDesc() {
+  print('New product title: ${_descController.text}');
+  //Ändra description i databasen
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: Text('Edit Listing'),
         backgroundColor: Color(0xFFA2BABF),
       ),
       body: SingleChildScrollView(
@@ -29,7 +40,7 @@ class EditProfile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120.0),
                   child: Image.asset(
-                    'images/woman.jpg',
+                    'images/apple.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -43,9 +54,9 @@ class EditProfile extends StatelessWidget {
                 MediaQuery.of(context).size.width * 0.01,
               ),
               child: TextField(
-                controller: _nameController,
+                controller: _titleController,
                 decoration: InputDecoration(
-                  labelText: 'Name',
+                  labelText: 'New Title',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -57,27 +68,14 @@ class EditProfile extends StatelessWidget {
                 MediaQuery.of(context).size.width * 0.01,
               ),
               child: TextField(
-                controller: _locationController,
+                controller: _descController,
                 decoration: InputDecoration(
-                  labelText: 'Location',
+                  labelText: 'New Description',
                   border: OutlineInputBorder(),
                 ),
               ),
             ),
             // Bio field
-            Container(
-              margin: EdgeInsets.all(
-                MediaQuery.of(context).size.width * 0.01,
-              ),
-              child: TextField(
-                controller: _contactController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: 'Contact details',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
             // Save button
             Container(
               margin: EdgeInsets.all(
@@ -86,6 +84,8 @@ class EditProfile extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement save changes logic
+                  changeTitle();
+                  changeDesc();
                 },
                 child: Text('Save Changes'),
               ),
