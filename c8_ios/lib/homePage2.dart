@@ -7,6 +7,7 @@ import 'secondmain.dart';
 import '../toolbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'clothingcategory.dart';
 
 class HomePage2 extends StatefulWidget {
   const HomePage2({super.key});
@@ -41,7 +42,15 @@ class _HomePage extends State<HomePage2> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Category(string: 'Clothes'),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ListingsPage(),
+                      ),
+                    );
+                  },
+                  child: Category(string: 'Clothes')),
               Category(string: 'Shoes'),
             ],
           ),
