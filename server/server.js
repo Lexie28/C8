@@ -1,9 +1,9 @@
 import * as listing from "./routes/listing.js";
 import * as user from "./routes/user.js";
 import * as pages from "./routes/pages.js";
-import { createRequire } from "module"
+import { createRequire } from "module";
 
-const require = createRequire(import.meta.url);
+//const require = createRequire(import.meta.url);
 
 require('dotenv').config();
 const express = require('express');
@@ -23,15 +23,100 @@ const knex = require('knex')({
 });
 
 
+app.get('/', (req, res) => {
+  res.send('Welcome to Circle Eight!');
+});
+
+const tables = ["user", "listing", "offer"];
+
+function getTableNameFromUrl(url) {
+    const url_splitted = url.split('/');
+
+    return url_splitted[1];
+}
+
+    
+for(table of tables) {
+    console.log(table);
+    app.get("/" + table, (req, res) => {
+	var table_name = getTableNameFromUrl(req.url);
+	
+	knex.select("*")
+	    .from(table_name)
+	    .then((result) => {
+		res.send(result);
+	    })
+	    .catch((err) => {
+		console.log(err);
+		res.status(500).json({message: "error!"});
+	    })
+    })
+
+    app.get("/" + table + "/:id", (req, res) => {
+	const id = req.params.id;
+	var table_name = getTableNameFromUrl(req.url);
+	
+	knex.select("*")
+	    .from(table_name)
+	    .where(table_name + ".id", "=", id)
+	    .then((result) => {
+		res.send(result);
+	    })
+	    .catch((err) => {
+		console.log(err)
+		res.status(500).json({message: "error!"});
+	    })
+    });
+
+    app.post("/" + table, (req, res) => {
+	var table_name = getTableNameFromUrl(req.url);
+	knex.insert(req.body)
+	    .then((result) => {
+		res.status(200).json({message: table_name + " created"});		    
+	    })
+	    .catch((err) => {
+		console.log(err)
+		res.status(500).json({message: "error!"});
+	    })
+    });
+
+    app.delete("/" + table + "/:id", (req, res) => {
+	const id = req.params.id;
+	var table_name = getTableNameFromUrl(req.url);
+	knex.select("*")
+	    .from(table_name)
+	    .where(table_name + ".id", "=", id)
+	    .del()
+	    .then(result => {
+		res.status(200).json({message: table_name + " with id " + id + " deleted!"})
+	    })
+	    .catch((err) => {
+		console.log(err)
+		res.status(500).json({message: "error!"});
+	    })
+    });
+    
+    
+}
+
+    
+
+
 // Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
 
+/* --------------------------------------------------
+   GAMLA OCH ICKE-CRAZY (dvs sunda) GREJER
+   --------------------------------------------------
 //init är att skapa alla tables med dom kolumnerna som vi bestämt
 //scaling (relational?) med MySQL eller i servern?
-
-
 // Basic trial
 app.get('/', (req, res) => {
   res.send('Welcome to Circle Eight!');
@@ -151,3 +236,4 @@ wss.on('connection', function(ws, req) {
     }
 }) 
 })*/
+
