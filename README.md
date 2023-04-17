@@ -1,1 +1,0 @@
-# Circle Eight (C8)
