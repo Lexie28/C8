@@ -20,6 +20,7 @@ import 'createprofile.dart';
 import 'profile.dart';
 import 'offers.dart';
 import 'hometest.dart';
+import 'createlisting.dart';
 
 void main() {
   runApp(C8());
@@ -54,7 +55,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     HomePage3(),
-    AddListing(),
+    CreateListingPage(),
     Offers(),
     Profile(),
   ];
