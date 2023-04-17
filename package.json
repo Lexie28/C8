@@ -1,14 +1,14 @@
 {
   "name": "c8",
   "version": "1.0.0",
-  "description": "project",
-  "main": "server.js",
+  "description": "",
+  "main": "server/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server/server.js"
   },
-  "author": "Järn",
-  "license": "UNLICENSED",
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -16,13 +16,5 @@
     "knex": "^2.4.2",
     "mysql2": "^3.2.0",
     "ws": "^8.13.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Lexie28/C8.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Lexie28/C8/issues"
-  },
-  "homepage": "https://github.com/Lexie28/C8#readme"
+  }
 }

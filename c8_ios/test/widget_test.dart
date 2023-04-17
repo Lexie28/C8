@@ -8,23 +8,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:c8_ios/secondmain.dart';
 import 'package:c8_ios/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('First page test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const C8iOS());
+    await tester.pumpWidget(const C8());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Circle Eight'), findsOneWidget);
+    expect(find.text('Log In'), findsOneWidget);
+    expect(find.text('Create Account'), findsOneWidget);
+    expect(find.text('username'), findsNothing);
 
     // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
 
     // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    //expect(find.text('0'), findsNothing);
+    //expect(find.text('1'), findsOneWidget);
   });
 }
