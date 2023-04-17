@@ -1,11 +1,44 @@
 import 'dart:io';
+import 'package:c8_ios/offers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../toolbar.dart';
 import 'settings.dart';
+import 'otherProduct.dart';
+import 'popularItems.dart';
+import 'hometest.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'deleteProfile.dart';
 
-class MakeBid extends StatelessWidget {
+class MakeBid extends StatefulWidget {
+  // TODO markera produkter!!!
+  const MakeBid({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _MakeBidState();
+}
+
+class _MakeBidState extends State<MakeBid> {
+  late Future<List<dynamic>> _futureListings;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureListings = fetchPopular();
+  }
+
+  Future<List<dynamic>> fetchPopular() async {
+    final response = await http
+        .get(Uri.parse('http://130.243.236.34:3000/listing/top5popular'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch listings');
+    }
+  }
+
+/*class MakeBid extends StatelessWidget {*/
   //Variabler som namn och bilder
 
   @override
@@ -44,7 +77,7 @@ class MakeBid extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.05),
+                    horizontal: MediaQuery.of(context).size.width * 0.04),
                 child: Text(
                   // TODO få in rätt user
                   'Lars',
@@ -54,11 +87,48 @@ class MakeBid extends StatelessWidget {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.width * 0.4,
-                color: Color.fromARGB(255, 211, 211, 211),
+              Padding(
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                child: Container(
+                  // containern längst bak
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.width * 0.4,
+                  color: Color.fromARGB(255, 232, 238, 237),
+                  child: FutureBuilder<List<dynamic>>(
+                    // scrollbar lista inuti
+                    future: _futureListings,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final listings = snapshot.data!;
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            for (int i = 0; i < listings.length; i++)
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          OtherProduct(),
+                                    ),
+                                  );
+                                },
+                                child:
+                                    Item(string: listings[i]['listing_name']),
+                              ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Failed to fetch listings');
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
               )
             ],
           ),
@@ -67,8 +137,11 @@ class MakeBid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.05),
+                padding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.04,
+                    MediaQuery.of(context).size.width * 0.04,
+                    MediaQuery.of(context).size.width * 0.04,
+                    0),
                 child: Text(
                   'Your',
                   style: style2,
@@ -76,12 +149,74 @@ class MakeBid extends StatelessWidget {
               ),
             ],
           ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SmallCard(
-                  string: 'Cancel', color: Color.fromARGB(255, 211, 211, 211)),
-              SmallCard(string: 'Ok', color: Color.fromARGB(255, 165, 206, 146))
+              Padding(
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                child: Container(
+                  // containern längst bak
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: MediaQuery.of(context).size.width * 0.4,
+                  color: Color.fromARGB(255, 232, 238, 237),
+                  child: FutureBuilder<List<dynamic>>(
+                    // scrollbar lista inuti
+                    future: _futureListings,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final listings = snapshot.data!;
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            for (int i = 0; i < listings.length; i++)
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          OtherProduct(),
+                                    ),
+                                  );
+                                },
+                                child:
+                                    Item(string: listings[i]['listing_name']),
+                              ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text('Failed to fetch listings');
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: SmallCard(
+                    string: 'Cancel',
+                    color: Color.fromARGB(255, 211, 211, 211)),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => Offers(),
+                      ),
+                    );
+                  },
+                  child: SmallCard(
+                      string: 'Ok', color: Color.fromARGB(255, 165, 206, 146)))
             ],
           )
         ],
@@ -116,6 +251,41 @@ class SmallCard extends StatelessWidget {
               string,
               style: style,
             ),
+          ),
+        ),
+      ]),
+    );
+  }
+}
+
+class Item extends StatelessWidget {
+  Item({required this.string});
+
+  final String string;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.bodySmall!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return Padding(
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+      child: Column(children: [
+        Container(
+          height: MediaQuery.of(context).size.width * 0.28,
+          child: Image.asset(
+            'images/shoes.jpg',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.2,
+          child: Text(
+            string,
+            style: style,
+            textAlign: TextAlign.center,
           ),
         ),
       ]),
