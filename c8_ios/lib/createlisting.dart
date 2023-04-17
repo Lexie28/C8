@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'hometest.dart';
 
 class CreateListingPage extends StatefulWidget {
   @override
@@ -15,29 +16,53 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _listingDescription = '';
   String _listingCategory = '';
 
-
   Future<void> _submitForm() async {
-  if (_formKey.currentState!.validate()) {
-    final url = Uri.parse('http://130.243.238.100:5000/listing/create');
-    final headers = {'Content-Type': 'application/json'};
-    final body = {
-      'user_id': _userId,
-      'listing_name': _listingName,
-      'listing_description': _listingDescription,
-      'listing_category': _listingCategory,
-    };
-    final jsonBody = json.encode(body);
-    final response = await http.post(url, headers: headers, body: jsonBody);
-    if (response.statusCode == 200) {
-      // Success
-      print('Good! New listing created!');
-    } else {
-      // Error, handle it
+    if (_formKey.currentState!.validate()) {
+      final url = Uri.parse('http://130.243.238.100:5000/listing/create');
+      final headers = {'Content-Type': 'application/json'};
+      final body = {
+        'user_id': _userId,
+        'listing_name': _listingName,
+        'listing_description': _listingDescription,
+        'listing_category': _listingCategory,
+      };
+      final jsonBody = json.encode(body);
+      final response = await http.post(url, headers: headers, body: jsonBody);
+      if (response.statusCode == 200) {
+        // Success
+        print('Good! New listing created!');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage3()),
+        );
+      } else {
+        print('NOOOO');
+      }
     }
   }
-}
 
-
+/*
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      final url = Uri.parse('http://130.243.238.100:5000/listing/create');
+      final headers = {'Content-Type': 'application/json'};
+      final body = {
+        'user_id': _userId,
+        'listing_name': _listingName,
+        'listing_description': _listingDescription,
+        'listing_category': _listingCategory,
+      };
+      final jsonBody = json.encode(body);
+      final response = await http.post(url, headers: headers, body: jsonBody);
+      if (response.statusCode == 200) {
+        // Success
+        print('Good! New listing created!');
+      } else {
+        print('NOOOO');
+      }
+    }
+  }
+*/
 /*
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
