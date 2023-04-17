@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import '../toolbar.dart';
 
 class AddListing extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -27,7 +24,7 @@ class AddListing extends StatelessWidget {
             child: Center(
               child: Container(
                 margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.width *0.1,
+                  top: MediaQuery.of(context).size.width * 0.1,
                 ),
                 child: IconButton(
                   onPressed: () {
@@ -38,7 +35,7 @@ class AddListing extends StatelessWidget {
                     color: Colors.blue,
                     //size: 120,
                   ),
-                  iconSize:MediaQuery.of(context).size.width * 0.3,
+                  iconSize: MediaQuery.of(context).size.width * 0.3,
                 ),
               ),
             ),

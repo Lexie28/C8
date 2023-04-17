@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'settings.dart';
 import 'otherProfile.dart';
 
-class Offer extends StatelessWidget {
+class CompletedOffer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Offer'),
+        title: Text('Completed offer'),
         backgroundColor: Color(0xFFA2BABF),
       ),
       body: SingleChildScrollView(
@@ -25,8 +21,8 @@ class Offer extends StatelessWidget {
                   bottom: MediaQuery.of(context).size.width * 0.07,
                   left: MediaQuery.of(context).size.width * 0.2,
                   right: MediaQuery.of(context).size.width * 0.2),
-              child: ElevatedButton(
-                onPressed: () {
+              child: GestureDetector(
+                onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => otherProfile(),
                   ));
@@ -35,12 +31,11 @@ class Offer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                   child: Image.asset(
                     'images/man.jpg',
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
-            Text('You have offered a trade with Lars'),
+            Text('You and Lars have agreed to trade!'),
             Container(
               constraints: BoxConstraints(
                 minWidth: MediaQuery.of(context).size.width * 0.5,
@@ -48,7 +43,7 @@ class Offer extends StatelessWidget {
               ),
               margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
               decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 114, 185, 221),
+                  color: Color.fromARGB(255, 132, 208, 127),
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(20)),
               child: Column(
@@ -71,28 +66,16 @@ class Offer extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.close_outlined),
-                      iconSize: MediaQuery.of(context).size.width * 0.2,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.add_box_outlined),
-                      iconSize: MediaQuery.of(context).size.width * 0.09,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.check_circle_outline),
-                      iconSize: MediaQuery.of(context).size.width * 0.2,
-                    ),
-                  ],
-                ))
+            Column(
+              children: [
+                Text(
+                  'Contact Lars!',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text('telephone: 1234556789'),
+                Text('mail: lasse@lasse.lars'),
+              ],
+            )
           ],
         ),
       ),
