@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http.get(Uri.parse('http://130.243.238.100:5000/listing/top5popular'));
+    final response = await http.get(Uri.parse('http://130.243.228.103:5000/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
