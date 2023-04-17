@@ -16,12 +16,12 @@ class HomePage2 extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage2> {
-  late Future<Album> futureAlbum;
+  //late Future<Album> futureAlbum;
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    //  futureAlbum = fetchAlbum();
   }
 
   @override
@@ -188,7 +188,7 @@ class Category extends StatelessWidget {
     );
   }
 }
-
+/*
 Future<Album> fetchAlbum() async {
   final response = await http
       .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
@@ -219,4 +219,4 @@ class Album {
       title: json['title'],
     );
   }
-}
+}*/
