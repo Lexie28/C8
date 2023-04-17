@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'secondmain.dart';
 import '../toolbar.dart';
+import 'clothingcategory.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key});
@@ -18,7 +19,15 @@ class Categories extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Category(string: 'Clothes'),
+              GestureDetector(
+                onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => ListingsPage(),
+                      ),
+                    );
+                },
+                child: Category(string: 'Clothes')),
               Category(string: 'Electornics'),
               Category(string: 'Food'),
               Category(string: 'Furniture'),

@@ -64,7 +64,9 @@ class Profile extends StatelessWidget {
                 ),
               ),
             )),
-            Center(child: Text(style: style, 'Name')),
+            
+            Center(child: Text(
+              style: style, 'Name')),
             Center(child: Text('Location')),
             Center(child: Text('Amount of likes: xx')),
 

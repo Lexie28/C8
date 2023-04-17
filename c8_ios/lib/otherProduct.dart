@@ -2,8 +2,9 @@ import 'package:c8_ios/otherProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import 'secondmain.dart';
 import '../toolbar.dart';
+import 'secondmain.dart';
+import 'makeBid.dart';
 
 class OtherProduct extends StatefulWidget {
   // TODO Logga in med Google!!
@@ -16,7 +17,6 @@ class OtherProduct extends StatefulWidget {
 
 class _OtherProductState extends State<OtherProduct> {
   int _currentIndex = 4;
-
 
   @override
   Widget build(BuildContext context) {
@@ -238,6 +238,11 @@ class _BidButtonState extends State<BidButton> {
           setState(() {
             buttonName = "Bidded";
           });
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) => MakeBid(),
+            ),
+          );
         },
         child: Text(buttonName),
       ),
@@ -345,7 +350,8 @@ class listingProfile extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.06),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.06),
                   string,
                 ),
                 Text("50% (12)"), //TODO
