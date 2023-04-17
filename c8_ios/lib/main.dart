@@ -19,6 +19,7 @@ import 'editprofile.dart';
 import 'createprofile.dart';
 import 'profile.dart';
 import 'offers.dart';
+import 'hometest.dart';
 
 void main() {
   runApp(C8());
@@ -52,7 +53,7 @@ class MyBottomNavigationbar extends StatefulWidget {
 class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    HomePage2(),
+    HomePage3(),
     AddListing(),
     Offers(),
     Profile(),
@@ -70,7 +71,6 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-
         type: BottomNavigationBarType.fixed,
         backgroundColor: Color(0xFFA2BABF),
         selectedItemColor: Colors.blueAccent,
