@@ -1,15 +1,10 @@
-import 'dart:io';
 import 'package:c8_ios/offers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'settings.dart';
 import 'otherProduct.dart';
-import 'popularItems.dart';
-import 'hometest.dart';
+//import 'popularItems.dart';
+//import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'deleteProfile.dart';
 
 class MakeBid extends StatefulWidget {
   // TODO markera produkter!!!

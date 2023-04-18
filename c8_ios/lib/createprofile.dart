@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:c8_ios/profile.dart';
 import 'package:flutter/material.dart';
-import '../toolbar.dart';
 
 class CreateProfile extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -20,30 +18,33 @@ class CreateProfile extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-              Center(
-                child: IconButton(
-                  onPressed: () {
-                    // TODO: Implement camera logic
-                  },
-                  icon: Container(
-                    margin: EdgeInsets.only(top :MediaQuery.of(context).size.width * 0.1,),
-                    child: IconButton(
-                      onPressed: () { 
-                        //TODO implement adding a profilepic
-                       },
-                      icon:  Icon(
-                        Icons.camera_alt,
-                        color: Colors.blue,
-                      ), 
-                      iconSize: MediaQuery.of(context).size.width * 0.3,
+            Center(
+              child: IconButton(
+                onPressed: () {
+                  // TODO: Implement camera logic
+                },
+                icon: Container(
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.1,
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      //TODO implement adding a profilepic
+                    },
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Colors.blue,
                     ),
+                    iconSize: MediaQuery.of(context).size.width * 0.3,
                   ),
                 ),
               ),
+            ),
             // Name field
             Container(
-              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
-
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -54,8 +55,9 @@ class CreateProfile extends StatelessWidget {
             ),
             // Name field
             Container(
-            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
-            
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: TextField(
                 controller: _locationController,
                 decoration: InputDecoration(
@@ -66,8 +68,9 @@ class CreateProfile extends StatelessWidget {
             ),
             // Bio field
             Container(
-            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01,),
-            
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.01,
+              ),
               child: TextField(
                 controller: _contactController,
                 maxLines: 3,
@@ -79,8 +82,9 @@ class CreateProfile extends StatelessWidget {
             ),
             // Save button
             Container(
-              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1,),
-            
+              margin: EdgeInsets.all(
+                MediaQuery.of(context).size.width * 0.1,
+              ),
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement save changes logic

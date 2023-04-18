@@ -1,13 +1,6 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:c8_ios/categories.dart';
 import 'package:c8_ios/offer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'settings.dart';
-import 'categories.dart';
 import 'completedOffer.dart';
 
 class Offers extends StatelessWidget {

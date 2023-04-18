@@ -1,8 +1,6 @@
-import 'dart:io';
-
-import 'package:c8_ios/otherProduct.dart';
+//import 'dart:io';
+//import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 
 class EditListing extends StatelessWidget {
   final TextEditingController _titleController = TextEditingController();
@@ -11,14 +9,14 @@ class EditListing extends StatelessWidget {
   //Någon variabel som håller bilden kanske
 
   void changeTitle() {
-  print('New product title: ${_titleController.text}');
-  //Ändra namnet i databasen
-}
+    print('New product title: ${_titleController.text}');
+    //Ändra namnet i databasen
+  }
 
   void changeDesc() {
-  print('New product title: ${_descController.text}');
-  //Ändra description i databasen
-}
+    print('New product title: ${_descController.text}');
+    //Ändra description i databasen
+  }
 
   @override
   Widget build(BuildContext context) {

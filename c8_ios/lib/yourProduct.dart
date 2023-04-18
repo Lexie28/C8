@@ -1,9 +1,6 @@
-import 'package:c8_ios/otherProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'secondmain.dart';
-import '../toolbar.dart';
 import 'editListing.dart';
 
 class YourProduct extends StatefulWidget {
@@ -17,7 +14,6 @@ class YourProduct extends StatefulWidget {
 
 class _YourProductState extends State<YourProduct> {
   int _currentIndex = 4;
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +42,18 @@ class _YourProductState extends State<YourProduct> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: productListing(string: 'images/apple.jpg'),
+                    child: ProductListing(string: 'images/apple.jpg'),
                   ),
                   Align(
                       alignment: FractionalOffset.topRight,
-                      child: listingProfile(string: 'Elsa')),
+                      child: ListingProfile(string: 'Elsa')),
                   //CardProduct(string: 'Hej'),
                 ],
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: ProductName(string: "Apple"),  //Hämta namnet från databasen
+                child:
+                    ProductName(string: "Apple"), //Hämta namnet från databasen
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
@@ -86,7 +83,7 @@ class _YourProductState extends State<YourProduct> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: numBids(string: '5'),
+                    child: NumBids(string: '5'),
                   ),
                   Align(
                     alignment: FractionalOffset.center,
@@ -128,12 +125,12 @@ class ProductName extends StatelessWidget {
         MediaQuery.of(context).size.width * 0.02,
       ),
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           TextField(
             controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'New Title',
-                  border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: 'New Title',
+              border: OutlineInputBorder(),
             ),
           );
         },
@@ -185,18 +182,18 @@ class ProductInfo extends StatelessWidget {
   }
 }
 
-class numBids extends StatefulWidget {
-  const numBids({
+class NumBids extends StatefulWidget {
+  const NumBids({
     required this.string,
   });
 
   final String string;
 
   @override
-  State<numBids> createState() => _numBidsState();
+  State<NumBids> createState() => _NumBidsState();
 }
 
-class _numBidsState extends State<numBids> {
+class _NumBidsState extends State<NumBids> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -273,16 +270,16 @@ class _BidButtonState extends State<BidButton> {
           buttonName,
           style: TextStyle(
             color: Colors.white,
-            fontSize: MediaQuery.of(context).size.width*0.05,
+            fontSize: MediaQuery.of(context).size.width * 0.05,
           ),
-          ),
+        ),
       ),
     );
   }
 }
 
-class productListing extends StatelessWidget {
-  const productListing({
+class ProductListing extends StatelessWidget {
+  const ProductListing({
     required this.string,
   });
 
@@ -324,9 +321,9 @@ class productListing extends StatelessWidget {
   }
 }
 
-class listingProfile extends StatelessWidget {
+class ListingProfile extends StatelessWidget {
   //TODO: Fetch data från databas
-  const listingProfile({
+  const ListingProfile({
     required this.string,
   });
 
@@ -364,7 +361,8 @@ class listingProfile extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.06),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.06),
                 string,
               ),
               Text("80% (599)"), //TODO

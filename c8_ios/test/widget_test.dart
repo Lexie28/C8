@@ -7,8 +7,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:c8_ios/secondmain.dart';
 import 'package:c8_ios/main.dart';
 
 void main() {

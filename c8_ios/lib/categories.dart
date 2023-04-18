@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import 'secondmain.dart';
-import '../toolbar.dart';
+//import 'package:provider/provider.dart';
+//import 'secondmain.dart';
 import 'clothingcategory.dart';
 
 class Categories extends StatelessWidget {
@@ -20,14 +18,14 @@ class Categories extends StatelessWidget {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () {
+                  onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => ListingsPage(),
                       ),
                     );
-                },
-                child: Category(string: 'Clothes')),
+                  },
+                  child: Category(string: 'Clothes')),
               Category(string: 'Electornics'),
               Category(string: 'Food'),
               Category(string: 'Furniture'),
@@ -70,6 +68,6 @@ class Category extends StatelessWidget {
           ),
         ),
       ),
-    );  
+    );
   }
 }

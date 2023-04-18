@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'otherProfile.dart';
 
 class CompletedOffer extends StatelessWidget {
@@ -24,7 +23,7 @@ class CompletedOffer extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => otherProfile(),
+                    builder: (BuildContext context) => OtherProfile(),
                   ));
                 },
                 child: ClipRRect(

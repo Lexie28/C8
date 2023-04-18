@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'secondmain.dart';
-import '../toolbar.dart';
 import 'clothingcategory.dart';
 import 'otherProduct.dart';
 import 'hometest.dart';
@@ -27,7 +25,7 @@ class _PopularItemsState extends State<PopularItems> {
 
   Future<List<dynamic>> fetchPopular() async {
     final response = await http
-        .get(Uri.parse('http://130.243.228.103:3000/listing/top5popular'));
+        .get(Uri.parse('http://130.243.236.34:3000/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

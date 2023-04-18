@@ -1,9 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'settings.dart';
 import 'otherProfile.dart';
 
 class Offer extends StatelessWidget {
@@ -28,7 +23,7 @@ class Offer extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => otherProfile(),
+                    builder: (BuildContext context) => OtherProfile(),
                   ));
                 },
                 child: ClipRRect(

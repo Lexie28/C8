@@ -1,22 +1,21 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:http/http.dart' as http;
-//import 'package:english_words/english_words.dart';
-//import 'dart:async';
+import 'dart:async';
 // for access to jsonEncode to encode the data
 import 'homePage2.dart';
+
 //Tovas sidor
 import 'otherProduct.dart';
 import 'otherProfile.dart';
 import 'categories.dart';
-import 'addlisting.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
+import 'addlisting.dart';
 import 'profile.dart';
 import 'offers.dart';
 import 'hometest.dart';
@@ -59,7 +58,6 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
     Offers(),
     Profile(),
   ];
-
 
   void onTappedBar(int index) {
     setState(() {

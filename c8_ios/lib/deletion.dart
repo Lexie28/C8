@@ -1,12 +1,5 @@
-import 'dart:io';
-
-import 'package:c8_ios/hometest.dart';
 import 'package:c8_ios/main.dart';
-import 'package:c8_ios/secondmain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'settings.dart';
 
 class Deletion extends StatelessWidget {
   //Variabler som namn och bilder
