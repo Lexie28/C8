@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 
 class EditProfile extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();

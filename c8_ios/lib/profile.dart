@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:c8_ios/editprofile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
 import 'settings.dart';
 import 'yourProduct.dart';
 
@@ -65,9 +63,8 @@ class Profile extends StatelessWidget {
                 ),
               ),
             )),
-            
-            Center(child: Text(
-              style: style, 'Name')),
+
+            Center(child: Text(style: style, 'Name')),
             Center(child: Text('Location')),
             Center(child: Text('Amount of likes: xx')),
 

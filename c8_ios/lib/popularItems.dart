@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'secondmain.dart';
-import '../toolbar.dart';
 import 'clothingcategory.dart';
 import 'otherProduct.dart';
 import 'hometest.dart';

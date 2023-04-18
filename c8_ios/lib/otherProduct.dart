@@ -1,9 +1,7 @@
 import 'package:c8_ios/otherProfile.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'secondmain.dart';
+//import 'package:provider/provider.dart';
+//import 'secondmain.dart';
 import 'makeBid.dart';
 
 class OtherProduct extends StatefulWidget {
@@ -34,11 +32,11 @@ class _OtherProductState extends State<OtherProduct> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: productListing(string: 'images/shoes.jpg'),
+                    child: ProductListing(string: 'images/shoes.jpg'),
                   ),
                   Align(
                       alignment: FractionalOffset.topRight,
-                      child: listingProfile(string: 'Lars')),
+                      child: ListingProfile(string: 'Lars')),
                   //CardProduct(string: 'Hej'),
                 ],
               ),
@@ -74,7 +72,7 @@ class _OtherProductState extends State<OtherProduct> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: numBids(string: '5'),
+                    child: NumBids(string: '5'),
                   ),
                   Align(
                     alignment: FractionalOffset.center,
@@ -159,18 +157,18 @@ class ProductInfo extends StatelessWidget {
   }
 }
 
-class numBids extends StatefulWidget {
-  const numBids({
+class NumBids extends StatefulWidget {
+  const NumBids({
     required this.string,
   });
 
   final String string;
 
   @override
-  State<numBids> createState() => _numBidsState();
+  State<NumBids> createState() => _NumBidsState();
 }
 
-class _numBidsState extends State<numBids> {
+class _NumBidsState extends State<NumBids> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -250,8 +248,8 @@ class _BidButtonState extends State<BidButton> {
   }
 }
 
-class productListing extends StatelessWidget {
-  const productListing({
+class ProductListing extends StatelessWidget {
+  const ProductListing({
     required this.string,
   });
 
@@ -293,9 +291,9 @@ class productListing extends StatelessWidget {
   }
 }
 
-class listingProfile extends StatelessWidget {
+class ListingProfile extends StatelessWidget {
   //TODO: Fetch data från databas
-  const listingProfile({
+  const ListingProfile({
     required this.string,
   });
 
@@ -320,7 +318,7 @@ class listingProfile extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => otherProfile(),
+                    builder: (BuildContext context) => OtherProfile(),
                   ),
                 );
               },
@@ -335,7 +333,7 @@ class listingProfile extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => const otherProfile(),
+                builder: (BuildContext context) => const OtherProfile(),
               ),
             );
           },

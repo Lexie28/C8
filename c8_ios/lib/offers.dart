@@ -1,13 +1,7 @@
-import 'dart:io';
-import 'dart:math';
-
 import 'package:c8_ios/categories.dart';
 import 'package:c8_ios/offer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
-import 'settings.dart';
-import 'categories.dart';
+import 'completedOffer.dart';
 
 class Offers extends StatelessWidget {
   @override
@@ -52,23 +46,35 @@ class Offers extends StatelessWidget {
                       style: style,
                     ),
                   ),
-
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => Offer(),
-                            ),
-                          );
-                        },
-                        child: Category(string: 'Offer'),
-                      ),
-                    ),
-                  ),
                 ],
+              ),
+            ),
+            Container(
+              padding:
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => Offer(),
+                    ),
+                  );
+                },
+                child: Category(string: 'Offer'),
+              ),
+            ),
+            Container(
+              padding:
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => CompletedOffer(),
+                    ),
+                  );
+                },
+                child: Category(string: 'Completed offer'),
               ),
             ),
           ],
