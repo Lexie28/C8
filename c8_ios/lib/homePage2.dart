@@ -1,10 +1,10 @@
 import 'package:c8_ios/categories.dart';
 import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 //import 'secondmain.dart';
-//import 'package:http/http.dart' as http;
-//import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'clothingcategory.dart';
 
 class HomePage2 extends StatefulWidget {
@@ -195,7 +195,7 @@ class Category extends StatelessWidget {
     );
   }
 }
-/*
+
 Future<Album> fetchAlbum() async {
   final response = await http
       .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
@@ -226,4 +226,4 @@ class Album {
       title: json['title'],
     );
   }
-}*/
+}
