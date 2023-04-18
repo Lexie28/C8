@@ -7,8 +7,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
 import 'dart:async';
 // for access to jsonEncode to encode the data
-import 'homePage2.dart';
-
+//import 'homePage2.dart';
 //Tovas sidor
 import 'otherProduct.dart';
 import 'otherProfile.dart';
@@ -19,6 +18,7 @@ import 'addlisting.dart';
 import 'profile.dart';
 import 'offers.dart';
 import 'hometest.dart';
+import 'createlisting.dart';
 
 void main() {
   runApp(C8());
@@ -54,7 +54,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     HomePage3(),
-    AddListing(),
+    CreateListingPage(),
     Offers(),
     Profile(),
   ];

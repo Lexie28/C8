@@ -1,5 +1,5 @@
 import 'package:c8_ios/addlisting.dart';
-import 'package:c8_ios/homePage2.dart';
+import 'package:c8_ios/hometest.dart';
 import 'package:c8_ios/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +51,7 @@ class _Toolbar extends State<toolbar> {
           case 0:
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomePage2(),
+                builder: (BuildContext context) => HomePage3(),
               ),
             );
             break;
