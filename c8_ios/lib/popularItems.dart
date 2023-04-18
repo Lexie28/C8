@@ -27,7 +27,7 @@ class _PopularItemsState extends State<PopularItems> {
 
   Future<List<dynamic>> fetchPopular() async {
     final response = await http
-        .get(Uri.parse('http://130.243.228.103:3000/listing/top5popular'));
+        .get(Uri.parse('http://130.243.226.61:3000/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -57,28 +57,20 @@ class _PopularItemsState extends State<PopularItems> {
                     itemCount: listings.length,
                     itemBuilder: (BuildContext context, int index) {
                       final listing = listings[index];
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        OtherProduct(),
-                                  ),
-                                );
-                              },
-                              child: Item(string: listing['listing_name'])),
-
-                          /*
-                              ListTile(
-                              title: Text(listing['listing_name']),
-                              subtitle: Text(listing['listing_description']),
-                              trailing: Text(listing['listing_category']),
-                            ),
-                            */
-                        ],
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          border: Border.all(width: 1, color: Colors.grey),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(0.0),
+                          ),
+                        ),  
+                        child: ListTile(
+                          leading: Image.asset('images/shoes.png'),
+                          title: Text(listing['listing_name']),
+                          subtitle: Text(listing['listing_description']),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                        ),
                       );
                     },
                   );

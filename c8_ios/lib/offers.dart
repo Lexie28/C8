@@ -19,6 +19,7 @@ class Offers extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Offers'),
         backgroundColor: Color(0xFFA2BABF),
       ),

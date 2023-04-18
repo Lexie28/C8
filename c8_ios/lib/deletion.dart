@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import '../toolbar.dart';
 import 'settings.dart';
+import 'bottomNavigation.dart';
+import 'main.dart';
 
 class Deletion extends StatelessWidget {
   //Variabler som namn och bilder

@@ -39,7 +39,7 @@ class C8 extends StatelessWidget {
         colorScheme:
             ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
       ),
-      home: MyBottomNavigationbar(),
+      home: FirstPage(),
     );
   }
 }
@@ -71,6 +71,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_currentIndex],
+      
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Color(0xFFA2BABF),
@@ -99,6 +100,59 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class FirstPage extends StatefulWidget {
+  const FirstPage({super.key});
+
+  @override
+  State<FirstPage> createState() => _FirstPageState();
+}
+
+class _FirstPageState extends State<FirstPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.height * 0.1,
+                MediaQuery.of(context).size.height * 0.35,
+                MediaQuery.of(context).size.height * 0.1,
+                MediaQuery.of(context).size.height * 0.1,
+              ),
+              child: Text(
+                'Welcome to Circle 8.',
+                textAlign: TextAlign.center,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    // TODO ska gå till startsidan
+
+                    builder: (BuildContext context) => MyBottomNavigationbar(),
+                  ),
+                );
+              },
+              child: Card(
+                color: Color.fromARGB(255, 162, 226, 239),
+                child: Padding(
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.03),
+                  child: Text(
+                    'Go to start page',
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
     );
   }
 }

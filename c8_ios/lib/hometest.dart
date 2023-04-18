@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage3> {
 
   Future<List<dynamic>> fetchPopular() async {
     final response = await http
-        .get(Uri.parse('http://130.243.228.103:3000/listing/top5popular'));
+        .get(Uri.parse('http://130.243.226.61:3000/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage3> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Circle 8'),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
         backgroundColor: Color.fromARGB(255, 162, 186, 191),

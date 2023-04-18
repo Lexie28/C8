@@ -14,6 +14,7 @@ class AddListing extends StatelessWidget {
     return Scaffold(
       //bottomNavigationBar: toolbar(),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Add Listing'),
         backgroundColor: Color(0xFFA2BABF),
       ),
