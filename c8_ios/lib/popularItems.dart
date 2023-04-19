@@ -15,6 +15,7 @@ class PopularItems extends StatefulWidget {
 }
 
 class _PopularItemsState extends State<PopularItems> {
+  Api _api = Api();
   late Future<List<dynamic>> _futureListings;
   Api _api = Api();
 
@@ -25,8 +26,7 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
+    final response = await http.get(Uri.parse('${_api.getApiHost()}/listings'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

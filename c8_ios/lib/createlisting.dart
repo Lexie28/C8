@@ -107,75 +107,69 @@ class _CreateListingPageState extends State<CreateListingPage> {
         automaticallyImplyLeading: false,
         title: Text('Create Listing'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'User ID'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a user ID';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _userId = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Listing Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a listing name';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _listingName = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Listing Description'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a listing description';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _listingDescription = value;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Listing Category'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a listing category';
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  _listingCategory = value;
-                },
-              ),
-              SizedBox(height: 16.0),
-              _image != null
-                  ? Image.file(_image!,
-                      width: 250, height: 250, fit: BoxFit.cover)
-                  : SizedBox(),
-              CustomButton(
-                  title: 'Add photo from gallery',
-                  icon: Icons.camera,
-                  onClick: getImage),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Create Listing'),
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'User ID'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a user ID';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _userId = value;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Listing Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a listing name';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _listingName = value;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Listing Description'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a listing description';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _listingDescription = value;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Listing Category'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a listing category';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    _listingCategory = value;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text('Create Listing'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

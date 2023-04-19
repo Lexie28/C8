@@ -113,40 +113,105 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.height * 0.1,
-            MediaQuery.of(context).size.height * 0.35,
-            MediaQuery.of(context).size.height * 0.1,
-            MediaQuery.of(context).size.height * 0.1,
-          ),
-          child: Text(
-            'Welcome to Circle 8.',
-            textAlign: TextAlign.center,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => MyBottomNavigationbar(),
+    return Container(
+      color: Color.fromARGB(255, 233, 247, 249),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.height * 0.1,
+              MediaQuery.of(context).size.height * 0.2,
+              MediaQuery.of(context).size.height * 0.1,
+              MediaQuery.of(context).size.height * 0.1,
+            ),
+            child: Card(
+              color: Color.fromARGB(255, 160, 200, 207), // Use hexadecimal color code for consistency
+              elevation: 4, // Add elevation to create a shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(16), // Round the corners of the card
               ),
-            );
-          },
-          child: Card(
-            color: Color.fromARGB(255, 162, 226, 239),
-            child: Padding(
-              padding:
-                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.03),
-              child: Text(
-                'Go to start page',
+              child: Padding(
+                padding: EdgeInsets.all(45),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the content vertically
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the content horizontally
+                  children: [
+                    Text(
+                      'Welcome',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                    Text(
+                      'to',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                    Text(
+                      'Circle 8',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MyBottomNavigationbar(),
+                ),
+              );
+            },
+            child: Card(
+              color: Color.fromARGB(255, 160, 200, 207), 
+              elevation: 4, 
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .center, 
+                  children: [
+                    Image.asset(
+                      'images/googleLogo.png',
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      width: MediaQuery.of(context).size.width * 0.1,
+                      fit: BoxFit.contain,
+                    ),
+                    SizedBox(
+                        width: 8), 
+                    Text(
+                      'Login with Google',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
