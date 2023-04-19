@@ -32,9 +32,7 @@ class Deletion extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    // TODO ska gå till startsidan
-
-                    builder: (BuildContext context) => C8(),
+                    builder: (BuildContext context) => FirstPage(),
                   ),
                 );
               },

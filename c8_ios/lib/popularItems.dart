@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'secondmain.dart';
-import 'clothingcategory.dart';
 import 'otherProduct.dart';
 import 'hometest.dart';
 import 'package:http/http.dart' as http;
@@ -62,7 +61,7 @@ class _PopularItemsState extends State<PopularItems> {
                           borderRadius: BorderRadius.all(
                             Radius.circular(0.0),
                           ),
-                        ),  
+                        ),
                         child: ListTile(
                           leading: Image.asset('images/shoes.png'),
                           title: Text(listing['listing_name']),

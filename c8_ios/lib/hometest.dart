@@ -1,6 +1,6 @@
 import 'package:c8_ios/categories.dart';
-import 'package:c8_ios/otherProduct.dart';
-import 'package:c8_ios/popularItems.dart';
+//import 'package:c8_ios/otherProduct.dart';
+//import 'package:c8_ios/popularItems.dart';
 import 'package:flutter/material.dart';
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';
@@ -10,8 +10,6 @@ import 'dart:convert';
 import 'listingscategory.dart';
 import 'specificitem.dart';
 import 'api.dart';
-
-
 
 class HomePage3 extends StatefulWidget {
   const HomePage3({Key? key}) : super(key: key);
@@ -24,6 +22,7 @@ class _HomePageState extends State<HomePage3> {
   late Future<List<dynamic>> _futureListings;
   Api _api = Api();
 
+  @override
   void initState() {
     super.initState();
     _futureListings = fetchPopular();
@@ -63,9 +62,9 @@ class _HomePageState extends State<HomePage3> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    _navigateToListingsPage('Clothes');
+                    _navigateToListingsPage('Clothing');
                   },
-                  child: Category(string: 'Clothes'),
+                  child: Category(string: 'Clothing'),
                 ),
                 GestureDetector(
                   onTap: () {
