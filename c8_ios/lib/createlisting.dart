@@ -3,6 +3,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'hometest.dart';
 import 'api.dart';
+import 'editprofile.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class CreateListingPage extends StatefulWidget {
   @override
@@ -12,11 +15,23 @@ class CreateListingPage extends StatefulWidget {
 class _CreateListingPageState extends State<CreateListingPage> {
   final _formKey = GlobalKey<FormState>();
 
+  File? _image;
   String _userId = '';
   String _listingName = '';
   String _listingDescription = '';
   String _listingCategory = '';
   Api _api = Api();
+
+  Future getImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
+
+    final imageTemporary = File(image.path);
+
+    setState(() {
+      _image = imageTemporary;
+    });
+  }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -27,6 +42,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
         'listing_name': _listingName,
         'listing_description': _listingDescription,
         'listing_category': _listingCategory,
+        // 'listing_photo': _image,
       };
       final jsonBody = json.encode(body);
       final response = await http.post(url, headers: headers, body: jsonBody);
@@ -146,6 +162,14 @@ class _CreateListingPageState extends State<CreateListingPage> {
                 },
               ),
               SizedBox(height: 16.0),
+              _image != null
+                  ? Image.file(_image!,
+                      width: 250, height: 250, fit: BoxFit.cover)
+                  : SizedBox(),
+              CustomButton(
+                  title: 'Add photo from gallery',
+                  icon: Icons.camera,
+                  onClick: getImage),
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('Create Listing'),
