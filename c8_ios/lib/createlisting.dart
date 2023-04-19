@@ -104,6 +104,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Create Listing'),
       ),
       body: Padding(
