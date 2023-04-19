@@ -17,7 +17,6 @@ class PopularItems extends StatefulWidget {
 class _PopularItemsState extends State<PopularItems> {
   Api _api = Api();
   late Future<List<dynamic>> _futureListings;
-  Api _api = Api();
 
   @override
   void initState() {
