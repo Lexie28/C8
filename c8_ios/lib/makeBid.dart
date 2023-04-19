@@ -5,6 +5,7 @@ import 'otherProduct.dart';
 //import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'api.dart';
 
 class MakeBid extends StatefulWidget {
   // TODO markera produkter!!!
@@ -16,6 +17,7 @@ class MakeBid extends StatefulWidget {
 
 class _MakeBidState extends State<MakeBid> {
   late Future<List<dynamic>> _futureListings;
+  Api _api = Api();
 
   @override
   void initState() {
@@ -24,8 +26,8 @@ class _MakeBidState extends State<MakeBid> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http
-        .get(Uri.parse('http://130.243.236.34:3000/listing/top5popular'));
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

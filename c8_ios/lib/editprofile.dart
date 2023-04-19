@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'dart:io';
 
 class EditProfile extends StatefulWidget {
@@ -13,16 +15,28 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   File? _image;
 
-  Future getImage() async {
-    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+  Future getImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
 
-    if (image == null) return;
+      //final imageTemporary = File(image.path);
+      final imagePermanent = await saveFilePermanently(image.path);
 
-    final imageTemporary = File(image.path);
+      setState(() {
+        _image = imagePermanent;
+      });
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
 
-    setState(() {
-      _image = imageTemporary;
-    });
+  Future<File> saveFilePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
   }
 
   final TextEditingController _nameController = TextEditingController();
@@ -114,11 +128,11 @@ class _EditProfileState extends State<EditProfile> {
             CustomButton(
                 title: 'Pick from Gallery',
                 icon: Icons.image_outlined,
-                onClick: getImage),
+                onClick: () => getImage(ImageSource.gallery)),
             CustomButton(
                 title: 'Pick from Camera',
                 icon: Icons.camera,
-                onClick: getImage),
+                onClick: () => getImage(ImageSource.camera)),
           ],
         ),
       ),

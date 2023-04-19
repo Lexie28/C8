@@ -1,13 +1,46 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:c8_ios/editprofile.dart';
 import 'package:flutter/material.dart';
 import 'settings.dart';
 import 'yourProduct.dart';
+import 'dart:convert';
+import 'api.dart';
 
-class Profile extends StatelessWidget {
+String userId = '1';
+
+class Profile extends StatefulWidget {
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String _user_name = 'Namn';
+  Api _api = Api();
+
+  Map<String, dynamic>? name = null;
+
+  @override
+  void initState() {
+    super.initState();
+    //fetchName();
+  }
+
+  /*Future<void> fetchName() async {
+    final response = await http
+        .get(Uri.parse('http://130.243.212.171:3000/profilepage/$userId'));
+    if (response.statusCode == 200) {
+      setState(() {
+        final name = jsonDecode(response.body);
+      });
+
+      _user_name = name!['user_name'];
+    } else {
+      throw Exception('Failed to fetch listings');
+    }
+  }*/
+
   //Variabler som namn och bilder
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -64,7 +97,7 @@ class Profile extends StatelessWidget {
               ),
             )),
 
-            Center(child: Text(style: style, 'Name')),
+            Center(child: Text(style: style, _user_name)),
             Center(child: Text('Location')),
             Center(child: Text('Amount of likes: xx')),
 

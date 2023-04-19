@@ -13,11 +13,10 @@ import 'dart:async';
 
 //Tovas sidor
 import 'otherProduct.dart';
-import 'otherProfile.dart';
+import 'otherprofile.dart';
 import 'categories.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
-import 'addlisting.dart';
 import 'profile.dart';
 import 'offers.dart';
 import 'hometest.dart';

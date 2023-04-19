@@ -1,4 +1,4 @@
-import 'package:c8_ios/otherProfile.dart';
+import 'package:c8_ios/otherprofile.dart';
 import 'package:flutter/material.dart';
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'otherProfile.dart';
+import 'otherprofile.dart';
 
 class CompletedOffer extends StatelessWidget {
   @override
