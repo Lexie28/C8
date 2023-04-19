@@ -5,6 +5,7 @@ import 'otherProduct.dart';
 import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'api.dart';
 
 class PopularItems extends StatefulWidget {
   const PopularItems({super.key});
@@ -14,6 +15,7 @@ class PopularItems extends StatefulWidget {
 }
 
 class _PopularItemsState extends State<PopularItems> {
+   Api _api = Api();
   late Future<List<dynamic>> _futureListings;
 
   @override
@@ -24,7 +26,7 @@ class _PopularItemsState extends State<PopularItems> {
 
   Future<List<dynamic>> fetchPopular() async {
     final response = await http
-        .get(Uri.parse('http://130.243.226.61:3000/listing/top5popular'));
+        .get(Uri.parse('${_api.getApiHost()}/listings'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
