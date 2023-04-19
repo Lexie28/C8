@@ -3,11 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/io.dart';
 import 'dart:async';
+
+// ws används inte?
+//import 'package:web_socket_channel/web_socket_channel.dart';
+//import 'package:web_socket_channel/io.dart';
 // for access to jsonEncode to encode the data
 //import 'homePage2.dart';
+
 //Tovas sidor
 import 'otherProduct.dart';
 import 'otherProfile.dart';
@@ -69,7 +72,6 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_currentIndex],
-      
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Color(0xFFA2BABF),
@@ -112,45 +114,40 @@ class FirstPage extends StatefulWidget {
 class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.height * 0.1,
-                MediaQuery.of(context).size.height * 0.35,
-                MediaQuery.of(context).size.height * 0.1,
-                MediaQuery.of(context).size.height * 0.1,
-              ),
-              child: Text(
-                'Welcome to Circle 8.',
-                textAlign: TextAlign.center,
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    // TODO ska gå till startsidan
-
-                    builder: (BuildContext context) => MyBottomNavigationbar(),
-                  ),
-                );
-              },
-              child: Card(
-                color: Color.fromARGB(255, 162, 226, 239),
-                child: Padding(
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.03),
-                  child: Text(
-                    'Go to start page',
-                  ),
-                ),
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.height * 0.1,
+            MediaQuery.of(context).size.height * 0.35,
+            MediaQuery.of(context).size.height * 0.1,
+            MediaQuery.of(context).size.height * 0.1,
+          ),
+          child: Text(
+            'Welcome to Circle 8.',
+            textAlign: TextAlign.center,
+          ),
         ),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) => MyBottomNavigationbar(),
+              ),
+            );
+          },
+          child: Card(
+            color: Color.fromARGB(255, 162, 226, 239),
+            child: Padding(
+              padding:
+                  EdgeInsets.all(MediaQuery.of(context).size.height * 0.03),
+              child: Text(
+                'Go to start page',
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

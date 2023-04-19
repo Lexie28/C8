@@ -16,7 +16,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _listingName = '';
   String _listingDescription = '';
   String _listingCategory = '';
-  Api _api = new Api();
+  Api _api = Api();
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {

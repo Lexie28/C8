@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'listingsCategory.dart';
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';
-import 'clothingcategory.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key});
@@ -19,13 +19,12 @@ class Categories extends StatelessWidget {
             children: [
               GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => ListingsPage(),
-                      ),
-                    );
-                },
-                child: Category(string: 'Clothing')),
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Clothing'),
+                    ));
+                  },
+                  child: Category(string: 'Clothing')),
               Category(string: 'Books'),
               Category(string: 'Beauty'),
               Category(string: 'Accessories'),
@@ -56,14 +55,13 @@ class Category extends StatelessWidget {
     final style = theme.textTheme.displayMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.15,
-      width: MediaQuery.of(context).size.width * 1,
-      child: Card(
-        color: theme.colorScheme.primary,
-        elevation: 10,
-        child: Align(
-          alignment: FractionalOffset.center,
+    return Card(
+      color: theme.colorScheme.primary,
+      elevation: 10,
+      child: Align(
+        alignment: FractionalOffset.center,
+        child: Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.04),
           child: Text(
             string,
             style: style,
