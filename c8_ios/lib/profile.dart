@@ -15,7 +15,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String _user_name = 'Namn';
+  String _user_name = 'Name';
   Api _api = Api();
 
   Map<String, dynamic>? name = null;
@@ -23,18 +23,14 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    //fetchName();
+    //_user_name = fetchName();
   }
 
   /*Future<void> fetchName() async {
-    final response = await http
-        .get(Uri.parse('http://130.243.212.171:3000/profilepage/$userId'));
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
     if (response.statusCode == 200) {
-      setState(() {
-        final name = jsonDecode(response.body);
-      });
-
-      _user_name = name!['user_name'];
+      return jsonDecode(response.body);
     } else {
       throw Exception('Failed to fetch listings');
     }
