@@ -1,52 +1,54 @@
-export { get_listings, listing_create, edit_listing_all, listing_delete, listing_top5popular, listing_bid, listing_popular, get_listing, listing_category }
+const express = require("express");
+const router = express.Router();
 
+const db = require("../db-config.js");
 
 /**
-Retrieves all records from the "listing" table using Knex.js and sends the result back to the client as a response.
+Retrieves all records from the "listing" table using Db.js and sends the result back to the client as a response.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function get_listings(req, res, knex) {
-    knex.select("*").from("listing").then((result) => {
+function get_listings(req, res) {
+    db.select("*").from("listing").then((result) => {
       res.send(result)
     })
 }
 
 
 /**
-Gets a  listing of a certain listing_id
+Gets a  listing of a certain id
  @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
 /*
-function get_listing(req, res, knex) {
-  const listing_id = req.params.listing_id;
+function get_listing(req, res) {
+  const id = req.params.id;
 
-  knex.select("*").from("listing").where({listing_id: listing_id}).then((result) => {
+  db.select("*").from("listing").where({id: id}).then((result) => {
     res.send(result);
   });
 }*/
 
-function get_listing(req, res, knex) {
-  const listing_id = req.params.listing_id;
+function get_listing(req, res) {
+  const id = req.params.id;
 
-  knex
+  db
     .select("*")
     .from("listing")
-    .where({ listing_id: listing_id })
+    .where({ id: id })
     .then((listing) => {
       if (listing.length === 0) {
         res.status(404).send("Listing not found");
       } else {
-        const user_id = listing[0].user_id;
-        knex
+        const id = listing[0].id;
+        db
           .select("*")
           .from("user")
-          .where({ user_id: user_id })
+          .where({ id: id })
           .then((user) => {
             if (user.length === 0) {
               res.status(404).send("User not found");
@@ -56,12 +58,14 @@ function get_listing(req, res, knex) {
             }
           })
           .catch((err) => {
-            res.status(500).send("Error retrieving user");
+              res.status(500).send("Error retrieving user.");
+	      	      console.log(err);
           });
       }
     })
     .catch((err) => {
-      res.status(500).send("Error retrieving listing");
+	res.status(500).send("Error retrieving listing");
+		      console.log(err);
     });
 }
 
@@ -69,14 +73,14 @@ function get_listing(req, res, knex) {
 Creates a new listing using imput received from the client.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function listing_create(req, res, knex) {
-  const { user_id, listing_name, listing_description, listing_category } = req.body;
+function listing_create(req, res) {
+    const { id, name, description, category, image_path, owner_id } = req.body;
 
-  knex('listing')
-    .insert({ user_id, listing_name, listing_description, listing_category })
+  db('listing')
+	.insert({ id, name, description, category, image_path, owner_id})
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'listing created successfully' });
@@ -94,16 +98,16 @@ function listing_create(req, res, knex) {
 Edits all editable fields in a listing (name, description and category)
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function edit_listing_all(req, res, knex) {
-  const { listing_id } = req.params;
-  const { listing_name, listing_description, listing_category } = req.body;
+function edit_listing_all(req, res) {
+  const { id } = req.params;
+  const { name, description, category } = req.body;
 
-  knex('listing')
-    .where({ listing_id })
-    .update({ listing_name, listing_description, listing_category })
+  db('listing')
+    .where({ id })
+	.update({ name, description, category, image_path })
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'listing updated successfully' });
@@ -121,14 +125,14 @@ function edit_listing_all(req, res, knex) {
 Deletes a listing from the 'listing' table.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function listing_delete(req, res, knex) {
-  const { listing_id } = req.params;
+function listing_delete(req, res) {
+  const { id } = req.params;
 
-  knex('listing')
-    .where({ listing_id })
+  db('listing')
+    .where({ id })
     .del()
     .then(result => {
       if (result) {
@@ -147,11 +151,11 @@ function listing_delete(req, res, knex) {
 Retrieves the 5 most pooular listings based on number of bids
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function listing_top5popular(req, res, knex) {
-  knex.select('*')
+function listing_top5popular(req, res) {
+  db.select('*')
     .from('listing')
     .orderBy('num_bids', 'desc')
     .limit(5)
@@ -168,11 +172,11 @@ function listing_top5popular(req, res, knex) {
 Retrieves all listings in order of popularity based on number of bids
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function listing_popular(req, res, knex) {
-  knex.select('*')
+function listing_popular(req, res) {
+  db.select('*')
     .from('listing')
     .orderBy('num_bids', 'desc')
     .then(popularlistings => {
@@ -189,14 +193,14 @@ function listing_popular(req, res, knex) {
 Increases the number of bids on a certain listing by 1.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function listing_bid(req, res, knex) {
-  const { listing_id } = req.params;
+function listing_bid(req, res) {
+  const { id } = req.params;
 
-  knex('listing')
-    .where({ listing_id })
+  db('listing')
+    .where({ id })
     .increment('num_bids', 1) // use the `increment` method to add 1 to `num_bids`
     .then(result => {
       if (result === 1) {
@@ -216,15 +220,15 @@ function listing_bid(req, res, knex) {
 Retrieves all listings of a certain category
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function listing_category(req, res, knex) {
-  const { listing_category } = req.params;
+function listing_category(req, res) {
+  const { category } = req.params;
 
-  knex.select('*')
+  db.select('*')
     .from('listing')
-    .where('listing.listing_category', '=', listing_category)
+    .where('listing.category', '=', category)
     .then(categorylistings => {
       res.status(200).json(categorylistings);
     })
@@ -233,3 +237,30 @@ function listing_category(req, res, knex) {
       res.status(500).json({ message: 'An error occurred while retrieving the listings of this category' });
     });
 }
+
+
+router.get("/listing", get_listings);
+
+router.get('/listing/:id', (req, res) => get_listing(req, res));
+
+router.post('/listing', (req,res) => listing_create(req, res));
+
+router.patch('/listing/:id', (req, res) => edit_listing_all(req, res));
+
+router.delete('/listing/:id', (req, res) => listing_delete(req, res));
+
+//Retrieve the 5 most popular listings
+router.get('/listing/top5popular', (req, res) => listing_top5popular(req, res));
+
+//Retrieve the listings in order of popularity based on number of bids
+router.get('/listing/popular', (req, res) => listing_popular(req, res));
+
+//Updates number of bid by 1 for a certain id
+//TODO: ta bort pga onödig?
+router.patch('/listing/:id/update_bid', (req, res) => listing_bid(req, res));
+
+//Retrieves all items of a certain category
+//TODO: byt ut mot query string istället för att ha endpoint
+router.get('/listing/category/:listing_category', (req, res) => listing_category(req, res));
+
+module.exports = router;

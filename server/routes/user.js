@@ -1,32 +1,35 @@
+const express = require("express");
+const router = express.Router();
 
-export { get_users, user_registration, user_like, user_dislike, user_delete, get_user }
+const db = require("../db-config.js");
+
 
 /**
-Retrieves all records from the "user" table using Knex.js and sends the result back to the client as a response.
-@param {Object} req   const { user_id } = req.params;
+Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
+@param {Object} req   const { id } = req.params;
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function get_users(req, res, knex)
+function get_users(req, res)
 {
-        knex.select("*").from("user").then((result) => {
+        db.select("*").from("user").then((result) => {
           res.send(result)
         })
 };
 
 
 /**
-Retrieves a certain user with user_id from the user table.
+Retrieves a certain user with id from the user table.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function get_user(req, res, knex) {
-  const user_id = req.params.user_id;
+function get_user(req, res) {
+  const id = req.params.id;
 
-  knex.select("*").from("user").where({user_id: user_id}).then((result) => {
+  db.select("*").from("user").where({id: id}).then((result) => {
     res.send(result);
   });
 }
@@ -35,14 +38,14 @@ function get_user(req, res, knex) {
 Registers a new user in the 'user' table.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function user_registration(req, res, knex) {
-  const { user_name, user_location, user_phone, user_email } = req.body;
+function user_registration(req, res) {
+  const { name, location, phone_number, email } = req.body;
 
-  knex('user')
-    .insert({ user_name, user_location, user_phone, user_email })
+  db('user')
+    .insert({ name, location, phone_number, email })
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'User created successfully' });
@@ -60,10 +63,10 @@ function user_registration(req, res, knex) {
 Adds a like to the user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function user_like(req, res, knex) {
+function user_like(req, res) {
 
 };
 
@@ -71,14 +74,14 @@ function user_like(req, res, knex) {
 Adds a dislike to the user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function user_dislike(req, res, knex) {
-  const { user_id } = req.params;
+function user_dislike(req, res) {
+  const { id } = req.params;
 
-  knex('user')
-    .where({ user_id })
+  db('user')
+    .where({ id })
     .increment('user_num_dislikes', 1) // use the `increment` method to add 1 to `num_likes`
     .then(result => {
       if (result === 1) {
@@ -97,14 +100,14 @@ function user_dislike(req, res, knex) {
 Deletes a user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} knex - The Knex.js instance to perform the database operation.
+@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
-function user_delete(req, res, knex) {
-  const { user_id } = req.params;
+function user_delete(req, res) {
+  const { id } = req.params;
 
-  knex('user')
-    .where({ user_id })
+  db('user')
+    .where({ id })
     .del()
     .then(result => {
       if (result) {
@@ -118,3 +121,23 @@ function user_delete(req, res, knex) {
       res.status(500).json({ message: 'An error occurred while deleting the user' });
     });
 };
+//Get all users in the database
+router.get('/user', (req, res) => get_users(req, res));
+
+//Get a specific user from the user table
+router.get('/user/:id', (req, res) => get_user(req, res))
+
+//Registering a new user
+router.post('/user/user', (req, res) => user_registration(req, res));
+
+//Adding a like (/thumbs up) to a user
+router.patch('/user/:id/like', (req, res) => user_like(req, res));
+
+//Adding a dislike (/thumbs down) to a user
+router.patch('/user/:id/dislike', (req, res) => user_dislike(req, res));
+
+//Deleting user
+router.delete('/user/:id', (req, res) => user_delete(req, res));
+
+module.exports = router;
+
