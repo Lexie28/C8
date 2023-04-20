@@ -15,7 +15,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String _user_name = 'Name';
+  late Future<User> futureUser;
   Api _api = Api();
 
   Map<String, dynamic>? name = null;
@@ -23,18 +23,23 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    //_user_name = fetchName();
+    futureUser = fetchUser();
   }
 
-  /*Future<void> fetchName() async {
+  Future<User> fetchUser() async {
     final response =
         await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
+
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return User.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to fetch listings');
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
     }
-  }*/
+  }
 
   //Variabler som namn och bilder
   @override
@@ -93,7 +98,22 @@ class _ProfileState extends State<Profile> {
               ),
             )),
 
-            Center(child: Text(style: style, _user_name)),
+            Center(
+              child: FutureBuilder<User>(
+                future: futureUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data!.userName.toString());
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
+              ),
+            ),
+
             Center(child: Text('Location')),
             Center(child: Text('Amount of likes: xx')),
 
@@ -218,6 +238,32 @@ class ProfileProducts extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class User {
+  final int userId;
+  final String userName;
+  final String location;
+  final int likes;
+  final int dislikes;
+
+  const User({
+    required this.userId,
+    required this.userName,
+    required this.location,
+    required this.likes,
+    required this.dislikes,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      userId: json['user_id'],
+      userName: json['user_name'],
+      location: json['user_location'],
+      likes: json['user_num_likes'],
+      dislikes: json['user_num_dislikes'],
     );
   }
 }
