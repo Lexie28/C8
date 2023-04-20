@@ -127,7 +127,8 @@ class _FirstPageState extends State<FirstPage> {
               MediaQuery.of(context).size.height * 0.1,
             ),
             child: Card(
-              color: Color.fromARGB(255, 160, 200, 207), // Use hexadecimal color code for consistency
+              color: Color.fromARGB(255, 160, 200,
+                  207), // Use hexadecimal color code for consistency
               elevation: 4, // Add elevation to create a shadow effect
               shape: RoundedRectangleBorder(
                 borderRadius:
@@ -179,17 +180,15 @@ class _FirstPageState extends State<FirstPage> {
               );
             },
             child: Card(
-              color: Color.fromARGB(255, 160, 200, 207), 
-              elevation: 4, 
+              color: Color.fromARGB(255, 160, 200, 207),
+              elevation: 4,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment
-                      .center, 
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'images/googleLogo.png',
@@ -197,8 +196,7 @@ class _FirstPageState extends State<FirstPage> {
                       width: MediaQuery.of(context).size.width * 0.1,
                       fit: BoxFit.contain,
                     ),
-                    SizedBox(
-                        width: 8), 
+                    SizedBox(width: 8),
                     Text(
                       'Login with Google',
                       style: TextStyle(

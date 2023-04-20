@@ -31,6 +31,69 @@ function offer_create(req, res, knex) {
     });
   };
 
+
+  function offers_get(req, res, knex) {
+    const { user_id } = req.params;
+  
+    knex.select('offer.bid_id', 'offer.bid_maker_id', 'offer.bid_receiver_id')
+      .from('offer')
+      .where('offer.bid_maker_id', user_id)
+      .orWhere('offer.bid_receiver_id', user_id)
+      .then(function(offers) {
+        const promises = offers.map(function(offer) {
+          return knex.select('offer_listing.listing_id', 'listing.listing_name', 'listing.listing_description', 'user.user_id', 'user.user_name')
+            .from('offer_listing')
+            .innerJoin('listing', 'listing.listing_id', 'offer_listing.listing_id')
+            .innerJoin('user', 'user.user_id', 'listing.user_id')
+            .where('offer_listing.bid_id', offer.bid_id)
+            .then(function(listings) {
+              const bidMaker = listings.find(function(listing) { return listing.user_id === offer.bid_maker_id; });
+              const bidReceiver = listings.find(function(listing) { return listing.user_id === offer.bid_receiver_id; });
+              const bidListings = {
+                bid_maker: {
+                  user_id: bidMaker.user_id,
+                  user_name: bidMaker.user_name,
+                  listings: []
+                },
+                bid_receiver: {
+                  user_id: bidReceiver.user_id,
+                  user_name: bidReceiver.user_name,
+                  listings: []
+                }
+              };
+              listings.forEach(function(listing) {
+                if (listing.user_id === offer.bid_maker_id) {
+                  bidListings.bid_maker.listings.push({
+                    listing_id: listing.listing_id,
+                    listing_name: listing.listing_name,
+                    listing_description: listing.listing_description
+                  });
+                } else if (listing.user_id === offer.bid_receiver_id) {
+                  bidListings.bid_receiver.listings.push({
+                    listing_id: listing.listing_id,
+                    listing_name: listing.listing_name,
+                    listing_description: listing.listing_description
+                  });
+                }
+              });
+              return bidListings;
+            });
+        });
+  
+        Promise.all(promises)
+          .then(function(results) {
+            res.status(200).json(results);
+          })
+          .catch(function(err) {
+            console.log(err);
+            res.status(500).json({ message: 'An error occurred while retrieving trade offers' });
+          });
+      });
+  }
+  
+  
+
+  /*
   function offers_get(req, res, knex) {
     const user_id = req.params.user_id;
   
@@ -73,5 +136,4 @@ function offer_create(req, res, knex) {
         console.error(error);
         res.status(500).json({message: "Internal server error"});
       });
-  }
-  
+  }*/
