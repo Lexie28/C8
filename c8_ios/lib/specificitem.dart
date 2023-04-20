@@ -23,12 +23,13 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   }
 
   Future<void> fetchListingDetails() async {
-    final response = await http.get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
     print(response.body);
     if (response.statusCode == 200) {
       setState(() {
         var decoded = jsonDecode(response.body);
-            listing = decoded;
+        listing = decoded;
       });
     } else {
       throw Exception('Failed to fetch listing details');

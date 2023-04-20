@@ -81,17 +81,21 @@ class _YourProductState extends State<YourProduct> {
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: ItemName(
-                  futureUser: futureUser,
-                  itemId: widget.itemId,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.1,
+                    vertical: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  child: ItemName(
+                    futureUser: futureUser,
+                    itemId: widget.itemId,
+                  ),
                 ), //Hämta namnet från databasen
               ),
               Align(
-                alignment: FractionalOffset.topLeft,
-                child: ProductInfo(
-                    string:
-                        'Nice apple. Red and crisp. Been polishing it for a few hours. '),
-              ),
+                  alignment: FractionalOffset.topLeft,
+                  child: ProductInfo(
+                      futureUser: futureUser, itemId: widget.itemId)),
               Align(
                 alignment: FractionalOffset.topLeft,
                 child: Container(
@@ -131,55 +135,11 @@ class _YourProductState extends State<YourProduct> {
   }
 }
 
-class ProductName extends StatelessWidget {
-  ProductName({
-    required this.string,
-  });
-
-  final String string;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Container(
-      margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.1,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0.02,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'New Title',
-              border: OutlineInputBorder(),
-            ),
-          );
-        },
-        child: Text(
-          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1),
-          string,
-        ),
-      ),
-    );
-  }
-}
-
 class ProductInfo extends StatelessWidget {
-  const ProductInfo({
-    required this.string,
-  });
+  ProductInfo({required this.futureUser, required this.itemId});
 
-  final String string;
+  final Future<User> futureUser;
+  final int itemId;
 
   @override
   Widget build(BuildContext context) {
@@ -202,9 +162,21 @@ class ProductInfo extends StatelessWidget {
           elevation: 10,
           child: Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: Text(
-              string,
-              style: TextStyle(color: Colors.black),
+            child: FutureBuilder<User>(
+              future: futureUser,
+              builder: (context, snapshot) {
+                List listings = snapshot.data!.listings;
+                if (snapshot.hasData) {
+                  return Text(
+                    listings[itemId]['listing_description'].toString(),
+                    style: style,
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
             ),
           ),
         ),

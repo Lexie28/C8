@@ -42,7 +42,7 @@ class _ListingsPageState extends State<ListingsPage> {
         title: Text(widget.category),
       ),
       body: listings.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: Text('No listings in this category yet!'))
           : ListView.builder(
               itemCount: listings.length,
               itemBuilder: (BuildContext context, int index) {

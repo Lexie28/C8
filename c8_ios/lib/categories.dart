@@ -25,15 +25,78 @@ class Categories extends StatelessWidget {
                     ));
                   },
                   child: Category(string: 'Clothing')),
-              Category(string: 'Books'),
-              Category(string: 'Beauty'),
-              Category(string: 'Accessories'),
-              Category(string: 'Collectables'),
-              Category(string: 'Furniture'),
-              Category(string: 'Electronics'),
-              Category(string: 'Houseware'),
-              Category(string: 'Sport'),
-              Category(string: 'Other'),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Books'),
+                    ));
+                  },
+                  child: Category(string: 'Books')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Beauty'),
+                    ));
+                  },
+                  child: Category(string: 'Beauty')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Accessories'),
+                    ));
+                  },
+                  child: Category(string: 'Accessories')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Collectables'),
+                    ));
+                  },
+                  child: Category(string: 'Collectables')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Furniture'),
+                    ));
+                  },
+                  child: Category(string: 'Furniture')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Electronics'),
+                    ));
+                  },
+                  child: Category(string: 'Electronics')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Houseware'),
+                    ));
+                  },
+                  child: Category(string: 'Houseware')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Sports'),
+                    ));
+                  },
+                  child: Category(string: 'Sports')),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Other'),
+                    ));
+                  },
+                  child: Category(string: 'Other')),
             ],
           ),
         ),
