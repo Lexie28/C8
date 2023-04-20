@@ -1,12 +1,11 @@
-import 'package:c8_ios/addlisting.dart';
-import 'package:c8_ios/homePage2.dart';
+import 'package:c8_ios/createlisting.dart';
+import 'package:c8_ios/hometest.dart';
 import 'package:c8_ios/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'secondmain.dart';
 import 'offers.dart';
-
 
 class toolbar extends StatefulWidget {
   const toolbar({super.key});
@@ -51,14 +50,14 @@ class _Toolbar extends State<toolbar> {
           case 0:
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomePage2(),
+                builder: (BuildContext context) => HomePage3(),
               ),
             );
             break;
           case 1:
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => AddListing(),
+                builder: (BuildContext context) => CreateListingPage(),
               ),
             );
             break;

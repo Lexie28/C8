@@ -1,3 +1,4 @@
+import 'package:c8_ios/createlisting.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -8,15 +9,15 @@ import 'package:http/http.dart' as http;
 //import 'package:english_words/english_words.dart';
 //import 'dart:async';
 // for access to jsonEncode to encode the data
-import 'homePage2.dart';
+//import 'homePage2.dart';
 //Tovas sidor
 import 'otherProduct.dart';
-import 'otherProfile.dart';
+import 'otherprofile.dart';
 import 'categories.dart';
-import 'addlisting.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
 import 'profile.dart';
+import 'hometest.dart';
 
 //  defines the data the app needs to function
 class MyAppState extends ChangeNotifier {}
@@ -56,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         // JOHN 2 ÄMNDRAR HÄR
-                        builder: (BuildContext context) => AddListing(),
+                        builder: (BuildContext context) => CreateListingPage(),
                       ),
                     );
                   },
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => HomePage2(),
+                        builder: (BuildContext context) => HomePage3(),
                       ),
                     );
                   },

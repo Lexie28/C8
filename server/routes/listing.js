@@ -22,12 +22,47 @@ Gets a  listing of a certain listing_id
 @param {Object} knex - The Knex.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
+/*
 function get_listing(req, res, knex) {
   const listing_id = req.params.listing_id;
 
   knex.select("*").from("listing").where({listing_id: listing_id}).then((result) => {
     res.send(result);
   });
+}*/
+
+function get_listing(req, res, knex) {
+  const listing_id = req.params.listing_id;
+
+  knex
+    .select("*")
+    .from("listing")
+    .where({ listing_id: listing_id })
+    .then((listing) => {
+      if (listing.length === 0) {
+        res.status(404).send("Listing not found");
+      } else {
+        const user_id = listing[0].user_id;
+        knex
+          .select("*")
+          .from("user")
+          .where({ user_id: user_id })
+          .then((user) => {
+            if (user.length === 0) {
+              res.status(404).send("User not found");
+            } else {
+              const listingWithUser = { ...listing[0], user: user[0] };
+              res.send(listingWithUser);
+            }
+          })
+          .catch((err) => {
+            res.status(500).send("Error retrieving user");
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send("Error retrieving listing");
+    });
 }
 
 /**
