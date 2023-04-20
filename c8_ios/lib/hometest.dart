@@ -102,7 +102,82 @@ class _HomePageState extends State<HomePage3> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final listings = snapshot.data!;
-                    final showMoreItems = listings.length > 5;
+                  final showMoreItems = listings.length > 4;
+                  return Wrap(
+                    spacing: 16.0, // set the horizontal spacing between items
+                    runSpacing: 16.0, // set the vertical spacing between items
+                    children: [
+                      for (int i = 0; i < 5; i++)
+                        Container(
+                          width: (MediaQuery.of(context).size.width - 48.0) /
+                              3, // calculate the width of each item based on the screen width and the spacing between items
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ListingDetailPage(
+                                    listingId:
+                                        listings[i]['listing_id'].toString(),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Item(string: listings[i]['listing_name']),
+                          ),
+                        ),
+                      if (showMoreItems)
+                        Container(
+                          width: (MediaQuery.of(context).size.width * 0.8) / 3,
+                          height: (MediaQuery.of(context).size.width * 1.1) /
+                              3, // calculate the width of the "See more items" box based on the screen width and the spacing between items
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      PopularItems(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                color: Colors.grey[200],
+                              ),
+                              child: Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Text(
+                                    'See more items',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('Failed to fetch listings');
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+final showMoreItems = listings.length > 5;
                   return Wrap(
                     spacing: 16.0, // set the horizontal spacing between items
                     runSpacing: 16.0, // set the vertical spacing between items
@@ -113,10 +188,12 @@ class _HomePageState extends State<HomePage3> {
                               3, // calculate the width of each item based on the screen width and the spacing between items
                           child: GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(
+                              Navigator.push(
+                                context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      OtherProduct(),
+                                  builder: (context) => ListingDetailPage(
+                                    listingId: listing['listing_id'].toString(),
+                                  ),
                                 ),
                               );
                             },
@@ -158,19 +235,7 @@ class _HomePageState extends State<HomePage3> {
                       ),
                     ],
                   );
-                } else if (snapshot.hasError) {
-                  return Text('Failed to fetch listings');
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+                  */
 
 class Item extends StatelessWidget {
   // TODO se till att strängen int är längre än en rad för då blir rutan ful
