@@ -22,31 +22,11 @@ class OtherProduct extends StatefulWidget {
 class _OtherProductState extends State<OtherProduct> {
   int _currentIndex = 4;
 
-  late Future<User> futureUser;
-  Api _api = Api();
-
+  
   Map<String, dynamic>? name = null;
 
   @override
-  void initState() {
-    super.initState();
-    futureUser = fetchUser();
-  }
 
-  Future<User> fetchUser() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      return User.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -400,31 +380,3 @@ class ListingProfile extends StatelessWidget {
     );
   }
 }
-
-class User {
-  final int userId;
-  final String userName;
-  final String location;
-  final int likes;
-  final int dislikes;
-
-  const User({
-    required this.userId,
-    required this.userName,
-    required this.location,
-    required this.likes,
-    required this.dislikes,
-  });
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      userId: json['user_id'],
-      userName: json['user_name'],
-      location: json['user_location'],
-      likes: json['user_num_likes'],
-      dislikes: json['user_num_dislikes'],
-    );
-  }
-}
-
-
