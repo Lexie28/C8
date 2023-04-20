@@ -1,0 +1,9 @@
+.env
+c8_ios/linux/flutter/generated_plugin_registrant.cc
+c8_ios/linux/flutter/generated_plugin_registrant.cc
+c8_ios/linux/flutter/generated_plugin_registrant.h
+c8_ios/linux/flutter/generated_plugins.cmake
+c8_ios/macos/Flutter/GeneratedPluginRegistrant.swift
+c8_ios/windows/flutter/generated_plugin_registrant.cc
+c8_ios/windows/flutter/generated_plugin_registrant.h
+c8_ios/windows/flutter/generated_plugins.cmake

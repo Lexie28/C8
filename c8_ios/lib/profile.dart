@@ -1,14 +1,42 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:c8_ios/editprofile.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import '../toolbar.dart';
 import 'settings.dart';
+import 'yourProduct.dart';
+import 'dart:convert';
+import 'api.dart';
 
-class Profile extends StatelessWidget {
+String userId = '1';
+
+class Profile extends StatefulWidget {
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  String _user_name = 'Name';
+  Api _api = Api();
+
+  Map<String, dynamic>? name = null;
+
+  @override
+  void initState() {
+    super.initState();
+    //_user_name = fetchName();
+  }
+
+  /*Future<void> fetchName() async {
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to fetch listings');
+    }
+  }*/
+
   //Variabler som namn och bilder
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -18,6 +46,7 @@ class Profile extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text('Your Profile'),
         backgroundColor: Color(0xFFA2BABF),
@@ -58,12 +87,13 @@ class Profile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.asset(
-                    'images/man.jpg',
+                    'images/woman.jpg',
                   ),
                 ),
               ),
             )),
-            Center(child: Text(style: style, 'Name')),
+
+            Center(child: Text(style: style, _user_name)),
             Center(child: Text('Location')),
             Center(child: Text('Amount of likes: xx')),
 
@@ -72,8 +102,17 @@ class Profile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ProfileProducts(
-                    string: 'a product',
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => YourProduct(),
+                        ),
+                      );
+                    },
+                    child: ProfileProducts(
+                      string: 'a product',
+                    ),
                   ),
                   ProfileProducts(
                     string: 'a product',

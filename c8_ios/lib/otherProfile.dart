@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'secondmain.dart';
-import '../toolbar.dart';
 
-class otherProfile extends StatelessWidget {
-  const otherProfile({super.key});
+class OtherProfile extends StatelessWidget {
+  const OtherProfile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +18,21 @@ class otherProfile extends StatelessWidget {
           children: [
             Align(
               alignment: FractionalOffset.topCenter,
-              child: profilePicture(),
+              child: ProfilePicture(),
             ),
             Align(
               alignment: FractionalOffset.topCenter,
-              child: profileName(string: 'Lars Svensson'),
+              child: ProfileName(string: 'Lars Svensson'),
             ),
             Row(
               children: [
                 Align(
                   alignment: FractionalOffset.topLeft,
-                  child: productProfile(string: 'images/shoes.jpg'),
+                  child: ProductProfile(string: 'images/shoes.jpg'),
                 ),
                 Align(
                   alignment: FractionalOffset.topLeft,
-                  child: productProfile(string: 'images/hatt.jpeg'),
+                  child: ProductProfile(string: 'images/hatt.jpeg'),
                 ),
               ],
             )
@@ -46,8 +44,8 @@ class otherProfile extends StatelessWidget {
   }
 }
 
-class profilePicture extends StatelessWidget {
-  const profilePicture({super.key});
+class ProfilePicture extends StatelessWidget {
+  const ProfilePicture({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +69,8 @@ class profilePicture extends StatelessWidget {
   }
 }
 
-class profileName extends StatelessWidget {
-  const profileName({
+class ProfileName extends StatelessWidget {
+  const ProfileName({
     required this.string,
   });
 
@@ -92,10 +90,14 @@ class profileName extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            style: TextStyle(fontSize: MediaQuery.of(context).size.width *0.07),
+            style:
+                TextStyle(fontSize: MediaQuery.of(context).size.width * 0.07),
             string,
           ),
-          Text(style: TextStyle(fontSize: MediaQuery.of(context).size.width *0.05), "50% (12)"),
+          Text(
+              style:
+                  TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05),
+              "50% (12)"),
           Container(
             height: MediaQuery.of(context).size.height * 0.05,
             width: MediaQuery.of(context).size.width * 0.07,
@@ -110,8 +112,8 @@ class profileName extends StatelessWidget {
   }
 }
 
-class productProfile extends StatelessWidget {
-  const productProfile({
+class ProductProfile extends StatelessWidget {
+  const ProductProfile({
     required this.string,
   });
 
@@ -121,10 +123,10 @@ class productProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width *0.07,
-        MediaQuery.of(context).size.width *0.1,
-        MediaQuery.of(context).size.width *0.05,
-        MediaQuery.of(context).size.width *0.02,
+        MediaQuery.of(context).size.width * 0.07,
+        MediaQuery.of(context).size.width * 0.1,
+        MediaQuery.of(context).size.width * 0.05,
+        MediaQuery.of(context).size.width * 0.02,
       ),
       height: MediaQuery.of(context).size.height * 0.17,
       width: MediaQuery.of(context).size.height * 0.17,

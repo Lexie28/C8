@@ -24,8 +24,8 @@ class _ListingsPageState extends State<ListingsPage> {
   }
 
   Future<void> fetchListings() async {
-    final response = await http.get(Uri.parse(
-        '${_api.getApiHost()}/listing/category/${widget.category}'));
+    final response = await http.get(
+        Uri.parse('${_api.getApiHost()}/listing/category/${widget.category}'));
     if (response.statusCode == 200) {
       setState(() {
         listings = jsonDecode(response.body);
