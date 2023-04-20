@@ -1,6 +1,7 @@
 import * as listing from "./routes/listing.js";
 import * as user from "./routes/user.js";
 import * as pages from "./routes/pages.js";
+import * as offer from "./routes/offer.js";
 import { createRequire } from "module"
 
 const require = createRequire(import.meta.url);
@@ -96,6 +97,23 @@ app.patch('/user/dislike/:user_id', (req, res) => user.user_dislike(req, res, kn
 
 //Deleting user
 app.delete('/user/delete/:user_id', (req, res) => user.user_delete(req, res, knex));
+
+
+
+//-------OFFER-------
+
+//Creates a new offer
+app.post('/offer/create', (req, res) => offer.offer_create(req, res, knex));
+
+//Lists all of the offers your user_id is involved in
+app.get('/offer/offers/:user_id', (req, res) => offer.offers_get(req, res, knex));
+
+
+
+
+
+
+
 
 
 
