@@ -20,6 +20,8 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _listingName = '';
   String _listingDescription = '';
   String _listingCategory = '';
+  List<String> _categories = ['Category 1', 'Category 2', 'Category 3'];
+
   Api _api = Api();
 
   Future getImage() async {
@@ -182,3 +184,5 @@ class _CreateListingPageState extends State<CreateListingPage> {
     );
   }
 }
+
+
