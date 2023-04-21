@@ -144,8 +144,8 @@ class ProductInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
+    final style = theme.textTheme.headlineSmall!.copyWith(
+      color: theme.colorScheme.onBackground,
     );
 
     return FittedBox(
@@ -165,8 +165,8 @@ class ProductInfo extends StatelessWidget {
             child: FutureBuilder<User>(
               future: futureUser,
               builder: (context, snapshot) {
-                List listings = snapshot.data!.listings;
                 if (snapshot.hasData) {
+                  List listings = snapshot.data!.listings;
                   return Text(
                     listings[itemId]['listing_description'].toString(),
                     style: style,
