@@ -75,7 +75,8 @@ app.patch('/listing/updatebid/:listing_id', (req, res) => listing.listing_bid(re
 //Retrieves all items of a certain category
 app.get('/listing/category/:listing_category', (req, res) => listing.listing_category(req, res, knex));
 
-
+//Retrieves all listings for a certain user
+app.get('/listing/user/:user_id', (req, res) => listing.listing_user(req, res, knex));
 
 
 //-------USER-------

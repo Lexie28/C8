@@ -1,4 +1,4 @@
-export { get_listings, listing_create, edit_listing_all, listing_delete, listing_top5popular, listing_bid, listing_popular, get_listing, listing_category }
+export { get_listings, listing_create, edit_listing_all, listing_delete, listing_top5popular, listing_bid, listing_popular, get_listing, listing_category, listing_user }
 
 
 /**
@@ -232,4 +232,16 @@ function listing_category(req, res, knex) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while retrieving the listings of this category' });
     });
+}
+
+
+function listing_user(req, res, knex) {
+  const user_id = req.params.user_id;
+  
+  knex.select("*").from("listing").where("user_id", user_id).then((result) => {
+    res.send(result)
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
 }

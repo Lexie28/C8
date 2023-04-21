@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
+import 'createbid.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
+  //final String userId;
 
   ListingDetailPage({required this.listingId});
 
@@ -23,12 +25,13 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   }
 
   Future<void> fetchListingDetails() async {
-    final response = await http.get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
     print(response.body);
     if (response.statusCode == 200) {
       setState(() {
         var decoded = jsonDecode(response.body);
-            listing = decoded;
+        listing = decoded;
       });
     } else {
       throw Exception('Failed to fetch listing details');
@@ -65,11 +68,26 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                   title: Text('User Location'),
                   subtitle: Text(listing['user']['user_location']),
                 ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CreateBid(
+                          listingId: widget.listingId,
+                          userId: listing['user_id'].toString(), // using the user_id from fetchListingDetails()
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text('Bid'),
+                ),
               ],
             ),
     );
   }
 }
+
 
 
 /*

@@ -25,7 +25,7 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http.get(Uri.parse('${_api.getApiHost()}/listings'));
+    final response = await http.get(Uri.parse('${_api.getApiHost()}/listing/popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
