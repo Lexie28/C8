@@ -16,7 +16,7 @@ class CompletedOffer extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.width * 0.01,
+                  top: MediaQuery.of(context).size.width * 0.1,
                   bottom: MediaQuery.of(context).size.width * 0.07,
                   left: MediaQuery.of(context).size.width * 0.2,
                   right: MediaQuery.of(context).size.width * 0.2),

@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api.dart';
-import 'secondmain.dart';
 import 'editListing.dart';
 import 'profile.dart';
 
 String userId = '1';
 
 class YourProduct extends StatefulWidget {
-  // TODO Logga in med Google!!
-
   const YourProduct({super.key, required this.itemId});
 
   final int itemId;
@@ -118,7 +114,10 @@ class _YourProductState extends State<YourProduct> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: NumBids(string: '5'),
+                    child: NumBids(
+                      futureUser: futureUser,
+                      itemId: widget.itemId,
+                    ),
                   ),
                   Align(
                     alignment: FractionalOffset.center,
@@ -187,10 +186,12 @@ class ProductInfo extends StatelessWidget {
 
 class NumBids extends StatefulWidget {
   const NumBids({
-    required this.string,
+    required this.futureUser,
+    required this.itemId,
   });
 
-  final String string;
+  final Future<User> futureUser;
+  final int itemId;
 
   @override
   State<NumBids> createState() => _NumBidsState();
@@ -220,18 +221,29 @@ class _NumBidsState extends State<NumBids> {
           borderRadius: BorderRadius.circular(100),
         ),
         child: Padding(
-          //padding: const EdgeInsets.fromLTRB(23, 15, 15, 15),
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.065,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.04,
-          ),
-          child: Text(
-            '7', //TODO: Kan inte ges som argument. Förmodligen pga stateful widget.
-            style: style,
-          ),
-        ),
+            //padding: const EdgeInsets.fromLTRB(23, 15, 15, 15),
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.065,
+              MediaQuery.of(context).size.width * 0.04,
+              MediaQuery.of(context).size.width * 0.04,
+              MediaQuery.of(context).size.width * 0.04,
+            ),
+            child: FutureBuilder<User>(
+              future: widget.futureUser,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List listings = snapshot.data!.listings;
+                  return Text(
+                    listings[widget.itemId]['num_bids'].toString(),
+                    style: style,
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
+            )),
       ),
     );
   }
@@ -325,7 +337,6 @@ class ProductListing extends StatelessWidget {
 }
 
 class ListingProfile extends StatelessWidget {
-  //TODO: Fetch data från databas
   const ListingProfile({
     required this.futureUser,
   });
