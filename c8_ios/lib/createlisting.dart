@@ -19,7 +19,9 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _userId = '';
   String _listingName = '';
   String _listingDescription = '';
-  String _listingCategory = '';
+  String _listingCategory = 'Other';
+  List<String> _categories = ['Other', 'Clothing', 'Books', 'Beauty', 'Accessories', 'Collectables', 'Furniture', 'Electronics', 'Houseware', 'Sports'];
+
   Api _api = Api();
 
   Future getImage() async {
@@ -151,16 +153,19 @@ class _CreateListingPageState extends State<CreateListingPage> {
                     _listingDescription = value;
                   },
                 ),
-                TextFormField(
+                DropdownButtonFormField(
                   decoration: InputDecoration(labelText: 'Listing Category'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a listing category';
-                    }
-                    return null;
-                  },
+                  value: _categories[0],
+                  items: _categories.map((category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
                   onChanged: (value) {
-                    _listingCategory = value;
+                    setState(() {
+                      _listingCategory = value.toString();
+                    });
                   },
                 ),
                 SizedBox(height: 16.0),

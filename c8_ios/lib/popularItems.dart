@@ -6,12 +6,13 @@ import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api.dart';
+import 'specificitem.dart';
 
 class PopularItems extends StatefulWidget {
-  const PopularItems({super.key});
+  const PopularItems({Key? key});
 
   @override
-  State<PopularItems> createState() => _PopularItemsState();
+  _PopularItemsState createState() => _PopularItemsState();
 }
 
 class _PopularItemsState extends State<PopularItems> {
@@ -25,7 +26,8 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http.get(Uri.parse('${_api.getApiHost()}/listing/popular'));
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -33,58 +35,65 @@ class _PopularItemsState extends State<PopularItems> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
-        title: Text('Popular Items'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FutureBuilder<List<dynamic>>(
-              future: _futureListings,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final listings = snapshot.data!;
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: listings.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final listing = listings[index];
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(0.0),
-                          ),
-                        ),
-                        child: ListTile(
-                          leading: Image.asset('images/shoes.png'),
-                          title: Text(listing['listing_name']),
-                          subtitle: Text(listing['listing_description']),
-                          trailing: Icon(Icons.arrow_forward_ios),
-                        ),
-                      );
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Failed to fetch listings');
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ],
-        ),
-      ),
+  void _navigateToListingDetailPage(int listingId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              ListingDetailPage(listingId: listingId.toString())),
     );
   }
+
+  Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Color(0xFFA2BABF),
+      title: Text('Popular Items'),
+    ),
+    body: FutureBuilder<List<dynamic>>(
+      future: _futureListings,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final listings = snapshot.data!;
+          return ListView.builder(
+            itemCount: listings.length,
+            itemBuilder: (BuildContext context, int index) {
+              final listing = listings[index];
+              return GestureDetector(
+                onTap: () {
+                  _navigateToListingDetailPage(listing['listing_id']);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(width: 1, color: Colors.grey),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(0.0),
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: Image.asset('images/shoes.png'),
+                    title: Text(listing['listing_name']),
+                    subtitle: Text(listing['listing_description']),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                  ),
+                ),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Text('Failed to fetch listings');
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    ),
+  );
 }
+
+}
+
+
 
 class Category extends StatelessWidget {
   const Category({
