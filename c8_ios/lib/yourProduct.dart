@@ -1,19 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'api.dart';
 import 'secondmain.dart';
 import 'editListing.dart';
+import 'profile.dart';
+
+String userId = '1';
 
 class YourProduct extends StatefulWidget {
   // TODO Logga in med Google!!
 
-  const YourProduct({super.key});
+  const YourProduct({super.key, required this.itemId});
+
+  final int itemId;
 
   @override
   State<YourProduct> createState() => _YourProductState();
 }
 
 class _YourProductState extends State<YourProduct> {
+  late Future<User> futureUser;
+  Api _api = Api();
   int _currentIndex = 4;
+
+  @override
+  void initState() {
+    super.initState();
+    futureUser = fetchUser();
+  }
+
+  Future<User> fetchUser() async {
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
+
+    if (response.statusCode == 200) {
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,21 +73,29 @@ class _YourProductState extends State<YourProduct> {
                   ),
                   Align(
                       alignment: FractionalOffset.topRight,
-                      child: ListingProfile(string: 'Elsa')),
+                      child: ListingProfile(
+                        futureUser: futureUser,
+                      )),
                   //CardProduct(string: 'Hej'),
                 ],
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child:
-                    ProductName(string: "Apple"), //Hämta namnet från databasen
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.1,
+                    vertical: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  child: ItemName(
+                    futureUser: futureUser,
+                    itemId: widget.itemId,
+                  ),
+                ), //Hämta namnet från databasen
               ),
               Align(
-                alignment: FractionalOffset.topLeft,
-                child: ProductInfo(
-                    string:
-                        'Nice apple. Red and crisp. Been polishing it for a few hours. '),
-              ),
+                  alignment: FractionalOffset.topLeft,
+                  child: ProductInfo(
+                      futureUser: futureUser, itemId: widget.itemId)),
               Align(
                 alignment: FractionalOffset.topLeft,
                 child: Container(
@@ -100,55 +135,11 @@ class _YourProductState extends State<YourProduct> {
   }
 }
 
-class ProductName extends StatelessWidget {
-  ProductName({
-    required this.string,
-  });
-
-  final String string;
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Container(
-      margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.1,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0.02,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: 'New Title',
-              border: OutlineInputBorder(),
-            ),
-          );
-        },
-        child: Text(
-          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1),
-          string,
-        ),
-      ),
-    );
-  }
-}
-
 class ProductInfo extends StatelessWidget {
-  const ProductInfo({
-    required this.string,
-  });
+  ProductInfo({required this.futureUser, required this.itemId});
 
-  final String string;
+  final Future<User> futureUser;
+  final int itemId;
 
   @override
   Widget build(BuildContext context) {
@@ -171,9 +162,21 @@ class ProductInfo extends StatelessWidget {
           elevation: 10,
           child: Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: Text(
-              string,
-              style: TextStyle(color: Colors.black),
+            child: FutureBuilder<User>(
+              future: futureUser,
+              builder: (context, snapshot) {
+                List listings = snapshot.data!.listings;
+                if (snapshot.hasData) {
+                  return Text(
+                    listings[itemId]['listing_description'].toString(),
+                    style: style,
+                  );
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              },
             ),
           ),
         ),
@@ -324,10 +327,10 @@ class ProductListing extends StatelessWidget {
 class ListingProfile extends StatelessWidget {
   //TODO: Fetch data från databas
   const ListingProfile({
-    required this.string,
+    required this.futureUser,
   });
 
-  final String string;
+  final Future<User> futureUser;
 
   @override
   Widget build(BuildContext context) {
@@ -360,10 +363,8 @@ class ListingProfile extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
             children: [
-              Text(
-                style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.06),
-                string,
+              Name(
+                futureUser: futureUser,
               ),
               Text("80% (599)"), //TODO
               Container(
@@ -378,6 +379,72 @@ class ListingProfile extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class Name extends StatelessWidget {
+  // TODO se till att strängen int är längre än en rad för då blir rutan ful
+
+  Name({required this.futureUser});
+
+  final Future<User> futureUser;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<User>(
+      future: futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(
+            snapshot.data!.userName.toString(),
+            style: style,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ItemName extends StatelessWidget {
+  // TODO se till att strängen int är längre än en rad för då blir rutan ful
+
+  ItemName({required this.futureUser, required this.itemId});
+
+  final Future<User> futureUser;
+  final int itemId;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<User>(
+      future: futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List listings = snapshot.data!.listings;
+          return Text(
+            listings[itemId]['listing_name'].toString(),
+            style: style,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
     );
   }
 }

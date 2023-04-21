@@ -5,6 +5,8 @@ import 'otherProduct.dart';
 import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'api.dart';
+import 'specificitem.dart';
 
 class PopularItems extends StatefulWidget {
   const PopularItems({super.key});
@@ -14,6 +16,7 @@ class PopularItems extends StatefulWidget {
 }
 
 class _PopularItemsState extends State<PopularItems> {
+  Api _api = Api();
   late Future<List<dynamic>> _futureListings;
 
   @override
@@ -23,8 +26,7 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http
-        .get(Uri.parse('http://130.243.226.61:3000/listing/top5popular'));
+    final response = await http.get(Uri.parse('${_api.getApiHost()}/listings'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -62,11 +64,24 @@ class _PopularItemsState extends State<PopularItems> {
                             Radius.circular(0.0),
                           ),
                         ),
-                        child: ListTile(
-                          leading: Image.asset('images/shoes.png'),
-                          title: Text(listing['listing_name']),
-                          subtitle: Text(listing['listing_description']),
-                          trailing: Icon(Icons.arrow_forward_ios),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListingDetailPage(
+                                  listingId:
+                                      listings[index]['listing_id'].toString(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: ListTile(
+                            leading: Image.asset('images/shoes.png'),
+                            title: Text(listing['listing_name']),
+                            subtitle: Text(listing['listing_description']),
+                            trailing: Icon(Icons.arrow_forward_ios),
+                          ),
                         ),
                       );
                     },
