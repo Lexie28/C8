@@ -7,6 +7,85 @@ import 'yourProduct.dart';
 import 'dart:convert';
 import 'api.dart';
 
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+class Profile extends StatefulWidget {
+  const Profile({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<Profile> {
+  Map<String, dynamic>? profileData;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProfileData();
+  }
+
+  Future<void> _fetchProfileData() async {
+    final response = await http.get(Uri.parse('http://192.168.0.100:3000/profilepage/1'));
+    if (response.statusCode == 200) {
+      setState(() {
+        profileData = jsonDecode(response.body);
+      });
+    } else {
+      throw Exception('Failed to load profile data');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Center(
+        child: profileData == null
+            ? CircularProgressIndicator()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(profileData!['user_name']),
+                  Text(profileData!['user_location']),
+                  Text("Likes: ${profileData!['user_num_likes']}"),
+                  Text("Dislikes: ${profileData!['user_num_dislikes']}"),
+                  SizedBox(height: 16),
+                  ...profileData!['listings']
+                      .map<Widget>((listing) => Column(
+                            children: [
+                              Text(listing['listing_name']),
+                              Text(listing['listing_description']),
+                              Text(listing['listing_category']),
+                              SizedBox(height: 16),
+                            ],
+                          ))
+                      .toList(),
+                ],
+              ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+/*
 String userId = '1';
 
 class Profile extends StatefulWidget {
@@ -18,23 +97,11 @@ class _ProfileState extends State<Profile> {
   String _user_name = 'Name';
   Api _api = Api();
 
-  Map<String, dynamic>? name = null;
-
   @override
   void initState() {
     super.initState();
     //_user_name = fetchName();
   }
-
-  /*Future<void> fetchName() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to fetch listings');
-    }
-  }*/
 
   //Variabler som namn och bilder
   @override
@@ -220,4 +287,4 @@ class ProfileProducts extends StatelessWidget {
       ],
     );
   }
-}
+}*/
