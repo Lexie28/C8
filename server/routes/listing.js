@@ -151,8 +151,10 @@ Retrieves the 5 most pooular listings based on number of bids
 @returns {undefined} This function does not return anything.
 */
 function listing_top5popular(req, res, knex) {
+  const { user_id } = req.params;
   knex.select('*')
     .from('listing')
+    .whereNot('user_id', user_id)
     .orderBy('num_bids', 'desc')
     .limit(5)
     .then(top5listings => {
@@ -164,6 +166,8 @@ function listing_top5popular(req, res, knex) {
     });
 }
 
+
+
 /**
 Retrieves all listings in order of popularity based on number of bids
 @param {Object} req - The request object from the client.
@@ -172,8 +176,10 @@ Retrieves all listings in order of popularity based on number of bids
 @returns {undefined} This function does not return anything.
 */
 function listing_popular(req, res, knex) {
+  const { user_id } = req.params;
   knex.select('*')
     .from('listing')
+    .whereNot('user_id', user_id)
     .orderBy('num_bids', 'desc')
     .then(popularlistings => {
       res.status(200).json(popularlistings);
@@ -220,11 +226,12 @@ Retrieves all listings of a certain category
 @returns {undefined} This function does not return anything.
 */
 function listing_category(req, res, knex) {
-  const { listing_category } = req.params;
+  const { listing_category, user_id } = req.params;
 
   knex.select('*')
     .from('listing')
     .where('listing.listing_category', '=', listing_category)
+    .whereNot('user_id', user_id)
     .then(categorylistings => {
       res.status(200).json(categorylistings);
     })

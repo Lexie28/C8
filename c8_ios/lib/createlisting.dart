@@ -1,3 +1,4 @@
+import 'package:c8_ios/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -53,7 +54,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
         print('Good! New listing created!');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage3()),
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
         );
       } else {
         print('NOOOO');

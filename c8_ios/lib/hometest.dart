@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage3> {
 
   Future<List<dynamic>> fetchPopular() async {
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular/1'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

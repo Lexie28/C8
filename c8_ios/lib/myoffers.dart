@@ -65,7 +65,7 @@ class _OffersPageState extends State<OffersPage> {
                                   children: [
                                     //Text('Listing ID: ${listing['listing_id']}'),
                                     Text('Listing: ${listing['listing_name']}'),
-                                    Text('Description: ${listing['listing_description']}'),
+                                    //Text('Description: ${listing['listing_description']}'),
                                     SizedBox(height: 8),
                                   ],
                                 ))
@@ -89,7 +89,7 @@ class _OffersPageState extends State<OffersPage> {
                                   children: [
                                     //Text('Listing ID: ${listing['listing_id']}'),
                                     Text('Listing: ${listing['listing_name']}'),
-                                    Text('Description: ${listing['listing_description']}'),
+                                    //Text('Description: ${listing['listing_description']}'),
                                     SizedBox(height: 8),
                                   ],
                                 ))

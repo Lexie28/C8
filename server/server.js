@@ -64,16 +64,16 @@ app.patch('/listing/edit/:listing_id', (req, res) => listing.edit_listing_all(re
 app.delete('/listing/delete/:listing_id', (req, res) => listing.listing_delete(req, res, knex));
 
 //Retrieve the 5 most popular listings
-app.get('/listing/top5popular', (req, res) => listing.listing_top5popular(req, res, knex));
+app.get('/listing/top5popular/:user_id', (req, res) => listing.listing_top5popular(req, res, knex));
 
 //Retrieve the listings in order of popularity based on number of bids
-app.get('/listing/popular', (req, res) => listing.listing_popular(req, res, knex));
+app.get('/listing/popular/:user_id', (req, res) => listing.listing_popular(req, res, knex));
 
 //Updates number of bid by 1 for a certain listing_id
 app.patch('/listing/updatebid/:listing_id', (req, res) => listing.listing_bid(req, res, knex));
 
 //Retrieves all items of a certain category
-app.get('/listing/category/:listing_category', (req, res) => listing.listing_category(req, res, knex));
+app.get('/listing/category/:listing_category/:user_id', (req, res) => listing.listing_category(req, res, knex));
 
 //Retrieves all listings for a certain user
 app.get('/listing/user/:user_id', (req, res) => listing.listing_user(req, res, knex));
