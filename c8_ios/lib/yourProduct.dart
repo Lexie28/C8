@@ -51,7 +51,7 @@ class _YourProductState extends State<YourProduct> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => EditListing(),
+                    builder: (BuildContext context) => EditListing(itemId: widget.itemId,),
                   ),
                 );
               },

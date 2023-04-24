@@ -15,6 +15,8 @@ class ListingDetailPage extends StatefulWidget {
 
 class _ListingDetailPageState extends State<ListingDetailPage> {
   Map<String, dynamic> listing = {};
+  //late Future<List<Map<String, dynamic>>> _getListingInfo;
+
   Api _api = Api();
 
   @override
@@ -45,70 +47,93 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
         backgroundColor: Color(0xFFA2BABF),
         title: Text('Listing'),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Align(
-                    alignment: FractionalOffset.topLeft,
-                    child: ProductListing(string: 'images/shoes.jpg'),
-                  ),
-                  Align(
-                      alignment: FractionalOffset.topRight,
-                      child: ListingProfile(name: listing['user']['user_name'], likes: listing['user']['user_num_likes'].toString() )),
-                  //CardProduct(string: 'Hej'),
-                ],
-              ),
-              Align(
-                alignment: FractionalOffset.topLeft,
-                child: ProductName(string: listing['listing_name']),
-              ),
-              Align(
-                alignment: FractionalOffset.topLeft,
-                child: ProductInfo(
-                    string:
-                        listing['listing_description']),
-              ),
-              Align(
-                alignment: FractionalOffset.topLeft,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(
-                    //35,
-                    MediaQuery.of(context).size.width * 0.1,
-                    MediaQuery.of(context).size.width * 0.065,
-                    MediaQuery.of(context).size.width * 0,
-                    MediaQuery.of(context).size.width * 0,
-                  ),
-                  child: Text(
-                    'Number of bids',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
+      body: /*FutureBuilder(
+       //future: _getListingInfo,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final listing = snapshot.data as Map<String, dynamic>?;
+          if (listing == null){
+             Center(child: Text('No listings in this category yet!'));
+          } //TODO: HANDLE IF NULL
+          return*/ SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Align(
+                      alignment: FractionalOffset.topLeft,
+                      child: ProductListing(string: 'images/shoes.jpg'),
+                    ),
+                    Align(
+                        alignment: FractionalOffset.topRight,
+                        child: ListingProfile(name: listing['user']['user_name'], likes: listing['user']['user_num_likes'].toString())),
+                    //CardProduct(string: 'Hej'),
+                  ],
+                ),
+                Align(
+                  alignment: FractionalOffset.topLeft,
+                  child: ProductName(string: listing['listing_name']),
+                ),
+                Align(
+                  alignment: FractionalOffset.topLeft,
+                  child: ProductInfo(
+                      string:
+                          listing['listing_description']),
+                ),
+                Align(
+                  alignment: FractionalOffset.topLeft,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(
+                      //35,
+                      MediaQuery.of(context).size.width * 0.1,
+                      MediaQuery.of(context).size.width * 0.065,
+                      MediaQuery.of(context).size.width * 0,
+                      MediaQuery.of(context).size.width * 0,
+                    ),
+                    child: Text(
+                      'Number of bids',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.1,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  Align(
-                    alignment: FractionalOffset.topLeft,
-                    child: NumBids(string: listing['num_bids'].toString()),
-                  ),
-                  Align(
-                    alignment: FractionalOffset.center,
-                    child: BidButton(),
-                  )
-                ],
-              ),
-            ],
+                Row(
+                  children: [
+                    Align(
+                      alignment: FractionalOffset.topLeft,
+                      child: NumBids(string: listing['num_bids'].toString()),
+                    ),
+                    Align(
+                      alignment: FractionalOffset.center,
+                      child: BidButton(),
+                    )
+                  ],
+                ),
+              ],
+            ),
+            
           ),
         ),
-      ),
-      //bottomNavigationBar: toolbar(),
     );
+        /*
+        } else if(snapshot.hasError){
+          return Center(
+            child: Text('Failed to fetch listing information'),
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+
+        }*/
+      }
+      //),
+      //bottomNavigationBar: toolbar(),
+    //);
   }
-}
+//}
 
 class ProductName extends StatelessWidget {
   const ProductName({
