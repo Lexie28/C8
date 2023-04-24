@@ -1,3 +1,4 @@
+import 'package:c8_ios/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,7 +10,7 @@ import 'dart:io';
 
 class CreateListingPage extends StatefulWidget {
   @override
-  _CreateListingPageState createState() => _CreateListingPageState();
+  State<CreateListingPage> createState() => _CreateListingPageState();
 }
 
 class _CreateListingPageState extends State<CreateListingPage> {
@@ -20,7 +21,18 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _listingName = '';
   String _listingDescription = '';
   String _listingCategory = 'Other';
-  List<String> _categories = ['Other', 'Clothing', 'Books', 'Beauty', 'Accessories', 'Collectables', 'Furniture', 'Electronics', 'Houseware', 'Sports'];
+  List<String> _categories = [
+    'Other',
+    'Clothing',
+    'Books',
+    'Beauty',
+    'Accessories',
+    'Collectables',
+    'Furniture',
+    'Electronics',
+    'Houseware',
+    'Sports'
+  ];
 
   Api _api = Api();
 
@@ -53,7 +65,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
         print('Good! New listing created!');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomePage3()),
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
         );
       } else {
         print('NOOOO');
