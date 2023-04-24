@@ -1,25 +1,28 @@
+import 'package:c8_ios/myoffers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:http/http.dart' as http;
-//import 'package:english_words/english_words.dart';
-//import 'dart:async';
+import 'dart:async';
+
+// ws används inte?
+//import 'package:web_socket_channel/web_socket_channel.dart';
+//import 'package:web_socket_channel/io.dart';
 // for access to jsonEncode to encode the data
-import 'homePage2.dart';
+//import 'homePage2.dart';
+
 //Tovas sidor
 import 'otherProduct.dart';
-import 'otherProfile.dart';
+import 'otherprofile.dart';
 import 'categories.dart';
-import 'addlisting.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
 import 'profile.dart';
 import 'offers.dart';
 import 'hometest.dart';
+import 'createlisting.dart';
 
 void main() {
   runApp(C8());
@@ -27,6 +30,7 @@ void main() {
 
 class C8 extends StatelessWidget {
   const C8({super.key});
+  final String userId = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class C8 extends StatelessWidget {
         colorScheme:
             ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
       ),
-      home: MyBottomNavigationbar(),
+      home: FirstPage(),
     );
   }
 }
@@ -54,8 +58,8 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
     HomePage3(),
-    AddListing(),
-    Offers(),
+    CreateListingPage(),
+    OffersPage(),
     Profile(),
   ];
 
@@ -94,6 +98,117 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person_2),
             label: 'My profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FirstPage extends StatefulWidget {
+  const FirstPage({super.key});
+
+  @override
+  State<FirstPage> createState() => _FirstPageState();
+}
+
+class _FirstPageState extends State<FirstPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color.fromARGB(255, 233, 247, 249),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.height * 0.1,
+              MediaQuery.of(context).size.height * 0.2,
+              MediaQuery.of(context).size.height * 0.1,
+              MediaQuery.of(context).size.height * 0.1,
+            ),
+            child: Card(
+              color: Color.fromARGB(255, 160, 200,
+                  207), // Use hexadecimal color code for consistency
+              elevation: 4, // Add elevation to create a shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(16), // Round the corners of the card
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(45),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the content vertically
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the content horizontally
+                  children: [
+                    Text(
+                      'Welcome',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                    Text(
+                      'to',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                    Text(
+                      'Circle 8',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) => MyBottomNavigationbar(),
+                ),
+              );
+            },
+            child: Card(
+              color: Color.fromARGB(255, 160, 200, 207),
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'images/googleLogo.png',
+                      height: MediaQuery.of(context).size.height * 0.1,
+                      width: MediaQuery.of(context).size.width * 0.1,
+                      fit: BoxFit.contain,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Login with Google',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.03,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),

@@ -1,13 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
+class EditProfile extends StatefulWidget {
+  EditProfile({Key? key}) : super(key: key);
+  //Någon variabel som håller bilden kanske
 
-class EditProfile extends StatelessWidget {
+  @override
+  _EditProfileState createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  File? _image;
+
+  Future getImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+
+      //final imageTemporary = File(image.path);
+      final imagePermanent = await saveFilePermanently(image.path);
+
+      setState(() {
+        _image = imagePermanent;
+      });
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<File> saveFilePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
+  }
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _contactController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  //Någon variabel som håller bilden kanske
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +62,16 @@ class EditProfile extends StatelessWidget {
                 margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120.0),
-                  child: Image.asset(
-                    'images/man.jpg',
-                    fit: BoxFit.cover,
-                  ),
+                  child: _image != null
+                      ? Image.file(_image!,
+                          width: 250, height: 250, fit: BoxFit.cover)
+                      : Image.asset(
+                          'images/woman.jpg',
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
-
-            // TODO: knapp för ändra profil
             // Name field
             Container(
               margin: EdgeInsets.all(
@@ -51,7 +86,7 @@ class EditProfile extends StatelessWidget {
               ),
             ),
 
-            // Name field
+            // Location field
             Container(
               margin: EdgeInsets.all(
                 MediaQuery.of(context).size.width * 0.01,
@@ -90,9 +125,37 @@ class EditProfile extends StatelessWidget {
                 child: Text('Save Changes'),
               ),
             ),
+            CustomButton(
+                title: 'Pick from Gallery',
+                icon: Icons.image_outlined,
+                onClick: () => getImage(ImageSource.gallery)),
+            CustomButton(
+                title: 'Pick from Camera',
+                icon: Icons.camera,
+                onClick: () => getImage(ImageSource.camera)),
           ],
         ),
       ),
     );
   }
+}
+
+Widget CustomButton(
+    {required String title,
+    required IconData icon,
+    required VoidCallback onClick}) {
+  return Container(
+    width: 280,
+    child: ElevatedButton(
+        onPressed: onClick,
+        child: Row(
+          children: [
+            Icon(icon),
+            SizedBox(
+              width: 20,
+            ),
+            Text(title),
+          ],
+        )),
+  );
 }

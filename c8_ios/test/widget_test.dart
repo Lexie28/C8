@@ -7,24 +7,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:c8_ios/secondmain.dart';
 import 'package:c8_ios/main.dart';
 
 void main() {
   testWidgets('First page test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const C8());
+    await tester.pumpWidget(C8());
 
-    expect(find.text('Circle Eight'), findsOneWidget);
-    expect(find.text('Log In'), findsOneWidget);
-    expect(find.text('Create Account'), findsOneWidget);
+    // Se att korrekta widgetar visas
+    expect(find.text('Categories'), findsOneWidget);
+    expect(find.text('Popular items'), findsOneWidget);
+    expect(find.text('Clothes'), findsOneWidget);
     expect(find.text('username'), findsNothing);
 
-    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add_circle_outline));
 
-    // Verify that our counter has incremented.
-    //expect(find.text('0'), findsNothing);
-    //expect(find.text('1'), findsOneWidget);
+    //expect(find.widgetWithIcon(), findsOneWidget);
   });
 }

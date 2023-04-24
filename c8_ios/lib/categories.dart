@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
-import 'secondmain.dart';
-import '../toolbar.dart';
+import 'listingsCategory.dart';
+//import 'package:provider/provider.dart';
+//import 'secondmain.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key});
@@ -18,14 +17,23 @@ class Categories extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Category(string: 'Clothes'),
-              Category(string: 'Electornics'),
-              Category(string: 'Food'),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          ListingsPage(category: 'Clothing'),
+                    ));
+                  },
+                  child: Category(string: 'Clothing')),
+              Category(string: 'Books'),
+              Category(string: 'Beauty'),
+              Category(string: 'Accessories'),
+              Category(string: 'Collectables'),
               Category(string: 'Furniture'),
-              Category(string: 'Hobbies'),
-              Category(string: 'Household'),
-              Category(string: 'Textiles'),
-              Category(string: 'Tools'),
+              Category(string: 'Electronics'),
+              Category(string: 'Houseware'),
+              Category(string: 'Sport'),
+              Category(string: 'Other'),
             ],
           ),
         ),
@@ -47,20 +55,19 @@ class Category extends StatelessWidget {
     final style = theme.textTheme.displayMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.15,
-      width: MediaQuery.of(context).size.width * 1,
-      child: Card(
-        color: theme.colorScheme.primary,
-        elevation: 10,
-        child: Align(
-          alignment: FractionalOffset.center,
+    return Card(
+      color: theme.colorScheme.primary,
+      elevation: 10,
+      child: Align(
+        alignment: FractionalOffset.center,
+        child: Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.04),
           child: Text(
             string,
             style: style,
           ),
         ),
       ),
-    );  
+    );
   }
 }

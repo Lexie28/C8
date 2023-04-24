@@ -1,7 +1,8 @@
 import * as listing from "./routes/listing.js";
 import * as user from "./routes/user.js";
 import * as pages from "./routes/pages.js";
-import { createRequire } from "module";
+import * as offer from "./routes/offer.js";
+import { createRequire } from "module"
 
 //const require = createRequire(import.meta.url);
 
@@ -148,18 +149,19 @@ app.patch('/listing/edit/:listing_id', (req, res) => listing.edit_listing_all(re
 app.delete('/listing/delete/:listing_id', (req, res) => listing.listing_delete(req, res, knex));
 
 //Retrieve the 5 most popular listings
-app.get('/listing/top5popular', (req, res) => listing.listing_top5popular(req, res, knex));
+app.get('/listing/top5popular/:user_id', (req, res) => listing.listing_top5popular(req, res, knex));
 
 //Retrieve the listings in order of popularity based on number of bids
-app.get('/listing/popular', (req, res) => listing.listing_popular(req, res, knex));
+app.get('/listing/popular/:user_id', (req, res) => listing.listing_popular(req, res, knex));
 
 //Updates number of bid by 1 for a certain listing_id
 app.patch('/listing/updatebid/:listing_id', (req, res) => listing.listing_bid(req, res, knex));
 
 //Retrieves all items of a certain category
-app.get('/listing/category/:listing_category', (req, res) => listing.listing_category(req, res, knex));
+app.get('/listing/category/:listing_category/:user_id', (req, res) => listing.listing_category(req, res, knex));
 
-
+//Retrieves all listings for a certain user
+app.get('/listing/user/:user_id', (req, res) => listing.listing_user(req, res, knex));
 
 
 //-------USER-------
@@ -184,6 +186,26 @@ app.delete('/user/delete/:user_id', (req, res) => user.user_delete(req, res, kne
 
 
 
+//-------OFFER-------
+
+//Creates a new offer
+app.post('/offer/create', (req, res) => offer.offer_create(req, res, knex));
+
+//Lists all of the offers your user_id is involved in
+app.get('/offer/offers/:user_id', (req, res) => offer.offers_get(req, res, knex));
+
+app.get('/offer/get/:bid_id', (req, res) => offer.get_bid_info(req, res, knex));
+
+
+
+
+
+
+
+
+
+
+
 //-----------------
 
 app.post('/login', (req, res) => {
@@ -204,7 +226,7 @@ app.patch('/transactions/:id', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

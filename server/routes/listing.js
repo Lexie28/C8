@@ -1,4 +1,4 @@
-export { get_listings, listing_create, edit_listing_all, listing_delete, listing_top5popular, listing_bid, listing_popular, get_listing, listing_category }
+export { get_listings, listing_create, edit_listing_all, listing_delete, listing_top5popular, listing_bid, listing_popular, get_listing, listing_category, listing_user }
 
 
 /**
@@ -22,12 +22,47 @@ Gets a  listing of a certain listing_id
 @param {Object} knex - The Knex.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
+/*
 function get_listing(req, res, knex) {
   const listing_id = req.params.listing_id;
 
   knex.select("*").from("listing").where({listing_id: listing_id}).then((result) => {
     res.send(result);
   });
+}*/
+
+function get_listing(req, res, knex) {
+  const listing_id = req.params.listing_id;
+
+  knex
+    .select("*")
+    .from("listing")
+    .where({ listing_id: listing_id })
+    .then((listing) => {
+      if (listing.length === 0) {
+        res.status(404).send("Listing not found");
+      } else {
+        const user_id = listing[0].user_id;
+        knex
+          .select("*")
+          .from("user")
+          .where({ user_id: user_id })
+          .then((user) => {
+            if (user.length === 0) {
+              res.status(404).send("User not found");
+            } else {
+              const listingWithUser = { ...listing[0], user: user[0] };
+              res.send(listingWithUser);
+            }
+          })
+          .catch((err) => {
+            res.status(500).send("Error retrieving user");
+          });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send("Error retrieving listing");
+    });
 }
 
 /**
@@ -116,8 +151,10 @@ Retrieves the 5 most pooular listings based on number of bids
 @returns {undefined} This function does not return anything.
 */
 function listing_top5popular(req, res, knex) {
+  const { user_id } = req.params;
   knex.select('*')
     .from('listing')
+    .whereNot('user_id', user_id)
     .orderBy('num_bids', 'desc')
     .limit(5)
     .then(top5listings => {
@@ -129,6 +166,8 @@ function listing_top5popular(req, res, knex) {
     });
 }
 
+
+
 /**
 Retrieves all listings in order of popularity based on number of bids
 @param {Object} req - The request object from the client.
@@ -137,8 +176,10 @@ Retrieves all listings in order of popularity based on number of bids
 @returns {undefined} This function does not return anything.
 */
 function listing_popular(req, res, knex) {
+  const { user_id } = req.params;
   knex.select('*')
     .from('listing')
+    .whereNot('user_id', user_id)
     .orderBy('num_bids', 'desc')
     .then(popularlistings => {
       res.status(200).json(popularlistings);
@@ -185,11 +226,12 @@ Retrieves all listings of a certain category
 @returns {undefined} This function does not return anything.
 */
 function listing_category(req, res, knex) {
-  const { listing_category } = req.params;
+  const { listing_category, user_id } = req.params;
 
   knex.select('*')
     .from('listing')
     .where('listing.listing_category', '=', listing_category)
+    .whereNot('user_id', user_id)
     .then(categorylistings => {
       res.status(200).json(categorylistings);
     })
@@ -197,4 +239,16 @@ function listing_category(req, res, knex) {
       console.error(err);
       res.status(500).json({ message: 'An error occurred while retrieving the listings of this category' });
     });
+}
+
+
+function listing_user(req, res, knex) {
+  const user_id = req.params.user_id;
+  
+  knex.select("*").from("listing").where("user_id", user_id).then((result) => {
+    res.send(result)
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
 }
