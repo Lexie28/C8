@@ -14,26 +14,23 @@ class ListingDetailPage extends StatefulWidget {
 }
 
 class _ListingDetailPageState extends State<ListingDetailPage> {
-  Map<String, dynamic> listing = {};
+  late Future<Listing> futureListing;
   Api _api = Api();
 
   @override
   void initState() {
     super.initState();
-    fetchListingDetails();
+    futureListing = fetchListingDetails();
   }
 
-  Future<void> fetchListingDetails() async {
+  Future<Listing> fetchListingDetails() async {
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
-    print(response.body);
+
     if (response.statusCode == 200) {
-      setState(() {
-        var decoded = jsonDecode(response.body);
-        listing = decoded;
-      });
+      return Listing.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to fetch listing details');
+      throw Exception('Failed to load album');
     }
   }
 
@@ -57,19 +54,27 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                   ),
                   Align(
                       alignment: FractionalOffset.topRight,
-                      child: ListingProfile(name: listing['user']['user_name'], likes: listing['user']['user_num_likes'].toString() )),
-                  //CardProduct(string: 'Hej'),
+                      child: ListingProfile(
+                        name: UserName(
+                          futureListing: futureListing,
+                        ),
+                        likes: Likes(
+                          futureListing: futureListing,
+                        ),
+                      ))
                 ],
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: ProductName(string: listing['listing_name']),
+                child: ProductName(
+                    string: ListingName(
+                  futureListing: futureListing,
+                )),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
                 child: ProductInfo(
-                    string:
-                        listing['listing_description']),
+                    string: ListingDesc(futureListing: futureListing)),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
@@ -93,7 +98,8 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: NumBids(string: listing['num_bids'].toString()),
+                    child: NumBids(
+                        string: ListingBids(futureListing: futureListing)),
                   ),
                   Align(
                     alignment: FractionalOffset.center,
@@ -115,7 +121,7 @@ class ProductName extends StatelessWidget {
     required this.string,
   });
 
-  final String string;
+  final ListingName string;
 
   @override
   Widget build(BuildContext context) {
@@ -131,10 +137,7 @@ class ProductName extends StatelessWidget {
         MediaQuery.of(context).size.width * 0,
         MediaQuery.of(context).size.width * 0.02,
       ),
-      child: Text(
-        style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.1),
-        string,
-      ),
+      child: string,
     );
   }
 }
@@ -144,7 +147,7 @@ class ProductInfo extends StatelessWidget {
     required this.string,
   });
 
-  final String string;
+  final ListingDesc string;
 
   @override
   Widget build(BuildContext context) {
@@ -167,10 +170,7 @@ class ProductInfo extends StatelessWidget {
           elevation: 10,
           child: Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: Text(
-              string,
-              style: TextStyle(color: Colors.black),
-            ),
+            child: string,
           ),
         ),
       ),
@@ -183,7 +183,7 @@ class NumBids extends StatelessWidget {
     required this.string,
   });
 
-  final String string;
+  final ListingBids string;
 
   @override
   Widget build(BuildContext context) {
@@ -215,10 +215,8 @@ class NumBids extends StatelessWidget {
             MediaQuery.of(context).size.width * 0.04,
             MediaQuery.of(context).size.width * 0.04,
           ),
-          child: Text(
-            string, //TODO: Kan inte ges som argument. Förmodligen pga stateful widget.
-            style: style,
-          ),
+          child:
+              string, //TODO: Kan inte ges som argument. Förmodligen pga stateful widget.
         ),
       ),
     );
@@ -316,8 +314,8 @@ class ListingProfile extends StatelessWidget {
     required this.likes,
   });
 
-  final String name;
-  final String likes;
+  final UserName name;
+  final Likes likes;
 
   @override
   Widget build(BuildContext context) {
@@ -367,12 +365,8 @@ class ListingProfile extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.2,
             child: Column(
               children: [
-                Text(
-                  style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.06),
-                  name,
-                ),
-                Text(likes), //TODO
+                name,
+                likes, //TODO
                 Container(
                   height: MediaQuery.of(context).size.height * 0.05,
                   width: MediaQuery.of(context).size.width * 0.07,
@@ -390,8 +384,7 @@ class ListingProfile extends StatelessWidget {
   }
 }
 
-  
-          /*
+/*
           ListView(
               children: [
                 ListTile(
@@ -416,7 +409,6 @@ class ListingProfile extends StatelessWidget {
                 ),
               ],
             ), */
-
 
 /*
 class _ListingDetailPageState extends State<ListingDetailPage> {
@@ -499,7 +491,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   }
 }*/
 
-  /*
+/*
 
   Future<void> fetchListingDetails() async {
     final response = await http
@@ -553,3 +545,185 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
     );
   }
 }*/
+
+class Listing {
+  final int listingId;
+  final Map<String, dynamic> user;
+  final String listingName;
+  final String listingDesc;
+  final int listingBids;
+
+  const Listing({
+    required this.listingId,
+    required this.user,
+    required this.listingName,
+    required this.listingDesc,
+    required this.listingBids,
+  });
+
+  factory Listing.fromJson(Map<String, dynamic> json) {
+    return Listing(
+      listingId: json['listing_id'],
+      user: json['user'],
+      listingName: json['listing_name'],
+      listingDesc: json['listing_description'],
+      listingBids: json['num_bids'],
+    );
+  }
+}
+
+class UserName extends StatelessWidget {
+  UserName({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          Map<String, dynamic> user = snapshot.data!.user;
+          return Text(
+            user['user_name'].toString(),
+            style: style,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class Likes extends StatelessWidget {
+  Likes({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineSmall!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          Map<String, dynamic> user = snapshot.data!.user;
+          return Text(
+            user['user_num_likes'].toString(),
+            style: style,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ListingName extends StatelessWidget {
+  ListingName({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String productName = snapshot.data!.listingName;
+          return Text(
+            productName,
+            style: style,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ListingDesc extends StatelessWidget {
+  ListingDesc({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineSmall!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String productName = snapshot.data!.listingDesc;
+          return Text(
+            productName,
+            style: style,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ListingBids extends StatelessWidget {
+  ListingBids({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          int productName = snapshot.data!.listingBids;
+          return Text(
+            productName.toString(),
+            style: style,
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
