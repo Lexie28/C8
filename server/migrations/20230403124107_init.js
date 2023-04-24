@@ -23,6 +23,7 @@ exports.up = function(knex) {
 		table.string("profile_picture_path");
 		table.string("phone_number", 12);
 		table.string("email");
+		table.string("location");
 	    })
     }
 
