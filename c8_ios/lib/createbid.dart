@@ -185,6 +185,7 @@ class _CreateBidState extends State<CreateBid> {
                     );
                     print(response.body);
                     // TODO: Handle response
+                    
                   },
                   child: Text('Create Bid'),
                 ),

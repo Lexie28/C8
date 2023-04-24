@@ -75,7 +75,8 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                       MaterialPageRoute(
                         builder: (context) => CreateBid(
                           listingId: widget.listingId,
-                          userId: listing['user_id'].toString(), // using the user_id from fetchListingDetails()
+                          userId: listing['user_id']
+                              .toString(), // using the user_id from fetchListingDetails()
                         ),
                       ),
                     );

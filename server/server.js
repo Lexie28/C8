@@ -109,6 +109,9 @@ app.post('/offer/create', (req, res) => offer.offer_create(req, res, knex));
 //Lists all of the offers your user_id is involved in
 app.get('/offer/offers/:user_id', (req, res) => offer.offers_get(req, res, knex));
 
+app.get('/offer/get/:bid_id', (req, res) => offer.get_bid_info(req, res, knex));
+
+
 
 
 
