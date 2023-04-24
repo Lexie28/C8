@@ -110,7 +110,9 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
             ],
           ),
         ),
+      ),
     );
+
         /*
         } else if(snapshot.hasError){
           return Center(
