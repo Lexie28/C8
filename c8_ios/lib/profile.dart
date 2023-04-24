@@ -163,7 +163,7 @@ class _ProfileState extends State<Profile> {
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         YourProduct(
-                                      itemId: 0,
+                                      itemId: i,
                                     ),
                                   ),
                                 );

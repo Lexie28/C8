@@ -4,8 +4,9 @@ import 'dart:convert';
 import 'api.dart';
 import 'editListing.dart';
 import 'profile.dart';
+import 'inloggadUser.dart';
 
-String userId = '1';
+String userId = LogIn().getUserLogin();
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemId});
@@ -19,7 +20,7 @@ class YourProduct extends StatefulWidget {
 class _YourProductState extends State<YourProduct> {
   late Future<User> futureUser;
   Api _api = Api();
-  int _currentIndex = 4;
+  //int _currentIndex = 4;
 
   @override
   void initState() {
@@ -147,36 +148,31 @@ class ProductInfo extends StatelessWidget {
       color: theme.colorScheme.onBackground,
     );
 
-    return FittedBox(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.7,
-        child: Card(
-          margin: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.1,
-            MediaQuery.of(context).size.width * 0,
-            MediaQuery.of(context).size.width * 0,
-            MediaQuery.of(context).size.width * 0,
-          ),
-          color: theme.colorScheme.onSecondary,
-          elevation: 10,
-          child: Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: FutureBuilder<User>(
-              future: futureUser,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List listings = snapshot.data!.listings;
-                  return Text(
-                    listings[itemId]['listing_description'].toString(),
-                    style: style,
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              },
-            ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.8,
+      child: Card(
+        margin: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * 0.1,
+        ),
+        color: theme.colorScheme.onSecondary,
+        elevation: 10,
+        child: Padding(
+          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
+          child: FutureBuilder<User>(
+            future: futureUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List listings = snapshot.data!.listings;
+                return Text(
+                  listings[itemId]['listing_description'].toString(),
+                  style: style,
+                );
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
           ),
         ),
       ),
@@ -205,46 +201,38 @@ class _NumBidsState extends State<NumBids> {
       color: theme.colorScheme.onPrimary,
     );
 
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.1,
-      width: MediaQuery.of(context).size.width * 0.32,
-      child: Card(
-        margin: EdgeInsets.fromLTRB(
-          MediaQuery.of(context).size.width * 0.11,
-          MediaQuery.of(context).size.width * 0,
-          MediaQuery.of(context).size.width * 0,
-          MediaQuery.of(context).size.width * 0,
-        ),
-        color: theme.colorScheme.primary,
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Padding(
-            //padding: const EdgeInsets.fromLTRB(23, 15, 15, 15),
-            padding: EdgeInsets.fromLTRB(
-              MediaQuery.of(context).size.width * 0.065,
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0.04,
-            ),
-            child: FutureBuilder<User>(
-              future: widget.futureUser,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List listings = snapshot.data!.listings;
-                  return Text(
-                    listings[widget.itemId]['num_bids'].toString(),
-                    style: style,
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('${snapshot.error}');
-                }
-                // By default, show a loading spinner.
-                return const CircularProgressIndicator();
-              },
-            )),
+    return Card(
+      margin: EdgeInsets.only(
+        left: MediaQuery.of(context).size.width * 0.11,
       ),
+      color: theme.colorScheme.primary,
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(100),
+      ),
+      child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.065,
+            MediaQuery.of(context).size.width * 0.04,
+            MediaQuery.of(context).size.width * 0.06,
+            MediaQuery.of(context).size.width * 0.04,
+          ),
+          child: FutureBuilder<User>(
+            future: widget.futureUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List listings = snapshot.data!.listings;
+                return Text(
+                  listings[widget.itemId]['num_bids'].toString(),
+                  style: style,
+                );
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          )),
     );
   }
 }
@@ -378,7 +366,7 @@ class ListingProfile extends StatelessWidget {
                 futureUser: futureUser,
               ),
               Text("80% (599)"), //TODO
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width * 0.07,
                 child: Image.asset(
@@ -395,8 +383,6 @@ class ListingProfile extends StatelessWidget {
 }
 
 class Name extends StatelessWidget {
-  // TODO se till att strängen int är längre än en rad för då blir rutan ful
-
   Name({required this.futureUser});
 
   final Future<User> futureUser;
@@ -427,8 +413,6 @@ class Name extends StatelessWidget {
 }
 
 class ItemName extends StatelessWidget {
-  // TODO se till att strängen int är längre än en rad för då blir rutan ful
-
   ItemName({required this.futureUser, required this.itemId});
 
   final Future<User> futureUser;
