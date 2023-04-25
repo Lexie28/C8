@@ -5,8 +5,9 @@ import 'settings.dart';
 import 'yourProduct.dart';
 import 'dart:convert';
 import 'api.dart';
+import 'inloggadUser.dart';
 
-String userId = '1';
+String userId = LogIn().getUserLogin();
 
 class Profile extends StatefulWidget {
   @override
@@ -162,9 +163,7 @@ class _ProfileState extends State<Profile> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        YourProduct(
-                                      itemId: i,
-                                    ),
+                                        YourProduct(itemIndex: i),
                                   ),
                                 );
                               },

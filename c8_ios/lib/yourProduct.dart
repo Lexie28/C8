@@ -9,9 +9,9 @@ import 'inloggadUser.dart';
 String userId = LogIn().getUserLogin();
 
 class YourProduct extends StatefulWidget {
-  const YourProduct({super.key, required this.itemId});
+  const YourProduct({super.key, required this.itemIndex});
 
-  final int itemId;
+  final int itemIndex;
 
   @override
   State<YourProduct> createState() => _YourProductState();
@@ -39,6 +39,24 @@ class _YourProductState extends State<YourProduct> {
     }
   }
 
+  int getUserId() {
+    int ret = -1;
+    FutureBuilder<User>(
+      future: futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List listings = snapshot.data!.listings;
+          ret = listings[widget.itemIndex]['listing_id'];
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+    return ret;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,11 +67,9 @@ class _YourProductState extends State<YourProduct> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => EditListing(itemId: widget.itemId,),
-                  ),
-                );
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        EditListing(itemId: getUserId())));
               },
               icon: Icon(Icons.edit)),
         ],
@@ -85,14 +101,14 @@ class _YourProductState extends State<YourProduct> {
                   ),
                   child: ItemName(
                     futureUser: futureUser,
-                    itemId: widget.itemId,
+                    itemId: widget.itemIndex,
                   ),
                 ), //Hämta namnet från databasen
               ),
               Align(
                   alignment: FractionalOffset.topLeft,
                   child: ProductInfo(
-                      futureUser: futureUser, itemId: widget.itemId)),
+                      futureUser: futureUser, itemId: widget.itemIndex)),
               Align(
                 alignment: FractionalOffset.topLeft,
                 child: Container(
@@ -117,7 +133,7 @@ class _YourProductState extends State<YourProduct> {
                     alignment: FractionalOffset.topLeft,
                     child: NumBids(
                       futureUser: futureUser,
-                      itemId: widget.itemId,
+                      itemId: widget.itemIndex,
                     ),
                   ),
                   Align(
