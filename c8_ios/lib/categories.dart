@@ -18,21 +18,27 @@ class Categories extends StatelessWidget {
           child: Column(
             children: [
               GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ListingsPage(category: 'Clothing'),
-                    ));
-                  },
-                  child: Category(string: 'Clothing')),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ListingsPage(category: 'Clothing'),
+                  ));
+                },
+                child:
+                    Category(string: 'Clothing', icon: 'images/shirticon.png'),
+              ),
               GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          ListingsPage(category: 'Books'),
-                    ));
-                  },
-                  child: Category(string: 'Books')),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ListingsPage(category: 'Books'),
+                  ));
+                },
+                child: Category(
+                  string: 'Books',
+                  icon: 'images/bookicon.png',
+                ),
+              ),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -40,7 +46,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Beauty'),
                     ));
                   },
-                  child: Category(string: 'Beauty')),
+                  child: Category(string: 'Beauty', icon: 'images/beautyicon.png',)),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -48,7 +54,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Accessories'),
                     ));
                   },
-                  child: Category(string: 'Accessories')),
+                  child: Category(string: 'Accessories', icon: 'images/accessioriesicon.png',)),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -56,7 +62,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Collectables'),
                     ));
                   },
-                  child: Category(string: 'Collectables')),
+                  child: Category(string: 'Collectables', icon: 'images/collectablesicon.png',)),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -64,7 +70,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Furniture'),
                     ));
                   },
-                  child: Category(string: 'Furniture')),
+                  child: Category(string: 'Furniture', icon: 'images/furnitureicon.png',)),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -72,7 +78,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Electronics'),
                     ));
                   },
-                  child: Category(string: 'Electronics')),
+                  child: Category(string: 'Electronics', icon: 'images/electronicsicon.png')),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -80,7 +86,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Houseware'),
                     ));
                   },
-                  child: Category(string: 'Houseware')),
+                  child: Category(string: 'Houseware', icon: 'images/housewareicon.png',)),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -88,7 +94,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Sports'),
                     ));
                   },
-                  child: Category(string: 'Sports')),
+                  child: Category(string: 'Sports', icon: 'images/sportsicon.png',)),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -96,7 +102,7 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Other'),
                     ));
                   },
-                  child: Category(string: 'Other')),
+                  child: Category(string: 'Other', icon: 'images/othericon.png',)),
             ],
           ),
         ),
@@ -108,9 +114,11 @@ class Categories extends StatelessWidget {
 class Category extends StatelessWidget {
   const Category({
     required this.string,
+    required this.icon,
   });
 
   final String string;
+  final String icon;
 
   @override
   Widget build(BuildContext context) {
@@ -119,15 +127,29 @@ class Category extends StatelessWidget {
       color: theme.colorScheme.onPrimary,
     );
     return Card(
-      color: theme.colorScheme.primary,
+      color: Color.fromARGB(255, 255, 255, 255),
       elevation: 10,
       child: Align(
         alignment: FractionalOffset.center,
         child: Padding(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.04),
-          child: Text(
-            string,
-            style: style,
+          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.025),
+          child: Row(
+            children: [
+              Image.asset(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  icon),
+              Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.05),
+                child: Text(
+                  string,
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.1,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

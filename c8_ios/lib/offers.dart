@@ -60,7 +60,7 @@ class Offers extends StatelessWidget {
                     ),
                   );
                 },
-                child: Category(string: 'Offer'),
+                child: Category(string: 'Offer', icon: 'images/othericon.png',),
               ),
             ),
             Container(
@@ -74,7 +74,7 @@ class Offers extends StatelessWidget {
                     ),
                   );
                 },
-                child: Category(string: 'Completed offer'),
+                child: Category(string: 'Completed offer', icon: 'images/othericon.png',),
               ),
             ),
           ],
