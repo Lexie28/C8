@@ -11,6 +11,7 @@ String userId = LogIn().getUserLogin();
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
 
+  // platsen den är på i user/listings-listan INTE SAMMA som itemId
   final int itemIndex;
 
   @override
@@ -20,7 +21,6 @@ class YourProduct extends StatefulWidget {
 class _YourProductState extends State<YourProduct> {
   late Future<User> futureUser;
   Api _api = Api();
-  //int _currentIndex = 4;
 
   @override
   void initState() {
@@ -39,37 +39,36 @@ class _YourProductState extends State<YourProduct> {
     }
   }
 
-  int getUserId() {
-    int ret = -1;
-    FutureBuilder<User>(
-      future: futureUser,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List listings = snapshot.data!.listings;
-          ret = listings[widget.itemIndex]['listing_id'];
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
-    );
-    return ret;
-  }
-
   @override
   Widget build(BuildContext context) {
+    // det sanna itemID!! == listing_id
+    int itemId = -1;
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
         backgroundColor: Color(0xFFA2BABF),
         title: Text('Listing'),
         actions: [
+          FutureBuilder<User>(
+            future: futureUser,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List listings = snapshot.data!.listings;
+                itemId = listings[widget.itemIndex]['listing_id'];
+                return Text('');
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          ),
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        EditListing(itemId: getUserId())));
+                        EditListing(itemId: itemId)));
               },
               icon: Icon(Icons.edit)),
         ],
@@ -138,7 +137,8 @@ class _YourProductState extends State<YourProduct> {
                   ),
                   Align(
                     alignment: FractionalOffset.center,
-                    child: BidButton(),
+                    // hmmmm vilken behövs itemId eller itemIndex?? tänk
+                    child: DeleteButton(),
                   )
                 ],
               ),
@@ -253,14 +253,14 @@ class _NumBidsState extends State<NumBids> {
   }
 }
 
-class BidButton extends StatefulWidget {
-  const BidButton({super.key});
+class DeleteButton extends StatefulWidget {
+  const DeleteButton({super.key});
 
   @override
-  State<BidButton> createState() => _BidButtonState();
+  State<DeleteButton> createState() => _DeleteButtonState();
 }
 
-class _BidButtonState extends State<BidButton> {
+class _DeleteButtonState extends State<DeleteButton> {
   String buttonName = "Delete";
 
   @override
