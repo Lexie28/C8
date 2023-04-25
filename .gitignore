@@ -7,6 +7,5 @@ c8_ios/macos/Flutter/GeneratedPluginRegistrant.swift
 c8_ios/windows/flutter/generated_plugin_registrant.cc
 c8_ios/windows/flutter/generated_plugin_registrant.h
 c8_ios/windows/flutter/generated_plugins.cmake
-server/swagger.js
 server/swagger_output.json
 .vscode
