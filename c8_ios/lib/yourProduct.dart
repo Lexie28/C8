@@ -126,22 +126,18 @@ class _YourProductState extends State<YourProduct> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Align(
-                    alignment: FractionalOffset.topLeft,
-                    child: NumBids(
-                      futureUser: futureUser,
-                      itemId: widget.itemIndex,
-                    ),
-                  ),
-                  Align(
-                    alignment: FractionalOffset.center,
-                    // hmmmm vilken behövs itemId eller itemIndex?? tänk
-                    child: DeleteButton(),
-                  )
-                ],
+              Align(
+                alignment: FractionalOffset.topLeft,
+                child: NumBids(
+                  futureUser: futureUser,
+                  itemId: widget.itemIndex,
+                ),
               ),
+              Align(
+                alignment: FractionalOffset.bottomRight,
+                // hmmmm vilken behövs itemId eller itemIndex?? tänk
+                child: DeleteButton(),
+              )
             ],
           ),
         ),
@@ -219,7 +215,7 @@ class _NumBidsState extends State<NumBids> {
 
     return Card(
       margin: EdgeInsets.only(
-        left: MediaQuery.of(context).size.width * 0.11,
+        left: MediaQuery.of(context).size.width * 0.1,
       ),
       color: theme.colorScheme.primary,
       elevation: 10,
@@ -227,11 +223,9 @@ class _NumBidsState extends State<NumBids> {
         borderRadius: BorderRadius.circular(100),
       ),
       child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.065,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.06,
-            MediaQuery.of(context).size.width * 0.04,
+          padding: EdgeInsets.symmetric(
+            horizontal: MediaQuery.of(context).size.width * 0.06,
+            vertical: MediaQuery.of(context).size.width * 0.04,
           ),
           child: FutureBuilder<User>(
             future: widget.futureUser,
@@ -266,13 +260,8 @@ class _DeleteButtonState extends State<DeleteButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //margin: const EdgeInsets.fromLTRB(80, 40, 10, 0),
-
-      margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.2,
+      margin: EdgeInsets.all(
         MediaQuery.of(context).size.width * 0.1,
-        MediaQuery.of(context).size.width * 0.05,
-        MediaQuery.of(context).size.width * 0,
       ),
       height: MediaQuery.of(context).size.height * 0.09,
       width: MediaQuery.of(context).size.height * 0.17,
