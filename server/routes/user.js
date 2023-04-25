@@ -42,10 +42,10 @@ Registers a new user in the 'user' table.
 @returns {undefined} This function does not return anything.
 */
 function user_registration(req, res) {
-  const { name, location, phone_number, email } = req.body;
+    const { name, profile_picture_path, phone_number, email, location } = req.body;
 
   db('user')
-    .insert({ name, location, phone_number, email })
+    .insert({ name, profile_picture_path, phone_number, email, location})
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'User created successfully' });
@@ -67,7 +67,22 @@ Adds a like to the user of a certain user id.
 @returns {undefined} This function does not return anything.
 */
 function user_like(req, res) {
+  const { id } = req.params;
 
+  db('user')
+    .where({ id })
+    .increment('likes', 1) // use the `increment` method to add 1 to `num_likes`
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'User dislikes updated successfully' });
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the user dislikes' });
+    });
 };
 
 /**
@@ -82,7 +97,7 @@ function user_dislike(req, res) {
 
   db('user')
     .where({ id })
-    .increment('user_num_dislikes', 1) // use the `increment` method to add 1 to `num_likes`
+    .increment('dislikes', 1) // use the `increment` method to add 1 to `num_likes`
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'User dislikes updated successfully' });
@@ -128,7 +143,7 @@ router.get('/user', (req, res) => get_users(req, res));
 router.get('/user/:id', (req, res) => get_user(req, res))
 
 //Registering a new user
-router.post('/user/user', (req, res) => user_registration(req, res));
+router.post('/user', (req, res) => user_registration(req, res));
 
 //Adding a like (/thumbs up) to a user
 router.patch('/user/:id/like', (req, res) => user_like(req, res));
@@ -139,5 +154,11 @@ router.patch('/user/:id/dislike', (req, res) => user_dislike(req, res));
 //Deleting user
 router.delete('/user/:id', (req, res) => user_delete(req, res));
 
+router.get("/user/:id/offers", async (req, res) => {
+    //TODO: flytta implementationen från offer.js hit    
+});
 module.exports = router;
 
+/*
+    
+*/

@@ -12,7 +12,7 @@ exports.up = function(knex) {
     function createUserTable() {
 	return knex.schema
 	    .createTable("user", (table) => {
-		table.increments("id")
+		table.string("id")
 		    .primary();
 		table.string("name")
 		    .notNullable();
@@ -30,7 +30,7 @@ exports.up = function(knex) {
     function createListingTable() {
 	return knex.schema
 	    .createTable("listing", (table) => {
-		table.increments("id")
+		table.string("id")
 		    .primary();
 		table.string("name")
 		    .notNullable();
@@ -38,34 +38,37 @@ exports.up = function(knex) {
 		table.datetime("creation_date");
 		table.string("image_path");
 		table.string("category");
-		
+		table.integer("number_of_bids")
+		    .defaultTo(0);
 		//FK
-		table.integer("owner_id")
-		    .unsigned() //Måste vara unsigned för att matcha user.id!
+		table.string("owner_id")
 		    .notNullable()
 		    .references("id")
 		    .inTable("user")
-		    .onDelete("CASCADE");
+		    .onDelete('CASCADE')
+		    
 	    })
     }
 
     function createOfferTable() {
 	return knex.schema
 	    .createTable("offer", (table) => {
-		table.increments("id").primary();
-		table.boolean("accepted");		
+		table.string("id")
+		    .primary();
+		table.integer("accepted")
+		    .defaultTo(0);
 		
 		//FK
-		table.integer("user_making_offer")
-		    .unsigned()
+		table.string("user_making_offer")
 		    .notNullable();
-		table.integer("user_receiving_offer")
-		    .unsigned()
-		    .notNullable();
+		table.string("user_receiving_offer")
+		    .notNullable()
+		table.datetime("creation_date");
 		table.foreign("user_making_offer", "user_receiving_offer")
 		    .references("id")
 		    .inTable("user")
-		    .onDelete("CASCADE"); //Om en användare tas bort, ta bort offer också.		                          
+		    .onDelete('CASCADE')
+		     //Om en användare tas bort, ta bort offer också.		                          
 	    })
     }
 
@@ -73,18 +76,18 @@ exports.up = function(knex) {
 	return knex.schema
 	    .createTable("offer_listing", (table) => {
 		//FK
-		table.integer("offer_id")
+		table.string("offer_id")
 		    .notNullable()
-		    .unsigned()
 		    .references("id")
 		    .inTable("offer")
-		    .onDelete("CASCADE");
-		table.integer("listing_id")
+		    .onDelete('CASCADE')
+		    
+		table.string("listing_id")
 		    .notNullable()
-		    .unsigned()
 		    .references("id")
 		    .inTable("listing")
-		    .onDelete("CASCADE");
+		    .onDelete('CASCADE')
+		    
 	    });
     }
 		
