@@ -172,30 +172,6 @@ function listing_delete(req, res) {
 };
 
 
-//TODO: ta bort
-/**
-Retrieves the 5 most pooular listings based on number of bids
-@param {Object} req - The request object from the client.
-@param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
-@returns {undefined} This function does not return anything.
-*/
-function listing_top5popular(req, res) {
-  db.select('*')
-    .from('listing')
-    .orderBy('num_bids', 'desc')
-    .limit(5)
-    .then(top5listings => {
-      res.status(200).json(top5listings);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred while retrieving the top 5 listings' });
-    });
-}
-
-
-
 
 /**
 Retrieves all listings of a certain category
@@ -230,10 +206,5 @@ router.patch('/listing/:id', (req, res) => edit_listing_all(req, res));
 
 router.delete('/listing/:id', (req, res) => listing_delete(req, res));
 
-//Retrieve the 5 most popular listings
-router.get('/listing/all/top5popular', (req, res) => listing_top5popular(req, res));
-
-//Retrieve the listings in order of popularity based on number of bids
-router.get('/listing/all/popular', (req, res) => listing_popular(req, res));
 
 module.exports = router;
