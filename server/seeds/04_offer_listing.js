@@ -7,20 +7,20 @@ exports.seed = async function(knex) {
   await knex('offer_listing').del()
   await knex('offer_listing').insert([
       {
-	  offer_id: 1,
-	  listing_id:1
+	  offer_id: "1",
+	  listing_id: "1"
       },
       {
-	  offer_id: 1,
-	  listing_id:3
+	  offer_id: "1",
+	  listing_id: "3"
       },
       {
-	  offer_id: 2,
-	  listing_id:2
+	  offer_id: "2",
+	  listing_id: "2"
       },
       {
-	  offer_id: 2,
-	  listing_id:4
+	  offer_id: "2",
+	  listing_id: "4"
       }
 	  
   ]);
