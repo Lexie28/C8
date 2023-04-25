@@ -34,7 +34,7 @@ class Offers extends StatelessWidget {
                   EdgeInsets.all(MediaQuery.of(context).size.height * 0.015),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+                children: [
                   Expanded(
                     child: Text(' Yours', style: style),
                   ),
