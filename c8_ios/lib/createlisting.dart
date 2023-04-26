@@ -7,6 +7,7 @@ import 'api.dart';
 import 'editprofile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateListingPage extends StatefulWidget {
   @override
@@ -49,15 +50,21 @@ class _CreateListingPageState extends State<CreateListingPage> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('uid');
+
+
+      //{ name, description, creation_date, image_path, category, owner_id
+      
       final url = Uri.parse('${_api.getApiHost()}/listing');
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        
         'name': _listingName,
-        'description': _listingDescription,        
+        'description': _listingDescription,
+        'creation_date': null, //TODO! CREATION DATE
+        'image_path': null, //TODO
         'category': _listingCategory,
-        //'image_path': _image,
-        'owner_id': _userId
+        'owner_id': userId
       };
       final jsonBody = json.encode(body);
       final response = await http.post(url, headers: headers, body: jsonBody);
@@ -130,18 +137,6 @@ class _CreateListingPageState extends State<CreateListingPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'User ID'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a user ID';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    _userId = value;
-                  },
-                ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Listing Name'),
                   validator: (value) {

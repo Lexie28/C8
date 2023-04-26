@@ -29,11 +29,12 @@ class _CreateProfileState extends State<CreateProfile> {
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'user_id': userId,
-          'user_name': _name,
-          'user_location': _location,
-          'user_phone': _phone,
-          'user_email': email
+          'email': email,
+          'id': userId,
+          'location': _location,
+          'name': _name,
+          'phone_number': _phone,
+          'profile_picture_path': null,
         }));
 
     if (response.statusCode == 200) {
