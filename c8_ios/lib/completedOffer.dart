@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'otherprofile.dart';
+import 'otherProfile.dart';
 import 'hometest.dart';
 
 class CompletedOffer extends StatelessWidget {

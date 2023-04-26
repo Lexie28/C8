@@ -15,7 +15,7 @@ import 'dart:async';
 
 //Tovas sidor
 import 'otherProduct.dart';
-import 'otherprofile.dart';
+import 'otherProfile.dart';
 import 'categories.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';

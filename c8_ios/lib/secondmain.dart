@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http;
 //import 'homePage2.dart';
 //Tovas sidor
 import 'otherProduct.dart';
-import 'otherprofile.dart';
+import 'otherProfile.dart';
 import 'categories.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';

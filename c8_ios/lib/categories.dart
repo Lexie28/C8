@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'listingsCategory.dart';
+import 'listingscategory.dart';
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';
 
