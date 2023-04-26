@@ -1,3 +1,5 @@
+import 'package:c8_ios/myoffers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +58,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   final List<Widget> _children = [
     HomePage3(),
     CreateListingPage(),
-    Offers(),
+    OffersPage(),
     Profile(),
   ];
 
