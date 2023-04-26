@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage3> {
                   onTap: () {
                     _navigateToListingsPage('Shoes');
                   },
-                  child: Category(String: 'Shoes'),
+                  child: Category(categoryName: 'Shoes'),
                 ),
               ),
               ],
@@ -185,7 +185,6 @@ class _HomePageState extends State<HomePage3> {
                 }
               },
             ),
-          ],
         ),
       ),
     );

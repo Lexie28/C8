@@ -45,45 +45,6 @@ class _CreateProfileState extends State<CreateProfile> {
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
-
-  //File? _image;
-  String _userId = '';
-  String _userName = '';
-  String _userLocation = '';
-  //String _userDescription = '';
-  String _contactDetails = '';
-  String _userPhoneNumber = '';
-  Api _api = Api();
-
-  Future<void> _submitUser() async {
-    if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('${_api.getApiHost()}/user');
-      final headers = {'Content-Type': 'application/json'};
-      final body = {
-        'id': _userId, //Ska vara google id?
-        'name': _userName,
-        'profile_picture_path':null,
-        'phone_number': _userPhoneNumber,        
-        'email': _contactDetails,
-        'location': _userLocation
-        // 'image_path': _image,
-      };
-      final jsonBody = json.encode(body);
-      final response = await http.post(url, headers: headers, body: jsonBody);
-      if (response.statusCode == 200) {
-        // Success
-        print('Good! New user created!');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
-        );
-      } else {
-        print('NOOOO');
-      }
-    }
-  }
-
   //Någon variabel som håller bilden kanske
   @override
 Widget build(BuildContext context) {
