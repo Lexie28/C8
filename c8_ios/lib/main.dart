@@ -1,4 +1,5 @@
 import 'package:c8_ios/myoffers.dart';
+import 'package:c8_ios/signin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ws används inte?
 //import 'package:web_socket_channel/web_socket_channel.dart';
@@ -39,8 +44,7 @@ class C8 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF3D4640)),
       ),
       home: FirstPage(),
     );
@@ -76,7 +80,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Color(0xFFA2BABF),
-        selectedItemColor: Colors.blueAccent,
+        selectedItemColor: Color.fromARGB(255, 80, 102, 106),
         unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -107,12 +111,13 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
-
   @override
   State<FirstPage> createState() => _FirstPageState();
 }
 
 class _FirstPageState extends State<FirstPage> {
+  bool _isSigningIn = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -172,40 +177,84 @@ class _FirstPageState extends State<FirstPage> {
             ),
           ),
           GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
+            onTap: () async {
+              print("Button pressed");
+              setState(() {
+                _isSigningIn = true;
+              });
+
+              auth.User? user =
+                  await Authentication.signInWithGoogle(context: context);
+
+              setState(() {
+                _isSigningIn = false;
+              });
+
+              if (user != null) {
+                print(user);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString("uid", user.uid);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyBottomNavigationbar()),
+                );
+              }
+            },
+            child: FutureBuilder(
+              future: Authentication.initializeFirebase(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error initializing Firebase');
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return GoogleSignInButton();
+                }
+                return Card(
+                  color: Colors.white,
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 255, 174, 0),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+          GestureDetector(
+            onTap: () async {
+              print("Next button pressed");
+
+              Navigator.pushReplacement(
+                context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => MyBottomNavigationbar(),
-                ),
+                    builder: (context) => MyBottomNavigationbar()),
               );
             },
             child: Card(
-              color: Color.fromARGB(255, 160, 200, 207),
+              color: Colors.white,
               elevation: 4,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(40),
               ),
               child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'images/googleLogo.png',
-                      height: MediaQuery.of(context).size.height * 0.1,
-                      width: MediaQuery.of(context).size.width * 0.1,
-                      fit: BoxFit.contain,
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Login with Google',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.03,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.025,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
             ),
@@ -215,19 +264,3 @@ class _FirstPageState extends State<FirstPage> {
     );
   }
 }
-
-/*Widget build(BuildContext context) {
-  return ChangeNotifierProvider(
-    create: (context) => MyAppState(),
-    child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Circle Eight',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
-      ),
-      home: HomePage(),
-    ),
-  );
-}*/

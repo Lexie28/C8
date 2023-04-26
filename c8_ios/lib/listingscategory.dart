@@ -25,7 +25,7 @@ class _ListingsPageState extends State<ListingsPage> {
 
   Future<void> fetchListings() async {
     final response = await http.get(
-        Uri.parse('${_api.getApiHost()}/listing/category/${widget.category}/1'));
+        Uri.parse('${_api.getApiHost()}/listing?category=${widget.category}'));
     if (response.statusCode == 200) {
       setState(() {
         listings = jsonDecode(response.body);
@@ -42,21 +42,21 @@ class _ListingsPageState extends State<ListingsPage> {
         title: Text(widget.category),
       ),
       body: listings.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? Center(child: Text('No listings in this category yet!'))
           : ListView.builder(
               itemCount: listings.length,
               itemBuilder: (BuildContext context, int index) {
                 final listing = listings[index];
                 return ListTile(
-                  title: Text(listing['listing_name']),
-                  subtitle: Text(listing['listing_description']),
-                  trailing: Text(listing['listing_category']),
+                  title: Text(listing['name']),
+                  subtitle: Text(listing['description']),
+                  trailing: Text(listing['category']),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ListingDetailPage(
-                            listingId: listing['listing_id'].toString()),
+                            listingId: listing['id'].toString()),
                       ),
                     );
                   },
@@ -108,15 +108,15 @@ class _ListingsPageState extends State<ListingsPage> {
               itemBuilder: (BuildContext context, int index) {
                 final listing = listings[index];
                 return ListTile(
-                  title: Text(listing['listing_name']),
-                  subtitle: Text(listing['listing_description']),
-                  trailing: Text(listing['listing_category']),
+                  title: Text(listing['name']),
+                  subtitle: Text(listing['description']),
+                  trailing: Text(listing['category']),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ListingDetailPage(
-                            listingId: listing['listing_id'].toString()),
+                            listingId: listing['id'].toString()),
                       ),
                     );
                   },

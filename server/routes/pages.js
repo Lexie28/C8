@@ -23,7 +23,7 @@ function get_user_with_listings(req, res) {
         const user = userResults[0];
         db.select('*')
           .from('listing')
-          .where('listing.id', '=', id)
+          .where('listing.owner_id', '=', id)
           .then(listingResults => {
             user.listings = listingResults;
             res.send(user);

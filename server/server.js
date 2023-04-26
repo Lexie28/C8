@@ -39,10 +39,10 @@ app.get('/', (req, res) => {
 
 
 
-
 //-------USER-------
 
 
+app.post('/user/exists/:user_id', (req, res) => user.user_exists(req, res, knex));
 
 
 //-------OFFER-------
