@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage3> {
     final uid = prefs.getString('uid');
     print(uid);
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular/1'));
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular/$uid'));
     print(response);
     if (response.statusCode == 200) {
       return jsonDecode(response.body);

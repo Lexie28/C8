@@ -180,7 +180,6 @@ class _FirstPageState extends State<FirstPage> {
           ),
           GestureDetector(
             onTap: () async {
-              print("Button pressed");
               setState(() {
                 _isSigningIn = true;
               });
