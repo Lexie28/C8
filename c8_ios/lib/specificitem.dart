@@ -2,12 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
-import 'createbid.dart';
 import 'otherProfile.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
-  //final String userId;
 
   ListingDetailPage({required this.listingId});
 
@@ -392,21 +390,6 @@ class ListingProfile extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateBid(
-                          listingId: widget.listingId,
-                          userId: listing['user_id']
-                              .toString(), // using the user_id from fetchListingDetails()
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text('Bid'),
-                ),
               ],
             ),
           ),
@@ -417,12 +400,6 @@ class ListingProfile extends StatelessWidget {
 }
 
 
-
-/*
-class _ListingDetailPageState extends State<ListingDetailPage> {
-  Map<String, dynamic> listing = {};
-  Api _api = Api();
-  List<Widget> listTileWidgets = [];
 class Listing {
   final int listingId;
   final Map<String, dynamic> user;

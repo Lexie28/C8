@@ -10,211 +10,14 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-
-class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
-
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<Profile> {
-  Map<String, dynamic>? profileData;
-  Api _api = Api();
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchProfileData();
-  }
-
-  Future<void> _fetchProfileData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('uid');
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
-    if (response.statusCode == 200) {
-      setState(() {
-        profileData = jsonDecode(response.body);
-      });
-    } else {
-      throw Exception('Failed to load profile data');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displaySmall!.copyWith(
-      color: theme.colorScheme.onBackground,
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text('Your Profile'),
-        backgroundColor: Color(0xFFA2BABF),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => EditProfile(),
-                  ),
-                );
-              },
-              icon: Icon(Icons.edit)),
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => Settings(),
-                  ),
-                );
-              },
-              icon: Icon(Icons.settings))
-        ],
-      ),
-      body: Center(
-        child: profileData == null
-            ? CircularProgressIndicator()
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Profile picture
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          // TODO: Implement camera logic
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical:
-                                  MediaQuery.of(context).size.width * 0.02,
-                              horizontal:
-                                  MediaQuery.of(context).size.width * 0.08),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(120),
-                            child: Image.asset(
-                              'images/woman.jpg',
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                        child: Text(profileData!['user_name'], style: style)),
-                    Center(child: Text(profileData!['user_location'])),
-                    Center(
-                        child:
-                            Text("Likes: ${profileData!['user_num_likes']}")),
-                    Center(
-                        child: Text(
-                            "Dislikes: ${profileData!['user_num_dislikes']}")),
-                    Text('Your products'),
-                    Column(
-                      children: profileData!['listings']
-                          .map<Widget>((listing) => GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          YourProduct(),
-                                    ),
-                                  );
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: ProfileProducts(
-                                    string: listing['listing_name'],
-                                  ),
-                                ),
-                              ))
-                          .toList(),
-                    ),
-                  ],
-                ),
-              ),
-      ),
-    );
-  }
-}
-
-/*class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
-
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<Profile> {
-  Map<String, dynamic>? profileData;
-  Api _api = Api();
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchProfileData();
-  }
-
-  Future<void> _fetchProfileData() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/1'));
-    if (response.statusCode == 200) {
-      setState(() {
-        profileData = jsonDecode(response.body);
-      });
-    } else {
-      throw Exception('Failed to load profile data');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: Center(
-        child: profileData == null
-            ? CircularProgressIndicator()
-            : SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(profileData!['user_name']),
-                    Text(profileData!['user_location']),
-                    Text("Likes: ${profileData!['user_num_likes']}"),
-                    Text("Dislikes: ${profileData!['user_num_dislikes']}"),
-                    SizedBox(height: 16),
-                    ...profileData!['listings']
-                        .map<Widget>((listing) => Column(
-                              children: [
-                                Text(listing['listing_name']),
-                                Text(listing['listing_description']),
-                                Text(listing['listing_category']),
-                                SizedBox(height: 16),
-                              ],
-                            ))
-                        .toList(),
-                  ],
-                ),
-              ),
-      ),
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-
+import 'package:http/http.dart' as http;
+import 'package:c8_ios/editprofile.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'yourProduct.dart';
+import 'dart:convert';
+import 'api.dart';
+import 'inloggadUser.dart';
 
 String userId = LogIn().getUserLogin();
 
@@ -392,7 +195,7 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-}*/
+}
 
 class ProfileProducts extends StatelessWidget {
   final String string;

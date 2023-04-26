@@ -14,6 +14,21 @@ import 'popularItems.dart';
 import 'otherProduct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:c8_ios/categories.dart';
+//import 'package:c8_ios/otherProduct.dart';
+//import 'package:c8_ios/popularItems.dart';
+import 'package:flutter/material.dart';
+//import 'package:provider/provider.dart';
+//import 'secondmain.dart';
+//import '../toolbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'listingscategory.dart';
+import 'specificitem.dart';
+import 'api.dart';
+import 'popularItems.dart';
+import 'otherProduct.dart';
+
 class HomePage3 extends StatefulWidget {
   const HomePage3({Key? key}) : super(key: key);
 
@@ -32,9 +47,6 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final prefs = await SharedPreferences.getInstance();
-    final uid = prefs.getString('uid');
-    print(uid);
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
     if (response.statusCode == 200) {
@@ -47,13 +59,6 @@ class _HomePageState extends State<HomePage3> {
   void _navigateToListingsPage(String category) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (BuildContext context) => ListingsPage(category: category),
-    ));
-  }
-
-  void _navigateToListingDetailPage(int listingId) {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (BuildContext context) =>
-          ListingDetailPage(listingId: listingId.toString()),
     ));
   }
 
@@ -86,171 +91,12 @@ class _HomePageState extends State<HomePage3> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Shoes');
-                  },
-                  child: Category(categoryName: 'Shoes'),
-                ),
               ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Food');
-                  },
-                  child: Category(string: 'Food'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => Categories(),
-                    ));
-                  },
-                  child: Category(string: 'All categories'),
-                ),
-              ],
-            ),
-            Header(string: 'Popular items'),
-            FutureBuilder<List<dynamic>>(
-              future: _futureListings,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final listings = snapshot.data!;
-                  final showMoreItems = listings.length > 5;
-                  return Wrap(
-                    spacing: 16.0, // set the horizontal spacing between items
-                    runSpacing: 16.0, // set the vertical spacing between items
-                    children: [
-                      for (int i = 0; i < listings.length && i < 5; i++)
-                        Container(
-                          width: (MediaQuery.of(context).size.width - 48.0) /
-                              3, // calculate the width of each item based on the screen width and the spacing between items
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ListingDetailPage(
-                                          listingId: listings[i]['listing_id']
-                                              .toString()),
-                                ),
-                              );
-                            },
-                            child: Item(string: listings[i]['listing_name']),
-                          ),
-                        ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width * 0.8) / 3,
-                        height: (MediaQuery.of(context).size.width * 1.1) /
-                            3, // calculate the width of the "See more items" box based on the screen width and the spacing between items
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    PopularItems(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.grey[200],
-                            ),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Text(
-                                  'See more items',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Failed to fetch listings');
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-        ),
-      ),
-    );
-  }
-}
-
-/*@override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Circle 8'),
-        foregroundColor: Color.fromARGB(255, 0, 0, 0),
-        backgroundColor: Color.fromARGB(255, 162, 186, 191),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Header(string: 'Categories'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Clothing');
-                  },
-                  child: Category(string: 'Clothing'),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Shoes');
-                  },
-                  child: Category(string: 'Shoes'),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Food');
-                  },
-                  child: Category(string: 'Food'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => Categories(),
-                    ));
-                  },
-                  child: Category(string: 'All categories'),
-                ),
-              ],
-            ),
-            Header(string: 'Popular items'),
-            FutureBuilder<List<dynamic>>(
-              future: _futureListings,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final listings = snapshot.data!;
-                    final showMoreItems = listings.length > 5;
-                  return Wrap(
-                    spacing: 16.0, // set the horizontal spacing between items
-                    runSpacing: 16.0, // set the vertical spacing between items
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  color: Color.fromARGB(255, 232, 237, 238),
+                  child: Row(
                     children: [
                       GestureDetector(
                           onTap: () {
@@ -490,7 +336,7 @@ class _HomePageState extends State<HomePage3> {
       ),
     );
   }
-}*/
+}
 
 class Item extends StatelessWidget {
   // TODO se till att strängen int är längre än en rad för då blir rutan ful

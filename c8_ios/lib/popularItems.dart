@@ -100,52 +100,6 @@ class _PopularItemsState extends State<PopularItems> {
     );
   }
 
-  Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      backgroundColor: Color(0xFFA2BABF),
-      title: Text('Popular Items'),
-    ),
-    body: FutureBuilder<List<dynamic>>(
-      future: _futureListings,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final listings = snapshot.data!;
-          return ListView.builder(
-            itemCount: listings.length,
-            itemBuilder: (BuildContext context, int index) {
-              final listing = listings[index];
-              return GestureDetector(
-                onTap: () {
-                  _navigateToListingDetailPage(listing['listing_id']);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(width: 1, color: Colors.grey),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(0.0),
-                    ),
-                  ),
-                  child: ListTile(
-                    leading: Image.asset('images/shoes.png'),
-                    title: Text(listing['listing_name']),
-                    subtitle: Text(listing['listing_description']),
-                    trailing: Icon(Icons.arrow_forward_ios),
-                  ),
-                ),
-              );
-            },
-          );
-        } else if (snapshot.hasError) {
-          return Text('Failed to fetch listings');
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    ),
-  );
-}
 
 }
 
