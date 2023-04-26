@@ -21,8 +21,9 @@ describe("GET /user", () => {
 describe("POST /user", () => {
     afterAll(async () => {
 	await request(baseURL).delete(`${}`); //TODO: skriv klart
-    }
-}
+    });
+});
+
 describe("PATCH /user/:id/like, PATCH /user/:id/dislike, and GET /user/:id", () => {
     const newUser = {
 	"id": 999999,

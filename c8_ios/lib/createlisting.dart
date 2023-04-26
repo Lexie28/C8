@@ -45,7 +45,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
         'listing_name': _listingName,
         'listing_description': _listingDescription,
         'listing_category': _listingCategory,
-        // 'listing_photo': _image,
+        'listing_photo': _image,
       };
       final jsonBody = json.encode(body);
       final response = await http.post(url, headers: headers, body: jsonBody);
