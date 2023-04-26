@@ -99,6 +99,8 @@ app.patch('/user/dislike/:user_id', (req, res) => user.user_dislike(req, res, kn
 //Deleting user
 app.delete('/user/delete/:user_id', (req, res) => user.user_delete(req, res, knex));
 
+app.post('/user/exists/:user_id', (req, res) => user.user_exists(req, res, knex));
+
 
 
 //-------OFFER-------

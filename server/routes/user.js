@@ -1,5 +1,5 @@
 
-export { get_users, user_registration, user_like, user_dislike, user_delete, get_user }
+export { get_users, user_registration, user_like, user_dislike, user_delete, get_user, user_exists }
 
 /**
 Retrieves all records from the "user" table using Knex.js and sends the result back to the client as a response.
@@ -39,10 +39,10 @@ Registers a new user in the 'user' table.
 @returns {undefined} This function does not return anything.
 */
 function user_registration(req, res, knex) {
-  const { user_name, user_location, user_phone, user_email } = req.body;
+  const { user_id, user_name, user_location, user_phone, user_email } = req.body;
 
   knex('user')
-    .insert({ user_name, user_location, user_phone, user_email })
+    .insert({ user_id, user_name, user_location, user_phone, user_email })
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'User created successfully' });
@@ -116,5 +116,26 @@ function user_delete(req, res, knex) {
     .catch(err => {
       console.log(err);
       res.status(500).json({ message: 'An error occurred while deleting the user' });
+    });
+};
+
+
+function user_exists(req, res, knex) {
+  const { user_id } = req.params;
+
+  knex('user')
+    .select('user_id')
+    .where({ user_id })
+    .first()
+    .then(result => {
+      if (result) {
+        res.status(200).json({ message: 'User found' });
+      } else {
+        res.status(404).json({ message: 'User not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while checking for user existence' });
     });
 };
