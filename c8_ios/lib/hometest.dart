@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -57,7 +57,6 @@ class _HomePageState extends State<HomePage3> {
         ),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
         backgroundColor: Color(0xFFA2BABF),
-       
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -259,21 +258,22 @@ class _HomePageState extends State<HomePage3> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ListingDetailPage(
-                                        listingId: listings[i]['listing_id']
-                                            .toString(),
+                                        listingId: listings[i]['id'].toString(),
                                       ),
                                     ),
                                   );
                                 },
-                                child:
-                                    Item(string: listings[i]['listing_name'], image: 'images/shoes.png',),
+                                child: Item(
+                                  string: listings[i]['name'],
+                                  image: 'images/shoes.png',
+                                ),
                               ),
                             ),
                           if (showMoreItems)
                             Container(
-                              width:
-                                  (MediaQuery.of(context).size.width*0.45),
-                              height: (MediaQuery.of(context).size.width*0.45), // calculate the width of the "See more items" box based on the screen width and the spacing between items
+                              width: (MediaQuery.of(context).size.width * 0.45),
+                              height: (MediaQuery.of(context).size.width *
+                                  0.45), // calculate the width of the "See more items" box based on the screen width and the spacing between items
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
@@ -294,7 +294,8 @@ class _HomePageState extends State<HomePage3> {
                                       child: Text(
                                         'See more items',
                                         style: TextStyle(
-                                          color: Color.fromARGB(255, 83, 83, 83),
+                                          color:
+                                              Color.fromARGB(255, 83, 83, 83),
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -327,7 +328,7 @@ class Item extends StatelessWidget {
   Item({
     required this.string,
     required this.image,
-    });
+  });
 
   final String string;
   final String image;

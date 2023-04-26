@@ -24,19 +24,21 @@ class _CreateProfileState extends State<CreateProfile> {
   String _userLocation = '';
   //String _userDescription = '';
   String _contactDetails = '';
-
+  String _userPhoneNumber = '';
   Api _api = Api();
 
   Future<void> _submitUser() async {
     if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('${_api.getApiHost()}/user/registration');
+      final url = Uri.parse('${_api.getApiHost()}/user');
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'user_id': _userId,
-        'user_name': _userName,
-        'user_location': _userLocation,
-        'user_email': _contactDetails,
-        // 'listing_photo': _image,
+        'id': _userId, //Ska vara google id?
+        'name': _userName,
+        'profile_picture_path':null,
+        'phone_number': _userPhoneNumber,        
+        'email': _contactDetails,
+        'location': _userLocation
+        // 'image_path': _image,
       };
       final jsonBody = json.encode(body);
       final response = await http.post(url, headers: headers, body: jsonBody);

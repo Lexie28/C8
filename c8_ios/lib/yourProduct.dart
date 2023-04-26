@@ -30,7 +30,7 @@ class _YourProductState extends State<YourProduct> {
 
   Future<User> fetchUser() async {
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
+        await http.get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
@@ -41,7 +41,7 @@ class _YourProductState extends State<YourProduct> {
 
   @override
   Widget build(BuildContext context) {
-    // det sanna itemID!! == listing_id
+    // det sanna itemID!! == id
     int itemId = -1;
 
     return Scaffold(
@@ -55,7 +55,7 @@ class _YourProductState extends State<YourProduct> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List listings = snapshot.data!.listings;
-                itemId = listings[widget.itemIndex]['listing_id'];
+                itemId = listings[widget.itemIndex]['id'];
                 return Text('');
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
@@ -176,7 +176,7 @@ class ProductInfo extends StatelessWidget {
               if (snapshot.hasData) {
                 List listings = snapshot.data!.listings;
                 return Text(
-                  listings[itemId]['listing_description'].toString(),
+                  listings[itemId]['description'].toString(),
                   style: style,
                 );
               } else if (snapshot.hasError) {
@@ -233,7 +233,7 @@ class _NumBidsState extends State<NumBids> {
               if (snapshot.hasData) {
                 List listings = snapshot.data!.listings;
                 return Text(
-                  listings[widget.itemId]['num_bids'].toString(),
+                  listings[widget.itemId]['number_of_bids'].toString(),
                   style: style,
                 );
               } else if (snapshot.hasError) {
@@ -436,7 +436,7 @@ class ItemName extends StatelessWidget {
         if (snapshot.hasData) {
           List listings = snapshot.data!.listings;
           return Text(
-            listings[itemId]['listing_name'].toString(),
+            listings[itemId]['name'].toString(),
             style: style,
           );
         } else if (snapshot.hasError) {

@@ -25,7 +25,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
   Future<Listing> fetchListingDetails() async {
     final response = await http
-        .get(Uri.parse('${_api.getApiHost()}/listing/get/${widget.listingId}'));
+        .get(Uri.parse('${_api.getApiHost()}/listing/${widget.listingId}'));
 
     if (response.statusCode == 200) {
       return Listing.fromJson(jsonDecode(response.body));
@@ -417,11 +417,11 @@ class Listing {
 
   factory Listing.fromJson(Map<String, dynamic> json) {
     return Listing(
-      listingId: json['listing_id'],
+      listingId: json['id'],
       user: json['user'],
-      listingName: json['listing_name'],
-      listingDesc: json['listing_description'],
-      listingBids: json['num_bids'],
+      listingName: json['name'],
+      listingDesc: json['description'],
+      listingBids: json['number_of_bids'],
     );
   }
 }
@@ -444,7 +444,7 @@ class UserName extends StatelessWidget {
         if (snapshot.hasData) {
           Map<String, dynamic> user = snapshot.data!.user;
           return Text(
-            user['user_name'].toString(),
+            user['name'].toString(),
             style: style,
           );
         } else if (snapshot.hasError) {
@@ -475,7 +475,7 @@ class Likes extends StatelessWidget {
         if (snapshot.hasData) {
           Map<String, dynamic> user = snapshot.data!.user;
           return Text(
-            user['user_num_likes'].toString(),
+            user['likes'].toString(),
             style: style,
           );
         } else if (snapshot.hasError) {

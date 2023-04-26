@@ -26,7 +26,7 @@ class _ProfileState extends State<Profile> {
 
   Future<User> fetchUser() async {
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
+        await http.get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
@@ -167,7 +167,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['listing_name']),
+                              child: Item(string: listings[i]['name']),
                             ),
                           ),
                       ]);
@@ -250,11 +250,11 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['user_id'],
-      userName: json['user_name'],
-      location: json['user_location'],
-      likes: json['user_num_likes'],
-      dislikes: json['user_num_dislikes'],
+      userId: json['id'],
+      userName: json['name'],
+      location: json['location'],
+      likes: json['likes'],
+      dislikes: json['dislikes'],
       listings: json['listings'],
     );
   }

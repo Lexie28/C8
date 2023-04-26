@@ -42,10 +42,10 @@ Registers a new user in the 'user' table.
 @returns {undefined} This function does not return anything.
 */
 function user_registration(req, res) {
-    const { name, profile_picture_path, phone_number, email, location } = req.body;
+    const { id, name, profile_picture_path, phone_number, email, location } = req.body;
 
   db('user')
-    .insert({ name, profile_picture_path, phone_number, email, location})
+	.insert({id, name, profile_picture_path, phone_number, email, location})
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'User created successfully' });
