@@ -51,121 +51,270 @@ class _HomePageState extends State<HomePage3> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Circle 8'),
+        title: Align(
+          alignment: FractionalOffset.center,
+          child: const Text('Circle 8'),
+        ),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
-        backgroundColor: Color.fromARGB(255, 162, 186, 191),
+        backgroundColor: Color(0xFFA2BABF),
+       
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Header(string: 'Categories'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Clothing');
-                  },
-                  child: Category(string: 'Clothing'),
+        child: Container(
+          color: Color.fromARGB(255, 232, 237, 238),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                color: Color.fromARGB(255, 232, 237, 238),
+                child: Align(
+                  alignment: FractionalOffset.topCenter,
+                  child: Text(
+                    'Categories',
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                  ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Shoes');
-                  },
-                  child: Category(string: 'Shoes'),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    _navigateToListingsPage('Food');
-                  },
-                  child: Category(string: 'Food'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => Categories(),
-                    ));
-                  },
-                  child: Category(string: 'All categories'),
-                ),
-              ],
-            ),
-            Header(string: 'Popular items'),
-            FutureBuilder<List<dynamic>>(
-              future: _futureListings,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final listings = snapshot.data!;
-                    final showMoreItems = listings.length > 5;
-                  return Wrap(
-                    spacing: 16.0, // set the horizontal spacing between items
-                    runSpacing: 16.0, // set the vertical spacing between items
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  color: Color.fromARGB(255, 232, 237, 238),
+                  child: Row(
                     children: [
-                      for (int i = 0; i < listings.length && i < 5; i++)
-                        Container(
-                          width: (MediaQuery.of(context).size.width - 48.0) /
-                              3, // calculate the width of each item based on the screen width and the spacing between items
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      OtherProduct(),
-                                ),
-                              );
-                            },
-                            child: Item(string: listings[i]['listing_name']),
-                          ),
-                        ),
-                      Container(
-                        width: (MediaQuery.of(context).size.width * 0.8) / 3,
-                        height: (MediaQuery.of(context).size.width * 1.1) /
-                            3, // calculate the width of the "See more items" box based on the screen width and the spacing between items
-                        child: GestureDetector(
+                      GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    PopularItems(),
-                              ),
-                            );
+                            _navigateToListingsPage('Clothing');
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.grey[200],
+                          child: Material(
+                            elevation: 10,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
                             ),
-                            child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(100),
+                                ),
+                                //color: Colors.yellow,
+                              ),
                               child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Text(
-                                  'See more items',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.bold,
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.1,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        'images/shirticon.png'),
+                                    Text('Clothing')
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                      GestureDetector(
+                          onTap: () {
+                            _navigateToListingsPage('Shoes');
+                          },
+                          child: Material(
+                            elevation: 10,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(100),
+                                ),
+                                //color: Colors.yellow,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.1,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        'images/shoeicon.png'),
+                                    Text('Shoes')
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                      GestureDetector(
+                          onTap: () {
+                            _navigateToListingsPage('Books');
+                          },
+                          child: Material(
+                            elevation: 10,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(100),
+                                ),
+                                //color: Colors.yellow,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.1,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        'images/bookicon.png'),
+                                    Text('Books')
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => Categories(),
+                            ));
+                          },
+                          child: Material(
+                            elevation: 10,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(100),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(100),
+                                ),
+                                //color: Colors.yellow,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.1,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.2,
+                                        'images/categoriesicon.png'),
+                                    Text('More ')
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: Text(
+                  'Popular Items',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.1,
+                  ),
+                ),
+              ),
+              Container(
+                color: Color.fromARGB(255, 241, 245, 246),
+                child: FutureBuilder<List<dynamic>>(
+                  future: _futureListings,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final listings = snapshot.data!;
+                      final showMoreItems = listings.length > 4;
+                      return Wrap(
+                        spacing:
+                            16.0, // set the horizontal spacing between items
+                        runSpacing:
+                            16.0, // set the vertical spacing between items
+                        children: [
+                          for (int i = 0; i < 5; i++)
+                            Container(
+                              width: (MediaQuery.of(context).size.width -
+                                      32.0) /
+                                  2, // calculate the width of each item based on the screen width and the spacing between items
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ListingDetailPage(
+                                        listingId: listings[i]['listing_id']
+                                            .toString(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child:
+                                    Item(string: listings[i]['listing_name'], image: 'images/shoes.png',),
+                              ),
+                            ),
+                          if (showMoreItems)
+                            Container(
+                              width:
+                                  (MediaQuery.of(context).size.width*0.45),
+                              height: (MediaQuery.of(context).size.width*0.45), // calculate the width of the "See more items" box based on the screen width and the spacing between items
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          PopularItems(),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    color: Color.fromARGB(255, 210, 208, 208),
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Text(
+                                        'See more items',
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 83, 83, 83),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return Text('Failed to fetch listings');
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ],
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text('Failed to fetch listings');
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -175,9 +324,13 @@ class _HomePageState extends State<HomePage3> {
 class Item extends StatelessWidget {
   // TODO se till att strängen int är längre än en rad för då blir rutan ful
 
-  Item({required this.string});
+  Item({
+    required this.string,
+    required this.image,
+    });
 
   final String string;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -186,19 +339,27 @@ class Item extends StatelessWidget {
       color: theme.colorScheme.onTertiary,
     );
 
-    return Container(
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-      color: Color.fromARGB(255, 195, 195, 195),
+    return Material(
+      elevation: 7,
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-            child: ClipRRect(
-              //borderRadius: BorderRadius.circular(50.0),
+          AspectRatio(
+            aspectRatio: 1,
+            child: Container(
+              height: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.4,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover,
+                ),
+                /*
+              height: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.4,
               child: Image.asset(
                 'images/shoes.png',
-                height: MediaQuery.of(context).size.width * 0.25,
-                width: MediaQuery.of(context).size.width * 0.25,
+                fit: BoxFit.cover,
+              */
               ),
             ),
           ),
