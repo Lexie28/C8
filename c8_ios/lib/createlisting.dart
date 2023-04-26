@@ -10,7 +10,7 @@ import 'dart:io';
 
 class CreateListingPage extends StatefulWidget {
   @override
-  _CreateListingPageState createState() => _CreateListingPageState();
+  State<CreateListingPage> createState() => _CreateListingPageState();
 }
 
 class _CreateListingPageState extends State<CreateListingPage> {
@@ -21,7 +21,18 @@ class _CreateListingPageState extends State<CreateListingPage> {
   String _listingName = '';
   String _listingDescription = '';
   String _listingCategory = 'Other';
-  List<String> _categories = ['Other', 'Clothing', 'Books', 'Beauty', 'Accessories', 'Collectables', 'Furniture', 'Electronics', 'Houseware', 'Sports'];
+  List<String> _categories = [
+    'Other',
+    'Clothing',
+    'Books',
+    'Beauty',
+    'Accessories',
+    'Collectables',
+    'Furniture',
+    'Electronics',
+    'Houseware',
+    'Sports'
+  ];
 
   Api _api = Api();
 
@@ -38,14 +49,15 @@ class _CreateListingPageState extends State<CreateListingPage> {
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('${_api.getApiHost()}/listing/create');
+      final url = Uri.parse('${_api.getApiHost()}/listing');
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'user_id': _userId,
-        'listing_name': _listingName,
-        'listing_description': _listingDescription,
-        'listing_category': _listingCategory,
-        // 'listing_photo': _image,
+        
+        'name': _listingName,
+        'description': _listingDescription,        
+        'category': _listingCategory,
+        //'image_path': _image,
+        'owner_id': _userId
       };
       final jsonBody = json.encode(body);
       final response = await http.post(url, headers: headers, body: jsonBody);
@@ -68,10 +80,10 @@ class _CreateListingPageState extends State<CreateListingPage> {
       final url = Uri.parse('http://130.243.238.100:5000/listing/create');
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'user_id': _userId,
-        'listing_name': _listingName,
-        'listing_description': _listingDescription,
-        'listing_category': _listingCategory,
+        'id': _userId,
+        'name': _listingName,
+        'description': _listingDescription,
+        'category': _listingCategory,
       };
       final jsonBody = json.encode(body);
       final response = await http.post(url, headers: headers, body: jsonBody);
@@ -89,10 +101,10 @@ class _CreateListingPageState extends State<CreateListingPage> {
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse('http://130.243.238.100:5000/listing/create');
       final response = await http.post(url, body: {
-        'user_id': _userId,
-        'listing_name': _listingName,
-        'listing_description': _listingDescription,
-        'listing_category': _listingCategory,
+        'id': _userId,
+        'name': _listingName,
+        'description': _listingDescription,
+        'category': _listingCategory,
       });
       if (response.statusCode == 200) {
         // Success

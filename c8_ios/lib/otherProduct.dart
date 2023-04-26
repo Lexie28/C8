@@ -1,8 +1,13 @@
-import 'package:c8_ios/otherprofile.dart';
+import 'package:c8_ios/otherProfile.dart';
 import 'package:flutter/material.dart';
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';
 import 'makeBid.dart';
+import 'api.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+String userId = '1';
 
 class OtherProduct extends StatefulWidget {
   // TODO Logga in med Google!!
@@ -15,6 +20,8 @@ class OtherProduct extends StatefulWidget {
 
 class _OtherProductState extends State<OtherProduct> {
   int _currentIndex = 4;
+
+  Map<String, dynamic>? name = null;
 
   @override
   Widget build(BuildContext context) {

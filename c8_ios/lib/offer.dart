@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'otherprofile.dart';
+import 'otherProfile.dart';
 
 class Offer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         title: Text('Offer'),
         backgroundColor: Color(0xFFA2BABF),
       ),
@@ -17,12 +17,12 @@ class Offer extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.width * 0.01,
+                  top: MediaQuery.of(context).size.width * 0.1,
                   bottom: MediaQuery.of(context).size.width * 0.07,
                   left: MediaQuery.of(context).size.width * 0.2,
                   right: MediaQuery.of(context).size.width * 0.2),
-              child: ElevatedButton(
-                onPressed: () {
+              child: GestureDetector(
+                onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) => OtherProfile(),
                   ));
