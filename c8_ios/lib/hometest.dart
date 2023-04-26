@@ -35,9 +35,6 @@ class _HomePageState extends State<HomePage3> {
     final prefs = await SharedPreferences.getInstance();
     final uid = prefs.getString('uid');
     print(uid);
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular/$uid'));
-    print(response);
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
     if (response.statusCode == 200) {
@@ -93,8 +90,9 @@ class _HomePageState extends State<HomePage3> {
                   onTap: () {
                     _navigateToListingsPage('Shoes');
                   },
-                  child: Category(string: 'Shoes'),
+                  child: Category(String: 'Shoes'),
                 ),
+              ),
               ],
             ),
             Row(
