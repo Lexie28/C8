@@ -206,5 +206,6 @@ router.patch('/listing/:id', (req, res) => edit_listing_all(req, res));
 
 router.delete('/listing/:id', (req, res) => listing_delete(req, res));
 
+router.get('/listing/category/:category', (req, res) => listing_category(req, res));
 
 module.exports = router;

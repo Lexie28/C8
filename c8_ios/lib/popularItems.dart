@@ -9,10 +9,10 @@ import 'api.dart';
 import 'specificitem.dart';
 
 class PopularItems extends StatefulWidget {
-  const PopularItems({super.key});
+  const PopularItems({Key? key});
 
   @override
-  State<PopularItems> createState() => _PopularItemsState();
+  _PopularItemsState createState() => _PopularItemsState();
 }
 
 class _PopularItemsState extends State<PopularItems> {
@@ -99,7 +99,11 @@ class _PopularItemsState extends State<PopularItems> {
       ),
     );
   }
+
+
 }
+
+
 
 class Category extends StatelessWidget {
   const Category({

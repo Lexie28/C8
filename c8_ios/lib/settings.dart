@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'deleteProfile.dart';
+import 'authentication.dart';
+import 'main.dart';
+import 'dart:convert';
+import 'package:flutter/gestures.dart';
+
 
 class Settings extends StatelessWidget {
-  //Variabler som namn och bilder
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +29,18 @@ class Settings extends StatelessWidget {
         child: Column(
           children: [
             SmallCard(
-                string: 'Log out', color: Color.fromARGB(255, 123, 174, 156)),
+              string: 'Log out',
+              color: Color.fromARGB(255, 123, 174, 156),
+              onTap: () async {
+                await Authentication.signOut(context: context);
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => FirstPage(),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
+              },
+            ),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -36,9 +50,10 @@ class Settings extends StatelessWidget {
                 );
               },
               child: SmallCard(
-                  string: 'Delete account',
-                  color: Color.fromARGB(255, 206, 96, 96)),
-            )
+                string: 'Delete account',
+                color: Color.fromARGB(255, 206, 96, 96),
+              ),
+            ),
           ],
         ),
       ),
@@ -46,6 +61,44 @@ class Settings extends StatelessWidget {
   }
 }
 
+class SmallCard extends StatelessWidget {
+  final String string;
+  final Color color;
+  final Function()? onTap;
+
+  const SmallCard({
+    Key? key,
+    required this.string,
+    required this.color,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 80,
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        decoration: BoxDecoration(
+            color: color, borderRadius: BorderRadius.circular(20)),
+        child: Center(
+          child: Text(
+            string,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+/*
 class SmallCard extends StatelessWidget {
   SmallCard({required this.string, required this.color});
 
@@ -74,4 +127,4 @@ class SmallCard extends StatelessWidget {
       ),
     ]);
   }
-}
+}*/
