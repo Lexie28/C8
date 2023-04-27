@@ -247,7 +247,7 @@ class _HomePageState extends State<HomePage3> {
                         runSpacing:
                             16.0, // set the vertical spacing between items
                         children: [
-                          for (int i = 0; i < 5; i++)
+                          for (int i = 0; i < listings.length && i < 5; i++)
                             Container(
                               width: (MediaQuery.of(context).size.width -
                                       32.0) /

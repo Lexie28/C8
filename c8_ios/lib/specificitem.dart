@@ -369,7 +369,7 @@ class ListingProfile extends StatelessWidget {
                 margin: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width * 0.0,
                   MediaQuery.of(context).size.width * 0.1,
-                  MediaQuery.of(context).size.width * 0.04,
+                  MediaQuery.of(context).size.width * 0.0,
                   MediaQuery.of(context).size.width * 0,
                 ),
                 width: MediaQuery.of(context).size.width * 0.4,
@@ -416,7 +416,7 @@ class ListingProfile extends StatelessWidget {
                   child: Column(
                     children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.02),
+                            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.02, top: MediaQuery.of(context).size.width*0.02 ),
                             child: Text(
                               "Location:",
                               style: TextStyle(
@@ -449,86 +449,6 @@ class ListingProfile extends StatelessWidget {
           ],
         )
       ],
-
-      /*Column(
-      
-      children: [
-        Container(
-          margin: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.05,
-              top: MediaQuery.of(context).size.width * 0.1),
-          child: Text(
-            "About the seller",
-            style:
-                TextStyle(fontSize: MediaQuery.of(context).size.width * 0.07),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(width: 2.2, color: Colors.white),
-            borderRadius: BorderRadius.all(
-              Radius.circular(100.0),
-            ),
-          ),
-          margin: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0,
-            MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0,
-          ),
-          height: MediaQuery.of(context).size.height * 0.15,
-          width: MediaQuery.of(context).size.width * 0.3,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => OtherProfile(),
-                  ),
-                );
-              },
-              child: Image.asset(
-                'images/man.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const OtherProfile(),
-              ),
-            );
-          },
-          child: Container(
-            margin: EdgeInsets.fromLTRB(
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0,
-            ),
-            width: MediaQuery.of(context).size.width * 0.2,
-            child: Column(
-              children: [
-                name,
-                likes, //TODO
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  width: MediaQuery.of(context).size.width * 0.07,
-                  child: Image.asset(
-                    'images/like.png', //TODO
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
-      */
     );
   }
 }
