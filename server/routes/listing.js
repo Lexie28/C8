@@ -198,6 +198,8 @@ function listing_category(req, res) {
 
 router.get("/listing", get_listings);
 
+router.get('/listing/category/:category', (req, res) => listing_category(req, res));
+
 router.get('/listing/:id', (req, res) => get_listing(req, res));
 
 router.post('/listing', (req,res) => listing_create(req, res));
@@ -205,7 +207,5 @@ router.post('/listing', (req,res) => listing_create(req, res));
 router.patch('/listing/:id', (req, res) => edit_listing_all(req, res));
 
 router.delete('/listing/:id', (req, res) => listing_delete(req, res));
-
-router.get('/listing/category/:category', (req, res) => listing_category(req, res));
 
 module.exports = router;
