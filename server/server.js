@@ -34,43 +34,14 @@ app.get('/', (req, res) => {
   res.send('Welcome to Circle Eight!');
 });
 
-
-//-------PAGES OF APP-------
-
-
-
-//-------USER-------
-
-
-
-app.post('/user/exists/:user_id', (req, res) => user.user_exists(req, res, knex));
-
-
-
-//-------OFFER-------
-
-
-
-app.get('/offer/get/:bid_id', (req, res) => offer.get_bid_info(req, res, knex));
-
-
-
-
-
-
-
-
-
-
-
-//-----------------
+//TODO: flytta till filer i routes
 
 app.post('/login', (req, res) => {
   // Handle user login
 });
 
 app.post('/articles', (req, res) => {
-  const article = req.body
+    const article = req.body;
   // Handle article creation
 });
 

@@ -9,3 +9,4 @@ c8_ios/windows/flutter/generated_plugin_registrant.h
 c8_ios/windows/flutter/generated_plugins.cmake
 server/swagger_output.json
 .vscode
+.tern-port
