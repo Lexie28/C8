@@ -57,7 +57,6 @@ class _HomePageState extends State<HomePage3> {
         ),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
         backgroundColor: Color(0xFFA2BABF),
-       
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -265,15 +264,17 @@ class _HomePageState extends State<HomePage3> {
                                     ),
                                   );
                                 },
-                                child:
-                                    Item(string: listings[i]['listing_name'], image: 'images/shoes.png',),
+                                child: Item(
+                                  string: listings[i]['listing_name'],
+                                  image: 'images/shoes.png',
+                                ),
                               ),
                             ),
                           if (showMoreItems)
                             Container(
-                              width:
-                                  (MediaQuery.of(context).size.width*0.45),
-                              height: (MediaQuery.of(context).size.width*0.45), // calculate the width of the "See more items" box based on the screen width and the spacing between items
+                              width: (MediaQuery.of(context).size.width * 0.45),
+                              height: (MediaQuery.of(context).size.width *
+                                  0.45), // calculate the width of the "See more items" box based on the screen width and the spacing between items
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).push(
@@ -283,19 +284,24 @@ class _HomePageState extends State<HomePage3> {
                                     ),
                                   );
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    color: Color.fromARGB(255, 210, 208, 208),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text(
-                                        'See more items',
-                                        style: TextStyle(
-                                          color: Color.fromARGB(255, 83, 83, 83),
-                                          fontWeight: FontWeight.bold,
+                                child: Material(
+                                  elevation: 10,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      color: Color.fromARGB(255, 228, 228, 228),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Text(
+                                          'See more items',
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 83, 83, 83),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -327,7 +333,7 @@ class Item extends StatelessWidget {
   Item({
     required this.string,
     required this.image,
-    });
+  });
 
   final String string;
   final String image;
