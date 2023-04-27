@@ -22,7 +22,7 @@ class _YourProductState extends State<YourProduct> {
   late Future<User> futureUser;
   Api _api = Api();
 
-  int itemId = -1;
+  String itemId = '';
   @override
   void initState() {
     super.initState();
@@ -43,7 +43,7 @@ class _YourProductState extends State<YourProduct> {
   @override
   Widget build(BuildContext context) {
     // det sanna itemID!! == id
-    int itemId = -1;
+    String itemId = '';
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
@@ -260,7 +260,7 @@ class _NumBidsState extends State<NumBids> {
 class DeleteProduct extends StatelessWidget {
   const DeleteProduct({required this.itemId});
 
-  final int itemId;
+  final String itemId;
 
   Future<void> _deleteProduct(BuildContext context) async {
     final api = Api();
