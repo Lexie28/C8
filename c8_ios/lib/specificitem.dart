@@ -454,7 +454,7 @@ class ListingProfile extends StatelessWidget {
 }
 
 class Listing {
-  final int listingId;
+  final String listingId;
   final Map<String, dynamic> user;
   final String listingName;
   final String listingDesc;
