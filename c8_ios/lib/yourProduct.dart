@@ -22,6 +22,7 @@ class _YourProductState extends State<YourProduct> {
   late Future<User> futureUser;
   Api _api = Api();
 
+  int itemId = -1;
   @override
   void initState() {
     super.initState();
@@ -42,7 +43,6 @@ class _YourProductState extends State<YourProduct> {
   @override
   Widget build(BuildContext context) {
     // det sanna itemID!! == listing_id
-    int itemId = -1;
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
@@ -55,7 +55,7 @@ class _YourProductState extends State<YourProduct> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List listings = snapshot.data!.listings;
-                itemId = listings[widget.itemIndex]['listing_id'];
+                this.itemId = listings[widget.itemIndex]['listing_id'];
                 return Text('');
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
@@ -133,11 +133,20 @@ class _YourProductState extends State<YourProduct> {
                   itemId: widget.itemIndex,
                 ),
               ),
-              Align(
-                alignment: FractionalOffset.bottomRight,
-                // hmmmm vilken behövs itemId eller itemIndex?? tänk
-                child: DeleteButton(),
-              )
+              FutureBuilder<User>(
+                future: futureUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List listings = snapshot.data!.listings;
+                    itemId = listings[widget.itemIndex]['listing_id'];
+                    return DeleteProduct(itemId: itemId);
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
+              ), // hmmmm vilken behövs itemId eller itemIndex?? tänk
             ],
           ),
         ),
@@ -247,41 +256,59 @@ class _NumBidsState extends State<NumBids> {
   }
 }
 
-class DeleteButton extends StatefulWidget {
-  const DeleteButton({super.key});
+class DeleteProduct extends StatelessWidget {
+  const DeleteProduct({required this.itemId});
 
-  @override
-  State<DeleteButton> createState() => _DeleteButtonState();
-}
+  final int itemId;
 
-class _DeleteButtonState extends State<DeleteButton> {
-  String buttonName = "Delete";
+  Future<void> _deleteProduct(BuildContext context) async {
+    final api = Api();
+    final url = '${api.getApiHost()}/listing/delete/$itemId';
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Product deleted successfully!'),
+        ),
+      );
+      Navigator.pop(context);
+      Navigator.pop(context);
+      
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to delete product'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(
-        MediaQuery.of(context).size.width * 0.1,
-      ),
-      height: MediaQuery.of(context).size.height * 0.09,
-      width: MediaQuery.of(context).size.height * 0.17,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFFF685E),
-        ),
-        onPressed: () {
-          setState(() {
-            buttonName = "Deleted(?)";
-          });
+    return IconButton(
+      onPressed: () => showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Are you sure you want to delete this product?'),
+            content: Text('This action cannot be undone.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () {
+                  _deleteProduct(context);
+                },
+                child: Text('Delete'),
+              ),
+            ],
+          );
         },
-        child: Text(
-          buttonName,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: MediaQuery.of(context).size.width * 0.05,
-          ),
-        ),
       ),
+      icon: Icon(color: Colors.red, Icons.delete),
     );
   }
 }
