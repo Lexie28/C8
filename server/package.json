@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
-    "start": "node server.js",
-    "swagger-autogen": "node swagger.js"
+      "test": "jest",
+      "prestart": "npm run swagger-autogen",
+      "start": "node server.js",
+      "swagger-autogen": "node swagger.js"
   },
   "author": "",
   "license": "ISC",
