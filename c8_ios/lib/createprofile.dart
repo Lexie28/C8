@@ -48,7 +48,7 @@ class _CreateProfileState extends State<CreateProfile> {
         MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
       );
     } else {
-      print("registration failed!");
+      print("registration failed!" + response.statusCode.toString());
     }
   }
 

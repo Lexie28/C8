@@ -21,36 +21,6 @@ class S3ClientSingleton {
 }
 const s3ClientSingleton = new S3ClientSingleton();
 
-//OBSOBS denna logik fungerar endast för profilbilden eftersom varje användare endast har 1 profilbild
-async function uploadPic(file_path, id) {
-  const s3Client = s3ClientSingleton.getInstance();
-  fs.readFile(file_path, async (err, pic_data) => {
-    if (err) throw err;
-    
-    // Set the parameters
-    const s3Params = {
-      Bucket: process.env.S3_BUCKET,
-      Key: id + ".png", //TODO: supporta fler filtyper??
-      Body: pic_data, // The content of the object. For example, 'Hello world!".
-    };
-    // Create an object and upload it to the Amazon S3 bucket.
-    try {
-      const results = await s3Client.send(new PutObjectCommand(s3Params)); // <-Viktigt att sätta alla fälten i 'params' så det blir rätt här
-      console.log(
-        "Successfully created " +
-        s3Params.Key +
-        " and uploaded it to " +
-        s3Params.Bucket +
-        "/" +
-        s3Params.Key
-        );
-        return results; // For unit tests.
-      } catch (err) {
-        console.log("Error", err);
-      }
-    });
-};
-
 /**
 Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
 @param {Object} req   const { id } = req.params;
@@ -72,22 +42,50 @@ Registers a new user in the 'user' table.
 @returns {undefined} This function does not return anything.
 */
 async function user_registration(req, res) {
-    const { id, name, profile_picture_path, phone_number, email, location } = req.body;
-  await uploadPic(id,profile_picture_path);
-  profile_picture_path = id + ".png";
-  db('user')
-	.insert({id, name, profile_picture_path, phone_number, email, location})
-    .then(result => {
-      if (result) {
-        res.status(200).json({ message: 'User created successfully' });
-      } else {
-        res.status(500).json({ message: 'An error occurred while creating the user' });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ message: 'An error occurred while creating the user' });
-    });
+  const { id, name, profile_picture_path, phone_number, email, location } = req.body;
+
+  fs.readFile(profile_picture_path, async (err, pic_data) => {
+    if (err) {
+      console.log("Error", err);
+      return res.status(500).json({ message: 'An error occurred while reading the file' });
+    }
+    const s3Client = s3ClientSingleton.getInstance();
+    // Set the parameters
+    const s3Params = {
+      Bucket: process.env.S3_BUCKET,
+      Key: id + ".png",
+      Body: pic_data,
+    };
+
+    // Create an object and upload it to the Amazon S3 bucket.
+    try {
+      const results = await s3Client.send(new PutObjectCommand(s3Params));
+      console.log(
+        "Successfully created " +
+        s3Params.Key +
+        " and uploaded it to " +
+        s3Params.Bucket +
+        "/" +
+        s3Params.Key
+      );
+      db('user')
+        .insert({id, name, profile_picture_path: s3Params.Key, phone_number, email, location})
+        .then(result => {
+          if (result) {
+            res.status(200).json({ message: 'User created successfully' });
+          } else {
+            res.status(500).json({ message: 'An error occurred while creating the user' });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json({ message: 'An error occurred while creating the user' });
+        });
+    } catch (err) {
+      console.log("Error", err);
+      res.status(500).json({ message: 'An error occurred while uploading the file' });
+    }
+  });
 };
 
 /**
@@ -214,7 +212,3 @@ router.post("/user/exists/:id", (req, res) => user_exists(req, res));
 
 
 module.exports = router;
-
-/*
-    
-*/
