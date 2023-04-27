@@ -8,7 +8,6 @@ const db = require("../db-config.js");
 Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
 @param {Object} req   const { id } = req.params;
 @param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
 function get_users(req, res)
@@ -20,25 +19,9 @@ function get_users(req, res)
 
 
 /**
-Retrieves a certain user with id from the user table.
-@param {Object} req - The request object from the client.
-@param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
-@returns {undefined} This function does not return anything.
-*/
-function get_user(req, res) {
-  const id = req.params.id;
-
-  db.select("*").from("user").where({id: id}).then((result) => {
-    res.send(result);
-  });
-}
-
-/**
 Registers a new user in the 'user' table.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
 function user_registration(req, res) {
@@ -63,7 +46,6 @@ function user_registration(req, res) {
 Adds a like to the user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
 function user_like(req, res) {
@@ -89,7 +71,6 @@ function user_like(req, res) {
 Adds a dislike to the user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
 @returns {undefined} This function does not return anything.
 */
 function user_dislike(req, res) {
@@ -115,7 +96,7 @@ function user_dislike(req, res) {
 Deletes a user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
+
 @returns {undefined} This function does not return anything.
 */
 function user_delete(req, res) {
@@ -183,7 +164,6 @@ router.get("/user/:id/offers", async (req, res) => {
 
 router.post("/user/exists/:id", (req, res) => user_exists(req, res));
 
-router.post("/user/registration", (req, res) => user_registration(req, res));
 
 module.exports = router;
 

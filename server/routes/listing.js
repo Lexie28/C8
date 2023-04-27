@@ -16,6 +16,10 @@ Retrieves all records from the "listing" table using Db.js and sends the result 
 @returns {undefined} This function does not return anything.
 */
 async function get_listings(req, res) {
+
+    /*
+      #swagger.description = 'Gets all listings. Use query strings to filter and sort. \\nPossible values for sort: popular.'
+    */
     var all_listings = db.select("*").from("listing");
     
     if(amountOfQueryStrings(req) === 0) {
@@ -171,29 +175,6 @@ function listing_delete(req, res) {
     //FIXME: allt som borde försvinna i offer_listing gör inte det
 };
 
-
-
-/**
-Retrieves all listings of a certain category
-@param {Object} req - The request object from the client.
-@param {Object} res - The response object to send data back to the client.
-@param {Object} db - The Db.js instance to perform the database operation.
-@returns {undefined} This function does not return anything.
-*/
-function listing_category(req, res) {
-  const { category } = req.params;
-
-  db.select('*')
-    .from('listing')
-    .where('listing.category', '=', category)
-    .then(categorylistings => {
-      res.status(200).json(categorylistings);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'An error occurred while retrieving the listings of this category' });
-    });
-}
 
 
 router.get("/listing", get_listings);
