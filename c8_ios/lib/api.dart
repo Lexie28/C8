@@ -1,5 +1,5 @@
 class Api {
-  String _apiHost = 'http://16.16.92.218:3000'; // the string you want to return
+  String _apiHost = 'http://130.243.236.53:3000'; // the string you want to return
   String getApiHost() {
     return _apiHost;
   }
