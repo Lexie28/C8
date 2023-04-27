@@ -299,20 +299,24 @@ class _HomePageState extends State<HomePage3> {
                                     ),
                                   );
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    color: Color.fromARGB(255, 210, 208, 208),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text(
-                                        'See more items',
-                                        style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 83, 83, 83),
-                                          fontWeight: FontWeight.bold,
+                                child: Material(
+                                  elevation: 10,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      color: Color.fromARGB(255, 228, 228, 228),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Text(
+                                          'See more items',
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 83, 83, 83),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
