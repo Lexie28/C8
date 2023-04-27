@@ -1,4 +1,5 @@
 import 'package:c8_ios/myoffers.dart';
+import 'package:c8_ios/signin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -6,6 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ws används inte?
 //import 'package:web_socket_channel/web_socket_channel.dart';
@@ -15,7 +20,7 @@ import 'dart:async';
 
 //Tovas sidor
 import 'otherProduct.dart';
-import 'otherprofile.dart';
+import 'otherProfile.dart';
 import 'categories.dart';
 import 'editprofile.dart';
 import 'createprofile.dart';
@@ -106,234 +111,156 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
-
   @override
   State<FirstPage> createState() => _FirstPageState();
 }
 
 class _FirstPageState extends State<FirstPage> {
+  bool _isSigningIn = false;
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        //color: Color.fromARGB(255, 233, 247, 249),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: new AssetImage('images/skogberg.jpg'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0,
-                MediaQuery.of(context).size.width * 0.5,
-                MediaQuery.of(context).size.width * 0,
-                MediaQuery.of(context).size.width * 0.3,
+    return Container(
+      color: Color.fromARGB(255, 233, 247, 249),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.height * 0.1,
+              MediaQuery.of(context).size.height * 0.2,
+              MediaQuery.of(context).size.height * 0.1,
+              MediaQuery.of(context).size.height * 0.1,
+            ),
+            child: Card(
+              color: Color.fromARGB(255, 160, 200,
+                  207), // Use hexadecimal color code for consistency
+              elevation: 4, // Add elevation to create a shadow effect
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(16), // Round the corners of the card
               ),
-              child: Card(
-                color: Colors.transparent,
-                elevation: 0,
+              child: Padding(
+                padding: EdgeInsets.all(45),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Center the content vertically
+                  crossAxisAlignment: CrossAxisAlignment
+                      .center, // Center the content horizontally
+                  children: [
+                    Text(
+                      'Welcome',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                    Text(
+                      'to',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                    Text(
+                      'Circle 8',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.055,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87, // Use a readable text color
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              print("Button pressed");
+              setState(() {
+                _isSigningIn = true;
+              });
+
+              auth.User? user =
+                  await Authentication.signInWithGoogle(context: context);
+
+              setState(() {
+                _isSigningIn = false;
+              });
+
+              if (user != null) {
+                print(user);
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString("uid", user.uid);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyBottomNavigationbar()),
+                );
+              }
+            },
+            child: FutureBuilder(
+              future: Authentication.initializeFirebase(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error initializing Firebase');
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return GoogleSignInButton();
+                }
+                return Card(
+                  color: Colors.white,
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Color.fromARGB(255, 255, 174, 0),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.03,
+          ),
+          GestureDetector(
+            onTap: () async {
+              print("Next button pressed");
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MyBottomNavigationbar()),
+              );
+            },
+            child: Card(
+              color: Colors.white,
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
                 child: Text(
-                  'Circle 8',
+                  'Next',
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.055,
+                    fontSize: MediaQuery.of(context).size.height * 0.025,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
-                    // Use a readable text color
                   ),
                 ),
               ),
             ),
-            /*
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.height * 0.1,
-                MediaQuery.of(context).size.height * 0.2,
-                MediaQuery.of(context).size.height * 0.1,
-                MediaQuery.of(context).size.height * 0.1,
-              ),
-              child: Card(
-                color: Color.fromARGB(255, 160, 200,
-                    207), // Use hexadecimal color code for consistency
-                elevation: 4, // Add elevation to create a shadow effect
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(16), // Round the corners of the card
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(45),
-                  child: Column(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // Center the content vertically
-                    crossAxisAlignment: CrossAxisAlignment
-                        .center, // Center the content horizontally
-                    children: [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.055,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87, // Use a readable text color
-                        ),
-                      ),
-                      Text(
-                        'to',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.055,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87, // Use a readable text color
-                        ),
-                      ),
-                      Text(
-                        'Circle 8',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.055,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87, // Use a readable text color
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-              */
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => MyBottomNavigationbar(),
-                  ),
-                );
-              },
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'images/googleLogo.png',
-                        height: MediaQuery.of(context).size.height * 0.06,
-                        width: MediaQuery.of(context).size.width * 0.06,
-                        fit: BoxFit.contain,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Login with Google',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.03,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              /*
-              child: Card(
-                color: Color.fromARGB(255, 160, 200, 207),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'images/googleLogo.png',
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        width: MediaQuery.of(context).size.width * 0.05,
-                        fit: BoxFit.contain,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'Login with Google',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.03,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              */
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => CreateProfile(),
-                  ),
-                );
-              },
-              child: Card(
-                color: Color.fromARGB(0, 244, 238, 238),
-                elevation: 1,
-                margin: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width * 0,
-                  MediaQuery.of(context).size.width * 0.1,
-                  MediaQuery.of(context).size.width * 0,
-                  MediaQuery.of(context).size.width * 0,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(18.0),
-                  child: RichText(
-                    text: TextSpan(
-                        text: 'Don\'t have an account?',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 255, 254, 254),
-                            fontSize: 18),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: ' Sign up',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 146, 183, 247),
-                                fontSize: 18),
-                          )
-                        ]),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0,
-                MediaQuery.of(context).size.width * 0.59,
-                MediaQuery.of(context).size.width * 0,
-                MediaQuery.of(context).size.width * 0,
-              ),
-              child: Text('Circle 8 2023',
-                  style: TextStyle(
-                    color: Colors.white,
-                  )),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
-
-/*Widget build(BuildContext context) {
-  return ChangeNotifierProvider(
-    create: (context) => MyAppState(),
-    child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Circle Eight',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(0, 112, 167, 158)),
-      ),
-      home: HomePage(),
-    ),
-  );
-}*/

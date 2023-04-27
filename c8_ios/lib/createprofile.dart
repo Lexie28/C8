@@ -1,159 +1,113 @@
-import 'package:c8_ios/profile.dart';
-import 'package:c8_ios/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 import 'api.dart';
-//import 'dart:io';
+import 'main.dart';
 
 class CreateProfile extends StatefulWidget {
   @override
-  State<CreateProfile> createState() => _CreateProfileState();
+  _CreateProfileState createState() => _CreateProfileState();
 }
 
 class _CreateProfileState extends State<CreateProfile> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
-
-  //File? _image;
-  String _userId = '';
-  String _userName = '';
-  String _userLocation = '';
-  //String _userDescription = '';
-  String _contactDetails = '';
-
   Api _api = Api();
 
-  Future<void> _submitUser() async {
-    if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('${_api.getApiHost()}/user/registration');
-      final headers = {'Content-Type': 'application/json'};
-      final body = {
-        'user_id': _userId,
-        'user_name': _userName,
-        'user_location': _userLocation,
-        'user_email': _contactDetails,
-        // 'listing_photo': _image,
-      };
-      final jsonBody = json.encode(body);
-      final response = await http.post(url, headers: headers, body: jsonBody);
-      if (response.statusCode == 200) {
-        // Success
-        print('Good! New user created!');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
-        );
-      } else {
-        print('NOOOO');
-      }
+  String _name = "";
+  String _location = "";
+  String _phone = "";
+
+  void _submitForm() async {
+    _formKey.currentState!.save();
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    final email = prefs.getString('email');
+
+    final url = Uri.parse("${_api.getApiHost()}/user/registration");
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': email,
+          'id': userId,
+          'location': _location,
+          'name': _name,
+          'phone_number': _phone,
+          'profile_picture_path': null,
+        }));
+
+    if (response.statusCode == 200) {
+      // registration successful, navigate to main page
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()));
+    } else {
+      print("registration failed!");
     }
   }
 
   //Någon variabel som håller bilden kanske
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Create Profile'),
-        backgroundColor: Color(0xFFA2BABF),
-      ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text("Create Profile"),
+    ),
+    body: SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
           child: Column(
-            children: [
-              Center(
-                child: IconButton(
-                  onPressed: () {
-                    // TODO: Implement camera logic
-                  },
-                  icon: Container(
-                    margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-                        //TODO implement adding a profilepic
-                      },
-                      icon: Icon(
-                        Icons.camera_alt,
-                        color: Colors.blue,
-                      ),
-                      iconSize: MediaQuery.of(context).size.width * 0.3,
-                    ),
-                  ),
-                ),
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(labelText: "Name"),
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return "Please enter your name";
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _name = value!;
+                },
               ),
-              // Name field
-              Container(
-                margin: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.01,
-                ),
-                child: TextField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    _userName = value;
-                  },
-                ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Location"),
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return "Please enter your location";
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _location = value!;
+                },
               ),
-              // Location field
-              Container(
-                margin: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.01,
-                ),
-                child: TextField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    labelText: 'Location',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    _userLocation = value;
-                  },
-                ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Phone Number"),
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return "Please enter your phone number";
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _phone = value!;
+                },
               ),
-              // Bio field
-              Container(
-                margin: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.01,
-                ),
-                child: TextField(
-                  controller: _contactController,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    labelText: 'Contact details',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (value) {
-                    _contactDetails = value;
-                  },
-                ),
-              ),
-              // Save button
-              Container(
-                margin: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.1,
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Implement save changes logic
-                    _submitUser();
-                  },
-                  child: Text('Save Changes'),
-                ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: Text("Create Profile"),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

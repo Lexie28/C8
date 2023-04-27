@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'listingsCategory.dart';
+import 'listingscategory.dart';
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';
 
@@ -46,7 +46,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Beauty'),
                     ));
                   },
-                  child: Category(string: 'Beauty', icon: 'images/beautyicon.png',)),
+                  child: Category(
+                    string: 'Beauty',
+                    icon: 'images/beautyicon.png',
+                  )),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -54,7 +57,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Accessories'),
                     ));
                   },
-                  child: Category(string: 'Accessories', icon: 'images/accessioriesicon.png',)),
+                  child: Category(
+                    string: 'Accessories',
+                    icon: 'images/accessioriesicon.png',
+                  )),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -62,7 +68,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Collectables'),
                     ));
                   },
-                  child: Category(string: 'Collectables', icon: 'images/collectablesicon.png',)),
+                  child: Category(
+                    string: 'Collectables',
+                    icon: 'images/collectablesicon.png',
+                  )),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -70,7 +79,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Furniture'),
                     ));
                   },
-                  child: Category(string: 'Furniture', icon: 'images/furnitureicon.png',)),
+                  child: Category(
+                    string: 'Furniture',
+                    icon: 'images/furnitureicon.png',
+                  )),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -78,7 +90,9 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Electronics'),
                     ));
                   },
-                  child: Category(string: 'Electronics', icon: 'images/electronicsicon.png')),
+                  child: Category(
+                      string: 'Electronics',
+                      icon: 'images/electronicsicon.png')),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -86,7 +100,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Houseware'),
                     ));
                   },
-                  child: Category(string: 'Houseware', icon: 'images/housewareicon.png',)),
+                  child: Category(
+                    string: 'Houseware',
+                    icon: 'images/housewareicon.png',
+                  )),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -94,7 +111,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Sports'),
                     ));
                   },
-                  child: Category(string: 'Sports', icon: 'images/sportsicon.png',)),
+                  child: Category(
+                    string: 'Sports',
+                    icon: 'images/sportsicon.png',
+                  )),
               GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -102,7 +122,10 @@ class Categories extends StatelessWidget {
                           ListingsPage(category: 'Other'),
                     ));
                   },
-                  child: Category(string: 'Other', icon: 'images/othericon.png',)),
+                  child: Category(
+                    string: 'Other',
+                    icon: 'images/othericon.png',
+                  )),
             ],
           ),
         ),

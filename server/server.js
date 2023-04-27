@@ -43,10 +43,15 @@ app.get('/', (req, res) => {
 
 
 
+app.post('/user/exists/:user_id', (req, res) => user.user_exists(req, res, knex));
+
 
 
 //-------OFFER-------
 
+
+
+app.get('/offer/get/:bid_id', (req, res) => offer.get_bid_info(req, res, knex));
 
 
 

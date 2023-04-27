@@ -9,10 +9,10 @@ import 'api.dart';
 import 'specificitem.dart';
 
 class PopularItems extends StatefulWidget {
-  const PopularItems({super.key});
+  const PopularItems({Key? key});
 
   @override
-  State<PopularItems> createState() => _PopularItemsState();
+  _PopularItemsState createState() => _PopularItemsState();
 }
 
 class _PopularItemsState extends State<PopularItems> {
@@ -26,7 +26,8 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response = await http.get(Uri.parse('${_api.getApiHost()}/listings'));
+    final response =
+        await http.get(Uri.parse('${_api.getApiHost()}/listing?sort=popular'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -71,15 +72,15 @@ class _PopularItemsState extends State<PopularItems> {
                               MaterialPageRoute(
                                 builder: (context) => ListingDetailPage(
                                   listingId:
-                                      listings[index]['listing_id'].toString(),
+                                      listings[index]['id'].toString(),
                                 ),
                               ),
                             );
                           },
                           child: ListTile(
                             leading: Image.asset('images/shoes.png'),
-                            title: Text(listing['listing_name']),
-                            subtitle: Text(listing['listing_description']),
+                            title: Text(listing['name']),
+                            subtitle: Text(listing['description']),
                             trailing: Icon(Icons.arrow_forward_ios),
                           ),
                         ),
@@ -98,7 +99,11 @@ class _PopularItemsState extends State<PopularItems> {
       ),
     );
   }
+
+
 }
+
+
 
 class Category extends StatelessWidget {
   const Category({

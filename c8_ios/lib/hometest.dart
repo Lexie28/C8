@@ -12,6 +12,22 @@ import 'specificitem.dart';
 import 'api.dart';
 import 'popularItems.dart';
 import 'otherProduct.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:c8_ios/categories.dart';
+//import 'package:c8_ios/otherProduct.dart';
+//import 'package:c8_ios/popularItems.dart';
+import 'package:flutter/material.dart';
+//import 'package:provider/provider.dart';
+//import 'secondmain.dart';
+//import '../toolbar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'listingscategory.dart';
+import 'specificitem.dart';
+import 'api.dart';
+import 'popularItems.dart';
+import 'otherProduct.dart';
 
 class HomePage3 extends StatefulWidget {
   const HomePage3({Key? key}) : super(key: key);
@@ -31,8 +47,8 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -258,14 +274,13 @@ class _HomePageState extends State<HomePage3> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ListingDetailPage(
-                                        listingId: listings[i]['listing_id']
-                                            .toString(),
+                                        listingId: listings[i]['id'].toString(),
                                       ),
                                     ),
                                   );
                                 },
                                 child: Item(
-                                  string: listings[i]['listing_name'],
+                                  string: listings[i]['name'],
                                   image: 'images/shoes.png',
                                 ),
                               ),

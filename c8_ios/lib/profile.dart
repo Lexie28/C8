@@ -1,3 +1,15 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:c8_ios/editprofile.dart';
+import 'package:flutter/material.dart';
+import 'settings.dart';
+import 'yourProduct.dart';
+import 'api.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+
 import 'package:http/http.dart' as http;
 import 'package:c8_ios/editprofile.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +18,6 @@ import 'yourProduct.dart';
 import 'dart:convert';
 import 'api.dart';
 import 'inloggadUser.dart';
-
-String userId = LogIn().getUserLogin();
 
 class Profile extends StatefulWidget {
   @override
@@ -25,8 +35,10 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<User> fetchUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/profilepage/$userId'));
+        await http.get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body));
@@ -167,7 +179,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['listing_name']),
+                              child: Item(string: listings[i]['name']),
                             ),
                           ),
                       ]);
@@ -232,7 +244,7 @@ class ProfileProducts extends StatelessWidget {
 }
 
 class User {
-  final int userId;
+  final String userId;
   final String userName;
   final String location;
   final int likes;
@@ -250,11 +262,11 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['user_id'],
-      userName: json['user_name'],
-      location: json['user_location'],
-      likes: json['user_num_likes'],
-      dislikes: json['user_num_dislikes'],
+      userId: json['id'],
+      userName: json['name'],
+      location: json['location'],
+      likes: json['likes'],
+      dislikes: json['dislikes'],
       listings: json['listings'],
     );
   }

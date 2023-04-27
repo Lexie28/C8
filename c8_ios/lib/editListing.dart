@@ -33,14 +33,14 @@ class _EditListingState extends State<EditListing> {
     print('New product title: ${_titleController.text}');
 
     if (_formKey.currentState!.validate()) {
-      //final url = Uri.parse('${_api.getApiHost()}/listing/edit/:listing_id');
+      //final url = Uri.parse('${_api.getApiHost()}/listing/:id');
       final url =
-          Uri.parse('${_api.getApiHost()}/listing/edit/${widget.itemId}');
+          Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}');
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'listing_name': '${_titleController.text}',
-        'listing_description': '${_descController.text}',
+        'name': '${_titleController.text}',
+        'description': '${_descController.text}',
       };
       final jsonBody = json.encode(body);
       final response = await http.patch(url, headers: headers, body: jsonBody);

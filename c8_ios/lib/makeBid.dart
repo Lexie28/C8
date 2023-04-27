@@ -27,7 +27,7 @@ class _MakeBidState extends State<MakeBid> {
 
   Future<List<dynamic>> fetchPopular() async {
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/top5popular'));
+        await http.get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -114,7 +114,7 @@ class _MakeBidState extends State<MakeBid> {
                                   );
                                 },
                                 child:
-                                    Item(string: listings[i]['listing_name']),
+                                    Item(string: listings[i]['name']),
                               ),
                           ],
                         );
@@ -178,7 +178,7 @@ class _MakeBidState extends State<MakeBid> {
                                   );
                                 },
                                 child:
-                                    Item(string: listings[i]['listing_name']),
+                                    Item(string: listings[i]['name']),
                               ),
                           ],
                         );
