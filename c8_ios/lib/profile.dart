@@ -19,8 +19,6 @@ import 'dart:convert';
 import 'api.dart';
 import 'inloggadUser.dart';
 
-String userId = LogIn().getUserLogin();
-
 class Profile extends StatefulWidget {
   @override
   State<Profile> createState() => _ProfileState();
@@ -37,6 +35,8 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<User> fetchUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     final response =
         await http.get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
@@ -244,7 +244,7 @@ class ProfileProducts extends StatelessWidget {
 }
 
 class User {
-  final int userId;
+  final String userId;
   final String userName;
   final String location;
   final int likes;
