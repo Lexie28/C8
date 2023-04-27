@@ -1,8 +1,44 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 
 const db = require("../db-config.js");
 
+require('dotenv').config();
+const{ PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
+
+// Create an Amazon S3 service client object.
+const s3Client = new S3Client({ region: "eu-north-1" });
+//TODO: Gör s3Client singleton så att det inte behöver skapas en ny för varje request till den.
+
+//OBSOBS denna logik fungerar endast för profilbilden eftersom varje användare endast har 1 profilbild
+async function uploadPic(file_path, id) {
+  fs.readFile(file_path, async (err, pic_data) => {
+    if (err) throw err;
+    
+    // Set the parameters
+    const s3Params = {
+      Bucket: process.env.S3_BUCKET,
+      Key: id + ".png", //TODO: supporta fler filtyper??
+      Body: pic_data, // The content of the object. For example, 'Hello world!".
+    };
+    // Create an object and upload it to the Amazon S3 bucket.
+    try {
+      const results = await s3Client.send(new PutObjectCommand(s3Params)); // <-Viktigt att sätta alla fälten i 'params' så det blir rätt här
+      console.log(
+        "Successfully created " +
+        s3Params.Key +
+        " and uploaded it to " +
+        s3Params.Bucket +
+        "/" +
+        s3Params.Key
+        );
+        return results; // For unit tests.
+      } catch (err) {
+        console.log("Error", err);
+      }
+    });
+};
 
 /**
 Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
@@ -27,6 +63,8 @@ Registers a new user in the 'user' table.
 function user_registration(req, res) {
     const { id, name, profile_picture_path, phone_number, email, location } = req.body;
 
+  uploadPic(id,profile_picture_path);
+  profile_picture_path = id + ".png";
   db('user')
 	.insert({id, name, profile_picture_path, phone_number, email, location})
     .then(result => {
@@ -144,7 +182,7 @@ function user_exists(req, res) {
 router.get('/user', (req, res) => get_users(req, res));
 
 //Get a specific user from the user table
-router.get('/user/:id', (req, res) => get_user(req, res))
+router.get('/user/:id', (req, res) => get_users(req, res))
 
 //Registering a new user
 router.post('/user', (req, res) => user_registration(req, res));
