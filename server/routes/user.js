@@ -8,11 +8,22 @@ require('dotenv').config();
 const{ PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
 
 // Create an Amazon S3 service client object.
-const s3Client = new S3Client({ region: "eu-north-1" });
-//TODO: Gör s3Client singleton så att det inte behöver skapas en ny för varje request till den.
+class S3ClientSingleton {
+  constructor() {
+    if (!S3ClientSingleton.instance) {
+      S3ClientSingleton.instance = new S3Client({ region: "eu-north-1" });
+    }
+  }
+
+  getInstance() {
+    return S3ClientSingleton.instance;
+  }
+}
+const s3ClientSingleton = new S3ClientSingleton();
 
 //OBSOBS denna logik fungerar endast för profilbilden eftersom varje användare endast har 1 profilbild
 async function uploadPic(file_path, id) {
+  const s3Client = s3ClientSingleton.getInstance();
   fs.readFile(file_path, async (err, pic_data) => {
     if (err) throw err;
     
@@ -60,10 +71,9 @@ Registers a new user in the 'user' table.
 @param {Object} res - The response object to send data back to the client.
 @returns {undefined} This function does not return anything.
 */
-function user_registration(req, res) {
+async function user_registration(req, res) {
     const { id, name, profile_picture_path, phone_number, email, location } = req.body;
-
-  uploadPic(id,profile_picture_path);
+  await uploadPic(id,profile_picture_path);
   profile_picture_path = id + ".png";
   db('user')
 	.insert({id, name, profile_picture_path, phone_number, email, location})

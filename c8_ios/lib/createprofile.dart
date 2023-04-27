@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'api.dart';
+import 'main.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
-import 'dart:io';
-import 'api.dart';
-import 'main.dart';
 
 class CreateProfile extends StatefulWidget {
   @override
@@ -22,6 +22,35 @@ class _CreateProfileState extends State<CreateProfile> {
   String _location = "";
   String _phone = "";
   File? _image;
+
+  void _submitForm() async {
+    _formKey.currentState!.save();
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    final email = prefs.getString('email');
+
+    final url = Uri.parse("${_api.getApiHost()}/user/registration");
+    final response = await http.post(url,
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': email,
+          'id': userId,
+          'location': _location,
+          'name': _name,
+          'phone_number': _phone,
+          'profile_picture_path': '$userId.png',
+        }));
+
+    if (response.statusCode == 200) {
+      // registration successful, navigate to main page
+      Navigator.pushReplacement(
+        _formKey.currentContext!,
+        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+      );
+    } else {
+      print("registration failed!");
+    }
+  }
 
   Future getImage(ImageSource source) async {
     try {
@@ -119,51 +148,23 @@ class _CreateProfileState extends State<CreateProfile> {
     );
   }
 
-  void _submitForm() async {
-    _formKey.currentState!.save();
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('uid');
-    final email = prefs.getString('email');
-
-    final url = Uri.parse("${_api.getApiHost()}/user/registration");
-    final response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': email,
-          'id': userId,
-          'location': _location,
-          'name': _name,
-          'phone_number': _phone,
-          'profile_picture_path': '$userId.png',
-        }));
-
-    if (response.statusCode == 200) {
-      // registration successful, navigate to main page
-      final future = Navigator.pushReplacement(
-          context, //<----ERROR HÄR!!! wtf?!?!?
-          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()));
-    } else {
-      print("registration failed!");
-    }
+  Widget CustomButton(
+      {required String title,
+      required IconData icon,
+      required VoidCallback onClick}) {
+    return Container(
+      width: 280,
+      child: ElevatedButton(
+          onPressed: onClick,
+          child: Row(
+            children: [
+              Icon(icon),
+              SizedBox(
+                width: 20,
+              ),
+              Text(title),
+            ],
+          )),
+    );
   }
-}
-
-Widget CustomButton(
-    {required String title,
-    required IconData icon,
-    required VoidCallback onClick}) {
-  return Container(
-    width: 280,
-    child: ElevatedButton(
-        onPressed: onClick,
-        child: Row(
-          children: [
-            Icon(icon),
-            SizedBox(
-              width: 20,
-            ),
-            Text(title),
-          ],
-        )),
-  );
 }
