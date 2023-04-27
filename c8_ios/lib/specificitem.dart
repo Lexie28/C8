@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'package:c8_ios/yourProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/status.dart';
 import 'api.dart';
 import 'otherProfile.dart';
+import 'createBid.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -37,6 +39,8 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    String userId = '';
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
@@ -70,9 +74,25 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                     child: NumBids(
                         string: ListingBids(futureListing: futureListing)),
                   ),
+                  FutureBuilder<Listing>(
+                    future: futureListing,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Map<String, dynamic> user = snapshot.data!.user;
+                        userId = user['id'];
+                        return Text('');
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
+                  ),
                   Align(
                     alignment: FractionalOffset.center,
-                    child: BidButton(),
+                    // bitbutton
+                    child:
+                        BidButton(listingId: widget.listingId, userId: userId),
                   )
                 ],
               ),
@@ -200,7 +220,13 @@ class NumBids extends StatelessWidget {
 }
 
 class BidButton extends StatefulWidget {
-  const BidButton({super.key});
+  const BidButton({
+    required this.listingId,
+    required this.userId,
+  });
+
+  final String listingId;
+  final String userId;
 
   @override
   State<BidButton> createState() => _BidButtonState();
@@ -239,13 +265,15 @@ class _BidButtonState extends State<BidButton> {
           /*
           setState(() {
             buttonName = "Bidded";
-          });
+          */
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => MakeBid(),
+              builder: (BuildContext context) => CreateBid(
+                listingId: widget.listingId,
+                userId: userId,
+              ),
             ),
           );
-          */
         },
       ),
     );
@@ -377,23 +405,26 @@ class ListingProfile extends StatelessWidget {
                   color: Color.fromARGB(93, 255, 254, 254),
                   child: Column(
                     children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.02),
-                            child: Text(
-                              "Total likes:",
-                              style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04),
-                            ),
-                          ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.width * 0.02),
+                        child: Text(
+                          "Total likes:",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04),
+                        ),
+                      ),
                       Row(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.12),
-                            child: likes
-                            ), //TODO
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.12),
+                              child: likes), //TODO
                           Container(
-                            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.04),
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.04),
                             height: MediaQuery.of(context).size.height * 0.05,
                             width: MediaQuery.of(context).size.width * 0.07,
                             child: Image.asset(
@@ -415,23 +446,27 @@ class ListingProfile extends StatelessWidget {
                   color: Colors.white,
                   child: Column(
                     children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.width*0.02, top: MediaQuery.of(context).size.width*0.02 ),
-                            child: Text(
-                              "Location:",
-                              style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.04),
-                            ),
-                          ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.width * 0.02,
+                            top: MediaQuery.of(context).size.width * 0.02),
+                        child: Text(
+                          "Location:",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04),
+                        ),
+                      ),
                       Row(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.07),
-                            child: location
-                            ), //TODO
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.07),
+                              child: location), //TODO
                           Container(
-                            margin: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.02),
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.02),
                             height: MediaQuery.of(context).size.height * 0.05,
                             width: MediaQuery.of(context).size.width * 0.07,
                             child: Image.asset(
@@ -527,10 +562,9 @@ class Location extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Map<String, dynamic> user = snapshot.data!.user;
-          return Text(
-            user['user_location'].toString(),
-            style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045)
-          );
+          return Text(user['user_location'].toString(),
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.045));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
