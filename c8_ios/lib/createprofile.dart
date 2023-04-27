@@ -29,7 +29,7 @@ class _CreateProfileState extends State<CreateProfile> {
     final userId = prefs.getString('uid');
     final email = prefs.getString('email');
 
-    final url = Uri.parse("${_api.getApiHost()}/user/registration");
+    final url = Uri.parse("${_api.getApiHost()}/user");
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
@@ -38,7 +38,7 @@ class _CreateProfileState extends State<CreateProfile> {
           'location': _location,
           'name': _name,
           'phone_number': _phone,
-          'profile_picture_path': '$userId.png',
+          'profile_picture_path': _image!.path, //eller '$userId.png' Det är här det fuckar just nu,
         }));
 
     if (response.statusCode == 200) {
