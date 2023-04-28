@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'api.dart';
 import 'editListing.dart';
+import 'main.dart';
 import 'profile.dart';
 import 'inloggadUser.dart';
 
-String userId = LogIn().getUserLogin();
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
 
   // platsen den är på i user/listings-listan INTE SAMMA som itemId
+
   final int itemIndex;
 
   @override
@@ -30,7 +32,9 @@ class _YourProductState extends State<YourProduct> {
   }
 
   Future<User> fetchUser() async {
-    final response = await http
+  final prefs = await SharedPreferences.getInstance();
+  final userId = prefs.getString('uid');
+  final response = await http
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
@@ -139,7 +143,7 @@ class _YourProductState extends State<YourProduct> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List listings = snapshot.data!.listings;
-                    itemId = listings[widget.itemIndex]['listing_id'];
+                    itemId = listings[widget.itemIndex]['id'];
                     return DeleteProduct(itemId: itemId);
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
@@ -264,7 +268,7 @@ class DeleteProduct extends StatelessWidget {
 
   Future<void> _deleteProduct(BuildContext context) async {
     final api = Api();
-    final url = '${api.getApiHost()}/listing/delete/$itemId';
+    final url = '${api.getApiHost()}/listing/$itemId';
     final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -275,6 +279,10 @@ class DeleteProduct extends StatelessWidget {
       );
       Navigator.pop(context);
       Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+        );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
