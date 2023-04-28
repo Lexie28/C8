@@ -111,25 +111,25 @@ class _CreateBidState extends State<CreateBid> {
                     itemCount: theirListingData.length,
                     itemBuilder: (BuildContext context, int index) {
                       return CheckboxListTile(
-                        title: Text(theirListingData[index]['listing_name']),
+                        title: Text(theirListingData[index]['name']),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                                theirListingData[index]['listing_description']),
-                            Text(theirListingData[index]['listing_category']),
+                                theirListingData[index]['description']),
+                            Text(theirListingData[index]['category']),
                           ],
                         ),
                         value: selectedTheirListingIds
-                            .contains(theirListingData[index]['listing_id']),
+                            .contains(theirListingData[index]['id']),
                         onChanged: (bool? value) {
                           setState(() {
                             if (value!) {
                               selectedTheirListingIds
-                                  .add(theirListingData[index]['listing_id']);
+                                  .add(theirListingData[index]['id']);
                             } else {
                               selectedTheirListingIds.remove(
-                                  theirListingData[index]['listing_id']);
+                                  theirListingData[index]['id']);
                             }
                           });
                         },
@@ -146,24 +146,24 @@ class _CreateBidState extends State<CreateBid> {
                     itemCount: myListingData.length,
                     itemBuilder: (BuildContext context, int index) {
                       return CheckboxListTile(
-                        title: Text(myListingData[index]['listing_name']),
+                        title: Text(myListingData[index]['name']),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(myListingData[index]['listing_description']),
-                            Text(myListingData[index]['listing_category']),
+                            Text(myListingData[index]['description']),
+                            Text(myListingData[index]['category']),
                           ],
                         ),
                         value: selectedMyListingIds
-                            .contains(myListingData[index]['listing_id']),
+                            .contains(myListingData[index]['id']),
                         onChanged: (bool? value) {
                           setState(() {
                             if (value!) {
                               selectedMyListingIds
-                                  .add(myListingData[index]['listing_id']);
+                                  .add(myListingData[index]['id']);
                             } else {
                               selectedMyListingIds
-                                  .remove(myListingData[index]['listing_id']);
+                                  .remove(myListingData[index]['id']);
                             }
                           });
                         },
@@ -174,13 +174,12 @@ class _CreateBidState extends State<CreateBid> {
                 ElevatedButton(
                   onPressed: () async {
                     var data = {
-                      "bid_maker_id": 1,
-                      "bid_receiver_id": widget.userId,
-                      "bid_active": "YES",
-                      "listing_ids": [
+                      "user_making_offer": userId,
+                      "user_receiving_offer": widget.userId,
+                      "id_of_listings": [
                         ...selectedMyListingIds,
                         ...selectedTheirListingIds
-                      ]
+                      ],
                     };
                     var response = await http.post(
                       Uri.parse('${_api.getApiHost()}/offer/create'),
