@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // ws används inte?
 //import 'package:web_socket_channel/web_socket_channel.dart';
@@ -120,146 +121,151 @@ class _FirstPageState extends State<FirstPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color.fromARGB(255, 233, 247, 249),
-      child: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              MediaQuery.of(context).size.height * 0.1,
-              MediaQuery.of(context).size.height * 0.2,
-              MediaQuery.of(context).size.height * 0.1,
-              MediaQuery.of(context).size.height * 0.1,
-            ),
-            child: Card(
-              color: Color.fromARGB(255, 160, 200,
-                  207), // Use hexadecimal color code for consistency
-              elevation: 4, // Add elevation to create a shadow effect
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(16), // Round the corners of the card
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(45),
-                child: Column(
-                  mainAxisAlignment:
-                      MainAxisAlignment.center, // Center the content vertically
-                  crossAxisAlignment: CrossAxisAlignment
-                      .center, // Center the content horizontally
-                  children: [
-                    Text(
-                      'Welcome',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.055,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87, // Use a readable text color
-                      ),
+    return Material(
+      child: Container(
+        //color: Color.fromARGB(255, 233, 247, 249),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/holdingplant.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0,
+                  MediaQuery.of(context).size.width * 0.45,
+                  MediaQuery.of(context).size.width * 0,
+                  MediaQuery.of(context).size.width * 0.34,
+                ),
+                child: Card(
+                  color: Colors.transparent,
+                  elevation: 0,
+                  child: Text(
+                    'Circle 8',
+                    style: GoogleFonts.kalam(   //kalam
+                      textStyle: 
+                    TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.065,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                      // Use a readable text color
                     ),
-                    Text(
-                      'to',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.055,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87, // Use a readable text color
-                      ),
                     ),
-                    Text(
-                      'Circle 8',
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.055,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87, // Use a readable text color
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () async {
-              print("Button pressed");
-              setState(() {
-                _isSigningIn = true;
-              });
+              GestureDetector(
+                onTap: () async {
+                  print("Button pressed");
+                  setState(() {
+                    _isSigningIn = true;
+                  });
 
-              auth.User? user =
-                  await Authentication.signInWithGoogle(context: context);
+                  auth.User? user =
+                      await Authentication.signInWithGoogle(context: context);
 
-              setState(() {
-                _isSigningIn = false;
-              });
+                  setState(() {
+                    _isSigningIn = false;
+                  });
 
-              if (user != null) {
-                print(user);
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString("uid", user.uid);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyBottomNavigationbar()),
-                );
-              }
-            },
-            child: FutureBuilder(
-              future: Authentication.initializeFirebase(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Error initializing Firebase');
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  return GoogleSignInButton();
-                }
-                return Card(
-                  color: Colors.white,
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
+                  if (user != null) {
+                    print(user);
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString("uid", user.uid);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyBottomNavigationbar()),
+                    );
+                  }
+                },
+                child: FutureBuilder(
+                  future: Authentication.initializeFirebase(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Error initializing Firebase');
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                      return GoogleSignInButton();
+                    }
+                    return Card(
+                      color: Colors.white,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color.fromARGB(255, 255, 174, 0),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  print("Next button pressed");
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyBottomNavigationbar()),
+                  );
+                },
+                child: Card(
+                  color: Color.fromARGB(0, 244, 238, 238),
+                  elevation: 1,
+                  margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0,
+                    MediaQuery.of(context).size.width * 0.1,
+                    MediaQuery.of(context).size.width * 0,
+                    MediaQuery.of(context).size.width * 0,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Color.fromARGB(255, 255, 174, 0),
-                      ),
+                    padding: const EdgeInsets.all(18.0),
+                    child: RichText(
+                      text: TextSpan(
+                          text: 'Already have an account?',
+                          style: 
+                          TextStyle(
+                              color: Color.fromARGB(255, 255, 254, 254),
+                              fontSize: 18),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' Sign in',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 146, 183, 247),
+                                  fontSize: 18),
+                            )
+                          ]),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.03,
-          ),
-          GestureDetector(
-            onTap: () async {
-              print("Next button pressed");
-
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyBottomNavigationbar()),
-              );
-            },
-            child: Card(
-              color: Colors.white,
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Next',
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.025,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
                   ),
                 ),
               ),
-            ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0,
+                  MediaQuery.of(context).size.width * 0.55,
+                  MediaQuery.of(context).size.width * 0,
+                  MediaQuery.of(context).size.width * 0,
+                ),
+                child: Text(
+                  'Circle 8 2023',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
