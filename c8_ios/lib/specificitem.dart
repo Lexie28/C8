@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:c8_ios/createbid.dart';
 import 'package:c8_ios/yourProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/status.dart';
 import 'api.dart';
 import 'otherProfile.dart';
-import 'createBid.dart';
+
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
