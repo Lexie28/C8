@@ -75,10 +75,9 @@ class _CreateBidState extends State<CreateBid> {
 
   Future<void> createBid() async {
     final data = {
-      "bid_maker_id": userId,
-      "bid_receiver_id": widget.userId,
-      "bid_active": "YES",
-      "listing_ids": [...selectedMyListingIds, ...selectedTheirListingIds],
+      "user_making_offer": userId,
+      "user_receiving_offer": widget.userId,
+      "id_of_listings": [...selectedMyListingIds, ...selectedTheirListingIds],
     };
     final response = await http.post(
       Uri.parse('${_api.getApiHost()}/offer'),
