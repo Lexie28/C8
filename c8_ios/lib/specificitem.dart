@@ -18,6 +18,7 @@ class ListingDetailPage extends StatefulWidget {
 
 class _ListingDetailPageState extends State<ListingDetailPage> {
   late Future<Listing> futureListing;
+  late String userId = '';
   Api _api = Api();
 
   @override
@@ -31,7 +32,13 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
         .get(Uri.parse('${_api.getApiHost()}/listing/${widget.listingId}'));
 
     if (response.statusCode == 200) {
-      return Listing.fromJson(jsonDecode(response.body));
+      Listing listing = Listing.fromJson(jsonDecode(response.body));
+
+      setState(() {
+        userId = listing.user['id'];
+      });
+
+      return listing;
     } else {
       throw Exception('Failed to load album');
     }
@@ -39,8 +46,6 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    String userId = '';
-
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
@@ -73,20 +78,6 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                     alignment: FractionalOffset.topLeft,
                     child: NumBids(
                         string: ListingBids(futureListing: futureListing)),
-                  ),
-                  FutureBuilder<Listing>(
-                    future: futureListing,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        Map<String, dynamic> user = snapshot.data!.user;
-                        userId = user['id'];
-                        return Text('');
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
-                      }
-                      // By default, show a loading spinner.
-                      return const CircularProgressIndicator();
-                    },
                   ),
                   Align(
                     alignment: FractionalOffset.center,
