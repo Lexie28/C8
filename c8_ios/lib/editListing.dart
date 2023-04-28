@@ -11,7 +11,7 @@ import 'main.dart';
 class EditListing extends StatefulWidget {
   const EditListing({super.key, required this.itemId});
 
-  final int itemId;
+  final String itemId;
 
   @override
   State<EditListing> createState() => _EditListingState();

@@ -147,7 +147,6 @@ class _CreateProfileState extends State<CreateProfile> {
       ),
     );
   }
-
   Widget CustomButton(
       {required String title,
       required IconData icon,

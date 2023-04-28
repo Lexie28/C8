@@ -179,6 +179,8 @@ function listing_delete(req, res) {
 
 router.get("/listing", get_listings);
 
+router.get('/listing/category/:category', (req, res) => listing_category(req, res));
+
 router.get('/listing/:id', (req, res) => get_listing(req, res));
 
 router.post('/listing', (req,res) => listing_create(req, res));

@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'package:c8_ios/yourProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/status.dart';
 import 'api.dart';
 import 'otherProfile.dart';
+import 'createBid.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -36,6 +39,8 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    String userId = '';
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
@@ -46,23 +51,9 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
         child: Center(
           child: Column(
             children: [
-              Row(
-                children: [
-                  Align(
-                    alignment: FractionalOffset.topLeft,
-                    child: ProductListing(string: 'images/shoes.jpg'),
-                  ),
-                  Align(
-                      alignment: FractionalOffset.topRight,
-                      child: ListingProfile(
-                        name: UserName(
-                          futureListing: futureListing,
-                        ),
-                        likes: Likes(
-                          futureListing: futureListing,
-                        ),
-                      ))
-                ],
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: ProductListing(string: 'images/shoes.jpg'),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
@@ -76,24 +67,6 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                 child: ProductInfo(
                     string: ListingDesc(futureListing: futureListing)),
               ),
-              Align(
-                alignment: FractionalOffset.topLeft,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(
-                    //35,
-                    MediaQuery.of(context).size.width * 0.1,
-                    MediaQuery.of(context).size.width * 0.065,
-                    MediaQuery.of(context).size.width * 0,
-                    MediaQuery.of(context).size.width * 0,
-                  ),
-                  child: Text(
-                    'Number of bids',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                  ),
-                ),
-              ),
               Row(
                 children: [
                   Align(
@@ -101,11 +74,41 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                     child: NumBids(
                         string: ListingBids(futureListing: futureListing)),
                   ),
+                  FutureBuilder<Listing>(
+                    future: futureListing,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        Map<String, dynamic> user = snapshot.data!.user;
+                        userId = user['id'];
+                        return Text('');
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
+                  ),
                   Align(
                     alignment: FractionalOffset.center,
-                    child: BidButton(),
+                    // bitbutton
+                    child:
+                        BidButton(listingId: widget.listingId, userId: userId),
                   )
                 ],
+              ),
+              Container(
+                color: Color.fromARGB(255, 233, 239, 240),
+                child: Align(
+                    alignment: FractionalOffset.topLeft,
+                    child: ListingProfile(
+                      name: UserName(
+                        futureListing: futureListing,
+                      ),
+                      likes: Likes(
+                        futureListing: futureListing,
+                      ),
+                      location: Location(futureListing: futureListing),
+                    )),
               ),
             ],
           ),
@@ -113,7 +116,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
       ),
     );
 
-        /*
+    /*
         } else if(snapshot.hasError){
           return Center(
             child: Text('Failed to fetch listing information'),
@@ -124,11 +127,11 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
           );
 
         }*/
-      }
-      //),
-      //bottomNavigationBar: toolbar(),
-    //);
   }
+  //),
+  //bottomNavigationBar: toolbar(),
+  //);
+}
 //}
 
 class ProductName extends StatelessWidget {
@@ -147,7 +150,7 @@ class ProductName extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.1,
+        MediaQuery.of(context).size.width * 0.05,
         MediaQuery.of(context).size.width * 0,
         MediaQuery.of(context).size.width * 0,
         MediaQuery.of(context).size.width * 0.02,
@@ -168,25 +171,22 @@ class ProductInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+        //color: theme.colorScheme.onPrimary,
+        );
 
     return FittedBox(
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.7,
-        child: Card(
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: Container(
           margin: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.1,
-            MediaQuery.of(context).size.width * 0,
+            MediaQuery.of(context).size.width * 0.05,
+            MediaQuery.of(context).size.width * 0.03,
             MediaQuery.of(context).size.width * 0,
             MediaQuery.of(context).size.width * 0,
           ),
-          color: theme.colorScheme.onSecondary,
-          elevation: 10,
-          child: Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-            child: string,
-          ),
+          //color: Color.fromARGB(255, 255, 255, 255),
+          //elevation: 10,
+          child: string,
         ),
       ),
     );
@@ -208,45 +208,32 @@ class NumBids extends StatelessWidget {
     );
 
     return Container(
-      height: MediaQuery.of(context).size.height * 0.1,
-      width: MediaQuery.of(context).size.width * 0.32,
-      child: Card(
-        margin: EdgeInsets.fromLTRB(
-          MediaQuery.of(context).size.width * 0.11,
-          MediaQuery.of(context).size.width * 0,
-          MediaQuery.of(context).size.width * 0,
-          MediaQuery.of(context).size.width * 0,
-        ),
-        color: theme.colorScheme.primary,
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Padding(
-          //padding: const EdgeInsets.fromLTRB(23, 15, 15, 15),
-          padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.065,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.04,
-          ),
-          child:
-              string, //TODO: Kan inte ges som argument. Förmodligen pga stateful widget.
-        ),
+      margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+      child: Row(
+        children: [
+          Text("Current bids: "),
+          string,
+        ],
       ),
     );
   }
 }
 
 class BidButton extends StatefulWidget {
-  const BidButton({super.key});
+  const BidButton({
+    required this.listingId,
+    required this.userId,
+  });
+
+  final String listingId;
+  final String userId;
 
   @override
   State<BidButton> createState() => _BidButtonState();
 }
 
 class _BidButtonState extends State<BidButton> {
-  String buttonName = "Bid";
+  String buttonName = "Make a bid";
 
   @override
   Widget build(BuildContext context) {
@@ -254,26 +241,40 @@ class _BidButtonState extends State<BidButton> {
       //margin: const EdgeInsets.fromLTRB(80, 40, 10, 0),
       margin: EdgeInsets.fromLTRB(
         MediaQuery.of(context).size.width * 0.2,
-        MediaQuery.of(context).size.width * 0.1,
-        MediaQuery.of(context).size.width * 0.05,
         MediaQuery.of(context).size.width * 0,
+        MediaQuery.of(context).size.width * 0.05,
+        MediaQuery.of(context).size.width * 0.05,
       ),
       height: MediaQuery.of(context).size.height * 0.09,
-      width: MediaQuery.of(context).size.height * 0.17,
-      child: ElevatedButton(
+      width: MediaQuery.of(context).size.height * 0.2,
+      child: ElevatedButton.icon(
+        label: Text(
+          buttonName,
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: Icon(
+          Icons.handshake_outlined,
+          color: Colors.white,
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFFA2BABF),
+
+          //elevated btton background color
+        ),
         onPressed: () {
           /*
           setState(() {
             buttonName = "Bidded";
-          });
+          */
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => MakeBid(),
+              builder: (BuildContext context) => CreateBid(
+                listingId: widget.listingId,
+                userId: userId,
+              ),
             ),
           );
-          */
         },
-        child: Text(buttonName),
       ),
     );
   }
@@ -290,13 +291,13 @@ class ProductListing extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.08,
+        MediaQuery.of(context).size.width * 0.05,
         MediaQuery.of(context).size.width * 0.1,
         MediaQuery.of(context).size.width * 0.05,
         MediaQuery.of(context).size.width * 0.08,
       ),
-      height: MediaQuery.of(context).size.height * 0.25,
-      width: MediaQuery.of(context).size.height * 0.25,
+      height: MediaQuery.of(context).size.height * 0.35,
+      width: MediaQuery.of(context).size.height * 0.35,
       decoration: BoxDecoration(
         border: Border.all(width: 2.2, color: Colors.white),
         borderRadius: BorderRadius.all(
@@ -327,78 +328,165 @@ class ListingProfile extends StatelessWidget {
   const ListingProfile({
     required this.name,
     required this.likes,
+    required this.location,
   });
 
   final UserName name;
   final Likes likes;
+  final Location location;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0.1,
-            MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0,
-          ),
-          height: MediaQuery.of(context).size.height * 0.1,
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => OtherProfile(),
-                  ),
-                );
-              },
-              child: Image.asset(
-                'images/man.jpg',
-                fit: BoxFit.cover,
+        Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.05,
+                  top: MediaQuery.of(context).size.width * 0.1),
+              child: Text(
+                "About the seller",
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.07),
               ),
             ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const OtherProfile(),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2.2, color: Colors.white),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
+                ),
               ),
-            );
-          },
-          child: Container(
-            margin: EdgeInsets.fromLTRB(
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0.04,
-              MediaQuery.of(context).size.width * 0,
-            ),
-            width: MediaQuery.of(context).size.width * 0.2,
-            child: Column(
-              children: [
-                name,
-                likes, //TODO
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  width: MediaQuery.of(context).size.width * 0.07,
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.05,
+                MediaQuery.of(context).size.width * 0.0,
+                MediaQuery.of(context).size.width * 0,
+              ),
+              height: MediaQuery.of(context).size.height * 0.15,
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => OtherProfile(),
+                      ),
+                    );
+                  },
                   child: Image.asset(
-                    'images/like.png', //TODO
-                    fit: BoxFit.contain,
+                    'images/man.jpg',
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+            Container(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.01,
+                    bottom: MediaQuery.of(context).size.width * 0.05),
+                child: name),
+          ],
+        ),
+        Column(
+          children: [
+            Container(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.0,
+                  MediaQuery.of(context).size.width * 0.1,
+                  MediaQuery.of(context).size.width * 0.0,
+                  MediaQuery.of(context).size.width * 0,
+                ),
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: Container(
+                  color: Color.fromARGB(93, 255, 254, 254),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.width * 0.02),
+                        child: Text(
+                          "Total likes:",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.12),
+                              child: likes), //TODO
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.04),
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            width: MediaQuery.of(context).size.width * 0.07,
+                            child: Image.asset(
+                              'images/like.png', //TODO
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: Container(
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.width * 0.02,
+                            top: MediaQuery.of(context).size.width * 0.02),
+                        child: Text(
+                          "Location:",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.07),
+                              child: location), //TODO
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.02),
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            width: MediaQuery.of(context).size.width * 0.07,
+                            child: Image.asset(
+                              'images/locationicon.png', //TODO
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
         )
       ],
     );
   }
 }
-
 
 class Listing {
   final String listingId;
@@ -447,6 +535,36 @@ class UserName extends StatelessWidget {
             user['name'].toString(),
             style: style,
           );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class Location extends StatelessWidget {
+  Location({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          Map<String, dynamic> user = snapshot.data!.user;
+          return Text(user['user_location'].toString(),
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.045));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -536,10 +654,10 @@ class ListingDesc extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           String productName = snapshot.data!.listingDesc;
-          return Text(
-            productName,
-            style: style,
-          );
+          return Text(productName,
+              style: TextStyle(
+                fontSize: 15,
+              ));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -569,7 +687,8 @@ class ListingBids extends StatelessWidget {
           int productName = snapshot.data!.listingBids;
           return Text(
             productName.toString(),
-            style: style,
+            style:
+                TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055),
             textAlign: TextAlign.center,
           );
         } else if (snapshot.hasError) {
