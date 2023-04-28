@@ -71,11 +71,11 @@ function get_listing(req, res) {
       if (listing.length === 0) {
         res.status(404).send("Listing not found");
       } else {
-        const id = listing[0].id;
+        const owner_id = listing[0].owner_id;
         db
           .select("*")
           .from("user")
-          .where({ id: id })
+          .where({ id: owner_id })
           .then((user) => {
             if (user.length === 0) {
               res.status(404).send("User not found");

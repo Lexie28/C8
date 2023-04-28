@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateBid extends StatefulWidget {
   final String listingId;
@@ -27,8 +29,11 @@ class _CreateBidState extends State<CreateBid> {
   }
 
   Future<void> fetchListingData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
     final myListingResponse =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/user/1'));
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/user/$userId'));
     final theirListingResponse = await http
         .get(Uri.parse('${_api.getApiHost()}/listing/user/${widget.userId}'));
     print(myListingResponse.body);
@@ -68,13 +73,13 @@ class _CreateBidState extends State<CreateBid> {
 
   Future<void> createBid() async {
     final data = {
-      "bid_maker_id": 1,
+      "bid_maker_id": userId,
       "bid_receiver_id": widget.userId,
       "bid_active": "YES",
       "listing_ids": [...selectedMyListingIds, ...selectedTheirListingIds],
     };
     final response = await http.post(
-      Uri.parse('${_api.getApiHost()}/offer/create'),
+      Uri.parse('${_api.getApiHost()}/offer'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
@@ -122,8 +127,8 @@ class _CreateBidState extends State<CreateBid> {
                               selectedTheirListingIds
                                   .add(theirListingData[index]['listing_id']);
                             } else {
-                              selectedTheirListingIds
-                                  .remove(theirListingData[index]['listing_id']);
+                              selectedTheirListingIds.remove(
+                                  theirListingData[index]['listing_id']);
                             }
                           });
                         },
@@ -185,7 +190,6 @@ class _CreateBidState extends State<CreateBid> {
                     );
                     print(response.body);
                     // TODO: Handle response
-                    
                   },
                   child: Text('Create Bid'),
                 ),
