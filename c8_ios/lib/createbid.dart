@@ -31,6 +31,8 @@ class _CreateBidState extends State<CreateBid> {
   Future<void> fetchListingData() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
+    print(userId);
+    print(widget.userId);
 
     final myListingResponse =
         await http.get(Uri.parse('${_api.getApiHost()}/listing/user/$userId'));
