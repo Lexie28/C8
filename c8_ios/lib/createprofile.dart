@@ -7,6 +7,7 @@ import 'main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart';
 
 class CreateProfile extends StatefulWidget {
@@ -24,32 +25,34 @@ class _CreateProfileState extends State<CreateProfile> {
   File? _image;
 
   void _submitForm() async {
-    _formKey.currentState!.save();
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('uid');
-    final email = prefs.getString('email');
+    var status = await Permission.storage.request();
+      _formKey.currentState!.save();
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('uid');
+      final email = prefs.getString('email');
 
-    final url = Uri.parse("${_api.getApiHost()}/user");
-    final response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': email,
-          'id': userId,
-          'location': _location,
-          'name': _name,
-          'phone_number': _phone,
-          'profile_picture_path': _image!.path, //eller '$userId.png' Det är här det fuckar just nu,
-        }));
+      final url = Uri.parse("${_api.getApiHost()}/user");
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'email': email,
+            'id': userId,
+            'location': _location,
+            'name': _name,
+            'phone_number': _phone,
+            'profile_picture_path': _image!
+                .path, //eller '$userId.png' Det är här det fuckar just nu,
+          }));
 
-    if (response.statusCode == 200) {
-      // registration successful, navigate to main page
-      Navigator.pushReplacement(
-        _formKey.currentContext!,
-        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
-      );
-    } else {
-      print("registration failed!" + response.statusCode.toString());
-    }
+      if (response.statusCode == 200) {
+        // registration successful, navigate to main page
+        Navigator.pushReplacement(
+          _formKey.currentContext!,
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+        );
+      } else {
+        print("registration failed!" + response.statusCode.toString());
+      }
   }
 
   Future getImage(ImageSource source) async {
@@ -147,6 +150,7 @@ class _CreateProfileState extends State<CreateProfile> {
       ),
     );
   }
+
   Widget CustomButton(
       {required String title,
       required IconData icon,
