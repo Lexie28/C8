@@ -7,6 +7,8 @@ import 'profile.dart';
 import 'inloggadUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//String userId = LogIn().getUserLogin();
+
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
 
@@ -31,7 +33,6 @@ class _YourProductState extends State<YourProduct> {
   Future<User> fetchUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
-
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 

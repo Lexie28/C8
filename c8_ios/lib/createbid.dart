@@ -115,8 +115,7 @@ class _CreateBidState extends State<CreateBid> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                theirListingData[index]['description']),
+                            Text(theirListingData[index]['description']),
                             Text(theirListingData[index]['category']),
                           ],
                         ),
@@ -128,8 +127,8 @@ class _CreateBidState extends State<CreateBid> {
                               selectedTheirListingIds
                                   .add(theirListingData[index]['id']);
                             } else {
-                              selectedTheirListingIds.remove(
-                                  theirListingData[index]['id']);
+                              selectedTheirListingIds
+                                  .remove(theirListingData[index]['id']);
                             }
                           });
                         },
