@@ -270,7 +270,7 @@ class _BidButtonState extends State<BidButton> {
             MaterialPageRoute(
               builder: (BuildContext context) => CreateBid(
                 listingId: widget.listingId,
-                userId: userId,
+                userId: widget.userId,
               ),
             ),
           );

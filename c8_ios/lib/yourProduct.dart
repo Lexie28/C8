@@ -5,8 +5,9 @@ import 'api.dart';
 import 'editListing.dart';
 import 'profile.dart';
 import 'inloggadUser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-String userId = LogIn().getUserLogin();
+//String userId = LogIn().getUserLogin();
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
@@ -30,6 +31,8 @@ class _YourProductState extends State<YourProduct> {
   }
 
   Future<User> fetchUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
@@ -139,7 +142,7 @@ class _YourProductState extends State<YourProduct> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     List listings = snapshot.data!.listings;
-                    itemId = listings[widget.itemIndex]['listing_id'];
+                    itemId = listings[widget.itemIndex]['id'];
                     return DeleteProduct(itemId: itemId);
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
