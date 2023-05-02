@@ -14,20 +14,14 @@ describe("GET /user", () => {
     });
     it("Should return users", async () => {
 	const response = await request(baseURL).get("/user");
-	expect(response._body.length == 2).toBe(true);
-    });
-});
-
-describe("POST /user", () => {
-    afterAll(async () => {
-	await request(baseURL).delete(`${}`); //TODO: skriv klart
+	expect(response._body.length == 3).toBe(true);
     });
 });
 
 describe("PATCH /user/:id/like, PATCH /user/:id/dislike, and GET /user/:id", () => {
     const newUser = {
-	"id": 999999,
-	"name": "John Doe",
+	"id": "998",
+	"name": "Ellie",
 	"profile_picture_path": "~/pictures/profile_picture_1.jpg",
 	"phone_number": "0701234567",
 	"email": "john_doe@protonmail.com",
@@ -58,11 +52,22 @@ describe("PATCH /user/:id/like, PATCH /user/:id/dislike, and GET /user/:id", () 
 	expect(response.statusCode).toBe(200);
 	expect(response.error).toBe(false);
     });
-       
+    
+	//console.log('newUser.id:', newUser.id);
     it("Should return the user with correct amount of likes and dislikes", async () => {
 	const response = await request(baseURL).get(`/user/${newUser.id}`);
-	const user = response._data[0];
+	//console.log(response);
+	expect(response.body.length).toBeGreaterThan(0);
+    const user = response.body[0];
 	expect(user.id).toBe(newUser.id);
+	expect(user.likes).toBe(1);
+	expect(user.dislikes).toBe(1);
     });
 });
 	       
+/*
+describe("POST /user", () => {
+    afterAll(async () => {
+	await request(baseURL).delete(`${}`); //TODO: skriv klart
+    }
+});*/

@@ -29,5 +29,8 @@
     "swagger-ui-express": "^4.6.2",
     "uuid": "^9.0.0"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
 }
