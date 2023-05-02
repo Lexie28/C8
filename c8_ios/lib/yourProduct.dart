@@ -6,7 +6,6 @@ import 'api.dart';
 import 'editListing.dart';
 import 'main.dart';
 import 'profile.dart';
-import 'inloggadUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

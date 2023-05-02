@@ -2,12 +2,10 @@ import 'package:c8_ios/myoffers.dart';
 import 'package:c8_ios/signin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +18,6 @@ import 'package:google_fonts/google_fonts.dart';
 //import 'homePage2.dart';
 
 //Tovas sidor
-import 'otherProduct.dart';
 import 'otherProfile.dart';
 import 'categories.dart';
 import 'editprofile.dart';
@@ -144,14 +141,14 @@ class _FirstPageState extends State<FirstPage> {
                   elevation: 0,
                   child: Text(
                     'Circle 8',
-                    style: GoogleFonts.kalam(   //kalam
-                      textStyle: 
-                    TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.065,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                      // Use a readable text color
-                    ),
+                    style: GoogleFonts.kalam(
+                      //kalam
+                      textStyle: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.065,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                        // Use a readable text color
+                      ),
                     ),
                   ),
                 ),
@@ -232,8 +229,7 @@ class _FirstPageState extends State<FirstPage> {
                     child: RichText(
                       text: TextSpan(
                           text: 'Already have an account?',
-                          style: 
-                          TextStyle(
+                          style: TextStyle(
                               color: Color.fromARGB(255, 255, 254, 254),
                               fontSize: 18),
                           children: <TextSpan>[

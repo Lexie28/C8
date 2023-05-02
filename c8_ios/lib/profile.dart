@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:c8_ios/editprofile.dart';
 import 'package:flutter/material.dart';
@@ -6,18 +5,7 @@ import 'settings.dart';
 import 'yourProduct.dart';
 import 'api.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-import 'package:http/http.dart' as http;
-import 'package:c8_ios/editprofile.dart';
-import 'package:flutter/material.dart';
-import 'settings.dart';
-import 'yourProduct.dart';
-import 'dart:convert';
-import 'api.dart';
-import 'inloggadUser.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -26,6 +14,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late Future<User> futureUser;
+  late String id;
   Api _api = Api();
 
   @override
@@ -37,10 +26,13 @@ class _ProfileState extends State<Profile> {
   Future<User> fetchUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
+      setState(() {
+        id = userId as String;
+      });
       return User.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load album');
@@ -66,7 +58,7 @@ class _ProfileState extends State<Profile> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => EditProfile(),
+                    builder: (BuildContext context) => EditProfile(userId: id),
                   ),
                 );
               },
@@ -167,7 +159,7 @@ class _ProfileState extends State<Profile> {
                           16.0, // set the vertical spacing between items
                       children: [
                         for (int i = 0; i < listings.length && i < 5; i++)
-                          Container(
+                          SizedBox(
                             width: (MediaQuery.of(context).size.width - 48.0) /
                                 3, // calculate the width of each item based on the screen width and the spacing between items
                             child: GestureDetector(

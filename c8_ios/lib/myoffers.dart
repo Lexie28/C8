@@ -7,7 +7,7 @@ import 'currentoffer.dart';
 
 class OffersPage extends StatefulWidget {
   @override
-  _OffersPageState createState() => _OffersPageState();
+  State<OffersPage> createState() => _OffersPageState();
 }
 
 class _OffersPageState extends State<OffersPage> {
