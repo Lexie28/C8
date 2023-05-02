@@ -3,12 +3,10 @@ import 'package:c8_ios/myoffers.dart';
 import 'package:c8_ios/signin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +19,6 @@ import 'package:google_fonts/google_fonts.dart';
 //import 'homePage2.dart';
 
 //Tovas sidor
-import 'otherProduct.dart';
 import 'otherProfile.dart';
 import 'categories.dart';
 import 'editprofile.dart';

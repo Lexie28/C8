@@ -1,47 +1,71 @@
+//import 'dart:io';
+//import 'package:c8_ios/otherProduct.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
-import 'dart:io';
+
+import 'api.dart';
+import 'main.dart';
 
 class EditProfile extends StatefulWidget {
-  EditProfile({Key? key}) : super(key: key);
-  //Någon variabel som håller bilden kanske
+  const EditProfile({super.key, required this.userId});
+
+  final String userId;
 
   @override
-  _EditProfileState createState() => _EditProfileState();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  File? _image;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-  Future getImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return;
+  Api _api = Api();
 
-      //final imageTemporary = File(image.path);
-      final imagePermanent = await saveFilePermanently(image.path);
+  String _userName = '';
+  String _userLocation = '';
+  String _userContact= '';
 
-      setState(() {
-        _image = imagePermanent;
-      });
-    } catch (e) {
-      print('Failed to pick image: $e');
+  //Någon variabel som håller bilden kanske
+  Future<void> changeTitle() async {
+    print('New product title: ${_nameController.text}');
+
+    if (_formKey.currentState!.validate()) {
+      //final url = Uri.parse('${_api.getApiHost()}/listing/:id');
+      final url =
+          Uri.parse('${_api.getApiHost()}/listing/${widget.userId}');   //TODO: ändra path NÄR DEN FINNS
+
+      final headers = {'Content-Type': 'application/json'};
+      final body = {
+        'name': '${_nameController.text}',
+        'description': '${_locationController.text}',
+        'category': '${_contactController.text}',
+        'image_path': null,
+      };
+      final jsonBody = json.encode(body);
+      final response = await http.patch(url, headers: headers, body: jsonBody);
+      if (response.statusCode == 200) {
+        // Success
+        print('Good! Listing uppdated!');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+        );
+      }
+      else if(response.statusCode == 404){
+        print("Error 404");
+      }
+      else if(response.statusCode == 500){
+        print("Error 500");
+      }
+       else {
+        print('Failed to update listing');
+      }
     }
   }
-
-  Future<File> saveFilePermanently(String imagePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final name = basename(imagePath);
-    final image = File('${directory.path}/$name');
-
-    return File(imagePath).copy(image.path);
-  }
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,112 +74,113 @@ class _EditProfileState extends State<EditProfile> {
         title: Text('Edit Profile'),
         backgroundColor: Color(0xFFA2BABF),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Profile picture
-            GestureDetector(
-              onTap: () {
-                // TODO: Implement change profile picture logic
-              },
-              child: Container(
-                margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(120.0),
-                  child: _image != null
-                      ? Image.file(_image!,
-                          width: 250, height: 250, fit: BoxFit.cover)
-                      : Image.asset(
-                          'images/woman.jpg',
-                          fit: BoxFit.cover,
-                        ),
-                ),
-              ),
-            ),
-            // Name field
-            Container(
-              margin: EdgeInsets.all(
-                MediaQuery.of(context).size.width * 0.01,
-              ),
-              child: TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-
-            // Location field
-            Container(
-              margin: EdgeInsets.all(
-                MediaQuery.of(context).size.width * 0.01,
-              ),
-              child: TextField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: 'Location',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            // Bio field
-            Container(
-              margin: EdgeInsets.all(
-                MediaQuery.of(context).size.width * 0.01,
-              ),
-              child: TextField(
-                controller: _contactController,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  labelText: 'Contact details',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            // Save button
-            Container(
-              margin: EdgeInsets.all(
-                MediaQuery.of(context).size.width * 0.01,
-              ),
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: Implement save changes logic
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Profile picture
+              GestureDetector(
+                onTap: () {
+                  // TODO: Implement change profile picture logic
                 },
-                child: Text('Save Changes'),
+                child: Container(
+                  margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(120.0),
+                    child: Image.asset(
+                      'images/woman.jpg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            CustomButton(
-                title: 'Pick from Gallery',
-                icon: Icons.image_outlined,
-                onClick: () => getImage(ImageSource.gallery)),
-            CustomButton(
-                title: 'Pick from Camera',
-                icon: Icons.camera,
-                onClick: () => getImage(ImageSource.camera)),
-          ],
+      
+              // TODO: knapp för ändra profil
+              // Name field
+              Container(
+                margin: EdgeInsets.all(
+                  MediaQuery.of(context).size.width * 0.01,
+                ),
+                child: TextField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'New Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    _userName = value;
+                  },
+                ),
+              ),
+      
+              // Name field
+              Container(
+                margin: EdgeInsets.all(
+                  MediaQuery.of(context).size.width * 0.01,
+                ),
+                child: TextField(
+                  controller: _locationController,
+                  decoration: InputDecoration(
+                    labelText: 'New Location',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    _userLocation = value;
+                  },
+                ),
+              ),
+
+
+              /*
+              DropdownButtonFormField(
+                  decoration: InputDecoration(labelText: 'Listing Category'),
+                  value: _categories[0],
+                  items: _categories.map((category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _listingCategory = value.toString();
+                    });
+                  },
+                ),
+                */
+                Container(
+                margin: EdgeInsets.all(
+                  MediaQuery.of(context).size.width * 0.01,
+                ),
+                child: TextField(
+                  controller: _contactController,
+                  decoration: InputDecoration(
+                    labelText: 'New Contact info',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    _userContact = value;
+                  },
+                ),
+              ),
+              // Bio field
+              // Save button
+              Container(
+                margin: EdgeInsets.all(
+                  MediaQuery.of(context).size.width * 0.01,
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    changeTitle();
+                  },
+                  child: Text('Save Changes'),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-}
-
-Widget CustomButton(
-    {required String title,
-    required IconData icon,
-    required VoidCallback onClick}) {
-  return Container(
-    width: 280,
-    child: ElevatedButton(
-        onPressed: onClick,
-        child: Row(
-          children: [
-            Icon(icon),
-            SizedBox(
-              width: 20,
-            ),
-            Text(title),
-          ],
-        )),
-  );
 }

@@ -129,11 +129,11 @@ Edits all editable fields in a listing (name, description and category)
 */
 function edit_listing_all(req, res) {
   const { id } = req.params;
-  const { name, description, category } = req.body;
+  const { name, description, category, image_path } = req.body;
 
   db('listing')
     .where({ id })
-	.update({ name, description, category, image_path })
+	.update({ name, description, category, image_path}) 
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'listing updated successfully' });
