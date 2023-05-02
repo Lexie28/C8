@@ -550,9 +550,10 @@ class Location extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Map<String, dynamic> user = snapshot.data!.user;
-          return Text(user['user_location'].toString(),
-              style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.width * 0.045));
+          return Text(
+            user['location'].toString(),
+            style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045)
+          );
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
