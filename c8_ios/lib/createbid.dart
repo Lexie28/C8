@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:c8_ios/otherProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
@@ -12,14 +11,14 @@ class CreateBid extends StatefulWidget {
   CreateBid({required this.listingId, required this.userId});
 
   @override
-  _CreateBidState createState() => _CreateBidState();
+  State<CreateBid> createState() => _CreateBidState();
 }
 
 class _CreateBidState extends State<CreateBid> {
   List<dynamic> myListingData = [];
   List<dynamic> theirListingData = [];
-  List<int> selectedMyListingIds = [];
-  List<int> selectedTheirListingIds = [];
+  List<String> selectedMyListingIds = [];
+  List<String> selectedTheirListingIds = [];
   Api _api = Api();
 
   @override
@@ -55,25 +54,28 @@ class _CreateBidState extends State<CreateBid> {
 
   void toggleMyListingSelection(int id) {
     setState(() {
-      if (selectedMyListingIds.contains(id)) {
-        selectedMyListingIds.remove(id);
+      if (selectedMyListingIds.contains(id.toString())) {
+        selectedMyListingIds.remove(id.toString());
       } else {
-        selectedMyListingIds.add(id);
+        selectedMyListingIds.add(id.toString());
       }
     });
   }
 
   void toggleTheirListingSelection(int id) {
     setState(() {
-      if (selectedTheirListingIds.contains(id)) {
-        selectedTheirListingIds.remove(id);
+      if (selectedTheirListingIds.contains(id.toString())) {
+        selectedTheirListingIds.remove(id.toString());
       } else {
-        selectedTheirListingIds.add(id);
+        selectedTheirListingIds.add(id.toString());
       }
     });
   }
 
   Future<void> createBid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
     final data = {
       "user_making_offer": userId,
       "user_receiving_offer": widget.userId,
@@ -123,6 +125,7 @@ class _CreateBidState extends State<CreateBid> {
                             .contains(theirListingData[index]['id']),
                         onChanged: (bool? value) {
                           setState(() {
+                            print(theirListingData[index]['id']);
                             if (value!) {
                               selectedTheirListingIds
                                   .add(theirListingData[index]['id']);
@@ -172,24 +175,7 @@ class _CreateBidState extends State<CreateBid> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    var data = {
-                      "bid_maker_id": 1,
-                      "bid_receiver_id": widget.userId,
-                      "bid_active": "YES",
-                      "listing_ids": [
-                        ...selectedMyListingIds,
-                        ...selectedTheirListingIds
-                      ]
-                    };
-                    var response = await http.post(
-                      Uri.parse('${_api.getApiHost()}/offer/create'),
-                      headers: <String, String>{
-                        'Content-Type': 'application/json'
-                      },
-                      body: jsonEncode(data),
-                    );
-                    print(response.body);
-                    // TODO: Handle response
+                    createBid();
                   },
                   child: Text('Create Bid'),
                 ),

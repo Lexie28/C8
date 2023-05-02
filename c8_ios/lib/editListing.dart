@@ -34,8 +34,7 @@ class _EditListingState extends State<EditListing> {
 
     if (_formKey.currentState!.validate()) {
       //final url = Uri.parse('${_api.getApiHost()}/listing/:id');
-      final url =
-          Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}');
+      final url = Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}');
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
@@ -80,7 +79,8 @@ class _EditListingState extends State<EditListing> {
                   // TODO: Implement change profile picture logic
                 },
                 child: Container(
-                  margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+                  margin:
+                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(120.0),
                     child: Image.asset(
@@ -90,7 +90,7 @@ class _EditListingState extends State<EditListing> {
                   ),
                 ),
               ),
-      
+
               // TODO: knapp för ändra profil
               // Name field
               Container(
@@ -108,7 +108,7 @@ class _EditListingState extends State<EditListing> {
                   },
                 ),
               ),
-      
+
               // Name field
               Container(
                 margin: EdgeInsets.all(

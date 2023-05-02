@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'api.dart';
 import 'editListing.dart';
 import 'profile.dart';
-import 'inloggadUser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //String userId = LogIn().getUserLogin();

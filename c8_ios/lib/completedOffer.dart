@@ -23,7 +23,10 @@ class CompletedOffer extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (BuildContext context) => OtherProfile(),
+                    // TODO:
+                    builder: (BuildContext context) => OtherProfile(
+                      userId: '1',
+                    ),
                   ));
                 },
                 child: ClipRRect(

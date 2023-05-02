@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:c8_ios/yourProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:web_socket_channel/status.dart';
 import 'api.dart';
 import 'otherProfile.dart';
 import 'createBid.dart';
@@ -13,7 +11,7 @@ class ListingDetailPage extends StatefulWidget {
   ListingDetailPage({required this.listingId});
 
   @override
-  _ListingDetailPageState createState() => _ListingDetailPageState();
+  State<ListingDetailPage> createState() => _ListingDetailPageState();
 }
 
 class _ListingDetailPageState extends State<ListingDetailPage> {
@@ -95,6 +93,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                       name: UserName(
                         futureListing: futureListing,
                       ),
+                      id: userId,
                       likes: Likes(
                         futureListing: futureListing,
                       ),
@@ -166,7 +165,7 @@ class ProductInfo extends StatelessWidget {
         );
 
     return FittedBox(
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.9,
         child: Container(
           margin: EdgeInsets.fromLTRB(
@@ -315,14 +314,15 @@ class ProductListing extends StatelessWidget {
 }
 
 class ListingProfile extends StatelessWidget {
-  //TODO: Fetch data från databas
   const ListingProfile({
     required this.name,
+    required this.id,
     required this.likes,
     required this.location,
   });
 
   final UserName name;
+  final String id;
   final Likes likes;
   final Location location;
 
@@ -363,7 +363,8 @@ class ListingProfile extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => OtherProfile(),
+                        builder: (BuildContext context) =>
+                            OtherProfile(userId: id),
                       ),
                     );
                   },
@@ -383,7 +384,7 @@ class ListingProfile extends StatelessWidget {
         ),
         Column(
           children: [
-            Container(
+            SizedBox(
               child: Container(
                 margin: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width * 0.0,
@@ -430,48 +431,44 @@ class ListingProfile extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.4,
-                child: Container(
-                  color: Colors.white,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).size.width * 0.02,
-                            top: MediaQuery.of(context).size.width * 0.02),
-                        child: Text(
-                          "Location:",
-                          style: TextStyle(
-                              fontSize:
-                                  MediaQuery.of(context).size.width * 0.04),
-                        ),
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.width * 0.02,
+                          top: MediaQuery.of(context).size.width * 0.02),
+                      child: Text(
+                        "Location:",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.04),
                       ),
-                      Row(
-                        children: [
-                          Container(
-                              margin: EdgeInsets.only(
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.07),
-                              child: location), //TODO
-                          Container(
+                    ),
+                    Row(
+                      children: [
+                        Container(
                             margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.02),
-                            height: MediaQuery.of(context).size.height * 0.05,
-                            width: MediaQuery.of(context).size.width * 0.07,
-                            child: Image.asset(
-                              'images/locationicon.png', //TODO
-                              fit: BoxFit.contain,
-                            ),
+                                left: MediaQuery.of(context).size.width * 0.07),
+                            child: location), //TODO
+                        Container(
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.02),
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          width: MediaQuery.of(context).size.width * 0.07,
+                          child: Image.asset(
+                            'images/locationicon.png', //TODO
+                            fit: BoxFit.contain,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         )
       ],

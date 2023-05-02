@@ -1,6 +1,6 @@
 import 'package:c8_ios/offers.dart';
 import 'package:flutter/material.dart';
-import 'otherProduct.dart';
+import 'specificitem.dart';
 //import 'popularItems.dart';
 //import 'hometest.dart';
 import 'package:http/http.dart' as http;
@@ -26,8 +26,8 @@ class _MakeBidState extends State<MakeBid> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -109,12 +109,13 @@ class _MakeBidState extends State<MakeBid> {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          OtherProduct(),
+                                          ListingDetailPage(
+                                        listingId: listings[i]['id'],
+                                      ),
                                     ),
                                   );
                                 },
-                                child:
-                                    Item(string: listings[i]['name']),
+                                child: Item(string: listings[i]['name']),
                               ),
                           ],
                         );
@@ -173,12 +174,13 @@ class _MakeBidState extends State<MakeBid> {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          OtherProduct(),
+                                          ListingDetailPage(
+                                        listingId: listings[i]['id'],
+                                      ),
                                     ),
                                   );
                                 },
-                                child:
-                                    Item(string: listings[i]['name']),
+                                child: Item(string: listings[i]['name']),
                               ),
                           ],
                         );
@@ -270,14 +272,14 @@ class Item extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
       child: Column(children: [
-        Container(
+        SizedBox(
           height: MediaQuery.of(context).size.width * 0.28,
           child: Image.asset(
             'images/shoes.jpg',
             fit: BoxFit.cover,
           ),
         ),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width * 0.2,
           child: Text(
             string,
