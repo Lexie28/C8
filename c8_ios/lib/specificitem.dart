@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'otherProfile.dart';
-
+import 'createbid.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -550,10 +550,9 @@ class Location extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           Map<String, dynamic> user = snapshot.data!.user;
-          return Text(
-            user['location'].toString(),
-            style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.045)
-          );
+          return Text(user['location'].toString(),
+              style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.045));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
