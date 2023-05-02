@@ -71,11 +71,11 @@ function get_listing(req, res) {
       if (listing.length === 0) {
         res.status(404).send("Listing not found");
       } else {
-        const id = listing[0].id;
+        const owner_id = listing[0].owner_id;
         db
           .select("*")
           .from("user")
-          .where({ id: id })
+          .where({ id: owner_id })
           .then((user) => {
             if (user.length === 0) {
               res.status(404).send("User not found");
@@ -175,9 +175,24 @@ function listing_delete(req, res) {
     //FIXME: allt som borde försvinna i offer_listing gör inte det
 };
 
+function listing_user(req, res) {
+  const { id } = req.params;
+
+  db.select("*").from("listing").where("owner_id", id).then((result) => {
+    res.send(result)
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+}
+
 
 
 router.get("/listing", get_listings);
+
+router.get('/listing/category/:category', (req, res) => listing_category(req, res));
+
+router.get('/listing/user/:id', (req, res) => listing_user(req, res));
 
 router.get('/listing/:id', (req, res) => get_listing(req, res));
 

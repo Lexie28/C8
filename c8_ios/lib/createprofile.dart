@@ -25,7 +25,7 @@ class _CreateProfileState extends State<CreateProfile> {
     final userId = prefs.getString('uid');
     final email = prefs.getString('email');
 
-    final url = Uri.parse("${_api.getApiHost()}/user/registration");
+    final url = Uri.parse("${_api.getApiHost()}/user");
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
@@ -48,66 +48,65 @@ class _CreateProfileState extends State<CreateProfile> {
 
   //Någon variabel som håller bilden kanske
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: Text("Create Profile"),
-    ),
-    body: SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(labelText: "Name"),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return "Please enter your name";
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _name = value!;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Location"),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return "Please enter your location";
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _location = value!;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Phone Number"),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return "Please enter your phone number";
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _phone = value!;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text("Create Profile"),
-              ),
-            ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Create Profile"),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Name"),
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return "Please enter your name";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _name = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Location"),
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return "Please enter your location";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _location = value!;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: "Phone Number"),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) {
+                      return "Please enter your phone number";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _phone = value!;
+                  },
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text("Create Profile"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 }
