@@ -93,7 +93,7 @@ class _ProfileState extends State<Profile> {
                     horizontal: MediaQuery.of(context).size.width * 0.08),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
-                  child: Image.asset(
+                  child: Image.network(
                     'https://circle8.s3.eu-north-1.amazonaws.com/$profile_picture_path',
                   ),
                 ),
