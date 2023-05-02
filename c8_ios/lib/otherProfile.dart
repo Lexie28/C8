@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'secondmain.dart';
 
 class OtherProfile extends StatelessWidget {
   const OtherProfile({super.key});

@@ -26,6 +26,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late Future<User> futureUser;
+  late String id;
   Api _api = Api();
 
   @override
@@ -41,6 +42,9 @@ class _ProfileState extends State<Profile> {
         await http.get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
+      setState(() {
+        id = userId as String;
+      });
       return User.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load album');
@@ -66,7 +70,7 @@ class _ProfileState extends State<Profile> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (BuildContext context) => EditProfile(),
+                    builder: (BuildContext context) => EditProfile(userId: id),
                   ),
                 );
               },
