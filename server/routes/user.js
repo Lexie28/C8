@@ -96,7 +96,6 @@ function user_dislike(req, res) {
 Deletes a user of a certain user id.
 @param {Object} req - The request object from the client.
 @param {Object} res - The response object to send data back to the client.
-
 @returns {undefined} This function does not return anything.
 */
 function user_delete(req, res) {
@@ -139,9 +138,29 @@ function user_exists(req, res) {
     });
 };
 
+/*
+@param {Object} req - The request object from the client.
+@param {Object} res - The response object to send data back to the client.
+@param {Object} knex - The Knex.js instance to perform the database operation.
+@returns {undefined} This function does not return anything.
+*/
+
+function get_user(req, res) {
+  const { id } = req.params;
+
+  db('user')
+  .where({ id })
+  .then((result) => {
+    res.send(result);
+  });
+}
+
 
 //Get all users in the database
 router.get('/user', (req, res) => get_users(req, res));
+
+//Checks if user exists
+router.post("/user/exists/:id", (req, res) => user_exists(req, res));
 
 //Get a specific user from the user table
 router.get('/user/:id', (req, res) => get_user(req, res))
@@ -162,7 +181,6 @@ router.get("/user/:id/offers", async (req, res) => {
     //TODO: flytta implementationen från offer.js hit    
 });
 
-router.post("/user/exists/:id", (req, res) => user_exists(req, res));
 
 
 module.exports = router;

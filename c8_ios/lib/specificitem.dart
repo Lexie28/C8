@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'otherProfile.dart';
-import 'createBid.dart';
+
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
