@@ -48,6 +48,7 @@ dependencies:
   permission_handler: ^8.0.0+2
   firebase_core: ^2.10.0
   firebase_auth: ^4.4.2
+  simple_s3: ^0.3.2
   google_sign_in: ^6.1.0
   shared_preferences: ^2.1.0
   google_fonts: ^4.0.4
