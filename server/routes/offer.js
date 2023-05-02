@@ -164,7 +164,19 @@ router.post('/offer', (req, res) => offer_create(req, res));
 
 //Lists all of the offers your id is involved in
 //TODO: flytta till user controller
-router.get('/offer/:id', (req, res) => offers_get(req, res));
+router.get('/offer/:id', (req, res) => {
+    const { id } = req.params;
+    
+    db("offer")
+	.select("*")
+	.where({id: id})
+	.then((result) => {
+	    res.status(200).json(result);
+	})
+
+});
+	  
+
 
 
 module.exports = router;
