@@ -111,6 +111,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   print(user);
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setString("uid", user.uid);
+                  
                 }
               },
               child: Padding(
