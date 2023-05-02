@@ -1,4 +1,9 @@
+
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'api.dart';
 import 'deleteProfile.dart';
 import 'authentication.dart';
 import 'main.dart';
@@ -9,6 +14,28 @@ import 'authentication.dart';
 import 'main.dart';
 
 class Settings extends StatelessWidget {
+
+
+  Future<void> _deleteUserId(BuildContext context) async {
+
+  final prefs = await SharedPreferences.getInstance();
+  final userId = prefs.getString('uid');
+    final api = Api();
+    final url = '${api.getApiHost()}/user/$userId';
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to delete UserId'),
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +127,7 @@ class Settings extends StatelessWidget {
                         TextButton(
                           child: Text('Delete'),
                           onPressed: () {
+                            _deleteUserId(context);
                             Navigator.of(context).pop(true);
                           },
                         ),
@@ -110,7 +138,7 @@ class Settings extends StatelessWidget {
                 if (confirm) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (BuildContext context) => DeleteProfile(),
+                      builder: (BuildContext context) => C8(),
                     ),
                   );
                 }
