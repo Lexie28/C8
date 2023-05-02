@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const {currentDateTime, newId} = require("../utils.js");
+const {currentDateTime, newId, entryExists} = require("../utils.js");
 
 const db = require("../db-config.js");
 
 
 async function offer_create(req, res) {
 
-    //TODO: increment number_of_bids for all items involved
+    //TODO: Se till att offern har items från två olika användare med listings som är available
     const { user_making_offer, user_receiving_offer, id_of_listings} = req.body;
 
     const offerId = newId();
@@ -38,7 +38,7 @@ async function offer_create(req, res) {
             });
     })
 	.then(function() {
-	    res.status(200).json({ message: 'Trade offer created successfully' });
+	    res.status(200).json({ message: 'Trade offer created successfully' , id: offerId});
 	})
 	.catch(function(err) {
 	    console.log(err);
@@ -159,11 +159,8 @@ router.get("/offer", (req, res) => {
     })
 })
 
-//Creates a new offer
 router.post('/offer', (req, res) => offer_create(req, res));
 
-//Lists all of the offers your id is involved in
-//TODO: flytta till user controller
 router.get('/offer/:id', (req, res) => {
     const { id } = req.params;
     
@@ -171,12 +168,109 @@ router.get('/offer/:id', (req, res) => {
 	.select("*")
 	.where({id: id})
 	.then((result) => {
-	    res.status(200).json(result);
+	    if(result.length == 0) {
+		res.status(404).json({message: "Offer with id not found"});
+		return;
+	    }
+	    else {
+		res.status(200).json(result);
+	    }
 	})
 
 });
 	  
+router.patch("/offer/:id/accept", async (req, res) => {
+    const offer_id = req.params.id;
 
+    if(!(await entryExists("offer", offer_id))) {
+	res.status(404).json({message: "Offer doesn't exist!"});
+	return;
+    }
+    
+    const offer = (await db("offer").where({id: offer_id}))[0];
+    
+    if (offer.accepted == 1) {
+	res.status(400).json({message: "Offer is already accepted"});
+	return;
+    }
 
+    else if (offer.rejected == 1) {
+	res.status(400).json({message: "Offer has already been rejected. Cannot be accepted!"});
+	return;
+    }
+    
+    db("offer")
+	.where({id: offer_id})
+	.update({accepted: 1})
+	.then(async (result) => {
+	    //SQL query: update listing set available=0 where id in (select listing_id from offer_listing where offer_id = 1);
+	    //TODO: Fixa logiken för om någon listing ej är available
+	    await db('listing')
+		.whereIn('id', function() {
+		    this.select('listing_id')
+			.from('offer_listing')
+			.where('offer_id', offer_id);
+		})
+		.update({available:0});
 
+	    res.status(200).json({message: "Offer accepted!"});
+	    return;
+	})
+	.catch((err) => {
+	    res.status(500).json({message: "Error! " + err});
+	    return;
+	});
+})
+
+router.patch("/offer/:id/reject", async (req, res) => {
+    const offer_id = req.params.id;
+
+    if(!(await entryExists("offer", offer_id))) {
+	res.status(404).json({message: "Offer doesn't exist!"});
+	return;
+    }
+    
+    const offer = (await db("offer").where({id: offer_id}))[0];
+    
+    if (offer.rejected == 1) {
+	res.status(400).json({message: "Offer is already rejected"});
+	return;
+    }
+    else if (offer.accepted == 1) {
+	res.status(400).json({message: "Offer has already been accepted. Cannot be rejected!"});
+	return;
+    }
+    
+    db("offer")
+	.where({id: offer_id})
+	.update({rejected: 1})
+	.then((result) => {
+	    res.status(200).json({message: "Offer successfully rejected!"});
+	})
+	.catch((err) => {
+	    res.status(500).json({message: "Error! " + err});
+	});
+    
+    
+})
+
+router.delete("/offer/:id",async (req, res) => {
+    //TODO: gör så att number of bids för listings minskar när offer tas bort
+    const offer_id = req.params.id;
+    
+    if(!(await entryExists("offer", offer_id))) {
+	res.status(404).json({message: "Offer doesn't exist!"});
+	return;
+    }
+    db("offer")
+	.where({id:offer_id})
+	.del()
+	.then((result) => {
+	    res.status(200).json({message: "Offer successfully deleted!"});
+	})
+	.catch((err) => {
+	    res.status(500).json({message: "Error! " + err});
+	})
+	      	      	      
+})
 module.exports = router;
