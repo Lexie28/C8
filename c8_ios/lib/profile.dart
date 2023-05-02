@@ -14,7 +14,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late Future<User> futureUser;
-  late String id;
+  late String id = '';
+  late String profile_picture_path = '';
+
   Api _api = Api();
 
   @override
@@ -30,10 +32,12 @@ class _ProfileState extends State<Profile> {
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
+      User user = User.fromJson(jsonDecode(response.body));
       setState(() {
         id = userId as String;
+        profile_picture_path = user.profilePicturePath;
       });
-      return User.fromJson(jsonDecode(response.body));
+      return user;
     } else {
       throw Exception('Failed to load album');
     }
@@ -90,7 +94,7 @@ class _ProfileState extends State<Profile> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.asset(
-                    'images/woman.jpg',
+                    'https://circle8.s3.eu-north-1.amazonaws.com/$profile_picture_path',
                   ),
                 ),
               ),
@@ -239,6 +243,7 @@ class User {
   final String userId;
   final String userName;
   final String location;
+  final String profilePicturePath;
   final int likes;
   final int dislikes;
   final List listings;
@@ -247,6 +252,7 @@ class User {
     required this.userId,
     required this.userName,
     required this.location,
+    required this.profilePicturePath,
     required this.likes,
     required this.dislikes,
     required this.listings,
@@ -257,6 +263,7 @@ class User {
       userId: json['id'],
       userName: json['name'],
       location: json['location'],
+      profilePicturePath: json['profile_picture_path'],
       likes: json['likes'],
       dislikes: json['dislikes'],
       listings: json['listings'],
