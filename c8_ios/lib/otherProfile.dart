@@ -88,7 +88,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        YourProduct(itemIndex: i),
+                                        ListingDetailPage(listingId: listings[i]['id']),
                                   ),
                                 );
                               },
