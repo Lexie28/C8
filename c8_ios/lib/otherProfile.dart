@@ -1,8 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'api.dart';
+import 'specificitem.dart';
+import 'package:c8_ios/yourProduct.dart';
+import 'profile.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class OtherProfile extends StatelessWidget {
-  const OtherProfile({super.key});
+class OtherProfile extends StatefulWidget {
+  OtherProfile({required this.userId});
+
+  final String userId;
+
+  @override
+  State<OtherProfile> createState() => _OtherProfileState();
+}
+
+class _OtherProfileState extends State<OtherProfile> {
+  late Future<User> futureUser = fetchUser();
+  String userName = '';
+  String location = '';
+
+  @override
+  void initState() {
+    super.initState();
+    futureUser = fetchUser();
+  }
+
+  Api _api = Api();
+
+  Future<User> fetchUser() async {
+    print(widget.userId);
+    final response = await http.get(
+        Uri.parse('${_api.getApiHost()}/pages/profilepage/${widget.userId}'));
+    if (response.statusCode == 200) {
+      User user = User.fromJson(jsonDecode(response.body));
+
+      setState(() {
+        userName = user.userName;
+        location = user.location;
+      });
+
+      return user;
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +64,45 @@ class OtherProfile extends StatelessWidget {
             ),
             Align(
               alignment: FractionalOffset.topCenter,
-              child: ProfileName(string: 'Lars Svensson'),
+              child: ProfileName(string: userName, location: location),
             ),
-            Row(
-              children: [
-                Align(
-                  alignment: FractionalOffset.topLeft,
-                  child: ProductProfile(string: 'images/shoes.jpg'),
-                ),
-                Align(
-                  alignment: FractionalOffset.topLeft,
-                  child: ProductProfile(string: 'images/hatt.jpeg'),
-                ),
-              ],
-            )
+
+            // Alla produkter!!
+            FutureBuilder<User>(
+              future: futureUser,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  final listings = snapshot.data!.listings;
+
+                  return Wrap(
+                      spacing: 16.0, // set the horizontal spacing between items
+                      runSpacing:
+                          16.0, // set the vertical spacing between items
+                      children: [
+                        for (int i = 0; i < listings.length && i < 5; i++)
+                          SizedBox(
+                            width: (MediaQuery.of(context).size.width - 48.0) /
+                                3, // calculate the width of each item based on the screen width and the spacing between items
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        YourProduct(itemIndex: i),
+                                  ),
+                                );
+                              },
+                              child: Item(string: listings[i]['name']),
+                            ),
+                          ),
+                      ]);
+                } else if (snapshot.hasError) {
+                  return Text('Failed to fetch listings');
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
           ],
         ),
       ),
@@ -71,9 +139,11 @@ class ProfilePicture extends StatelessWidget {
 class ProfileName extends StatelessWidget {
   const ProfileName({
     required this.string,
+    required this.location,
   });
 
   final String string;
+  final String location;
 
   @override
   Widget build(BuildContext context) {
@@ -93,11 +163,12 @@ class ProfileName extends StatelessWidget {
                 TextStyle(fontSize: MediaQuery.of(context).size.width * 0.07),
             string,
           ),
+          Text(location),
           Text(
               style:
                   TextStyle(fontSize: MediaQuery.of(context).size.width * 0.05),
               "50% (12)"),
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height * 0.05,
             width: MediaQuery.of(context).size.width * 0.07,
             child: Image.asset(
