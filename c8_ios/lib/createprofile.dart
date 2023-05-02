@@ -25,6 +25,7 @@ Future<String?> _upload(File? fileToUpload) async {
         s3FolderPath: "",
         accessControl: S3AccessControl.publicReadWrite,
       );
+      result = basename(fileToUpload.path);
     } catch (e) {
       print(e);
     }
@@ -47,7 +48,7 @@ class _CreateProfileState extends State<CreateProfile> {
   File? _image;
 
   void _submitForm() async {
-    var status = await Permission.storage.request();
+    final permission = await Permission.storage.request();
     _formKey.currentState!.save();
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
@@ -55,7 +56,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
     final url = Uri.parse("${_api.getApiHost()}/user");
 
-    await _upload(_image);
+    final uploadedImageName = await _upload(_image);
 
     final response = await http.post(url,
         headers: {'Content-Type': 'application/json'},
@@ -65,7 +66,7 @@ class _CreateProfileState extends State<CreateProfile> {
           'location': _location,
           'name': _name,
           'phone_number': _phone,
-          'profile_picture_path': basename(_image!.path),
+          'profile_picture_path': uploadedImageName
         }));
 
     if (response.statusCode == 200) {
