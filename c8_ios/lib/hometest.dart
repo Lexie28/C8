@@ -274,7 +274,7 @@ class _HomePageState extends State<HomePage3> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ListingDetailPage(
-                                        listingId: listings[i]['id'].toString(),
+                                        listingId: listings[i]['id'],
                                       ),
                                     ),
                                   );
