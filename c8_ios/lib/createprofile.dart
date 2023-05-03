@@ -121,8 +121,8 @@ class _CreateProfileState extends State<CreateProfile> {
                 TextFormField(
                   decoration: InputDecoration(labelText: "Name"),
                   validator: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return "Please enter your name";
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a name';
                     }
                     return null;
                   },
@@ -133,8 +133,8 @@ class _CreateProfileState extends State<CreateProfile> {
                 TextFormField(
                   decoration: InputDecoration(labelText: "Location"),
                   validator: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return "Please enter your location";
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a location';
                     }
                     return null;
                   },
@@ -146,8 +146,8 @@ class _CreateProfileState extends State<CreateProfile> {
                   decoration: InputDecoration(labelText: "Phone Number"),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return "Please enter your phone number";
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a phone number';
                     }
                     return null;
                   },
