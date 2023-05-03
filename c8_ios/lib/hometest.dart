@@ -272,7 +272,7 @@ class _HomePageState extends State<HomePage3> {
                                 },
                                 child: Item(
                                   string: listings[i]['name'],
-                                  image: 'images/shoes.png',
+                                  image: listings[i]['image_path'],
                                 ),
                               ),
                             ),
@@ -360,18 +360,18 @@ class Item extends StatelessWidget {
             child: Container(
               height: MediaQuery.of(context).size.width * 0.4,
               width: MediaQuery.of(context).size.width * 0.4,
+              /*
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(image),
+                  image: AssetImage('https://circle8.s3.eu-north-1.amazonaws.com/$image'),
                   fit: BoxFit.cover,
                 ),
-                /*
-              height: MediaQuery.of(context).size.width * 0.4,
-              width: MediaQuery.of(context).size.width * 0.4,
-              child: Image.asset(
-                'images/shoes.png',
+                */
+                
+              child: Image.network(
+                'https://circle8.s3.eu-north-1.amazonaws.com/$image',
                 fit: BoxFit.cover,
-              */
+              
               ),
             ),
           ),

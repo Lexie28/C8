@@ -92,7 +92,7 @@ class _OtherProfileState extends State<OtherProfile> {
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['name']),
+                              child: Item(string: listings[i]['name'], picturePath: listings[i]['image_path'],),
                             ),
                           ),
                       ]);
