@@ -8,7 +8,6 @@ import 'main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart';
 
 SimpleS3 _simpleS3 = SimpleS3();
@@ -42,41 +41,48 @@ class _CreateProfileState extends State<CreateProfile> {
   final _formKey = GlobalKey<FormState>();
   Api _api = Api();
 
-  String _name = "";
-  String _location = "";
-  String _phone = "";
+  String? _name;
+  String? _location;
+  String? _phone;
   File? _image;
+  bool imagePicked = false;
 
   void _submitForm() async {
-    //final permission = await Permission.storage.request();
     _formKey.currentState!.save();
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
     final email = prefs.getString('email');
 
     final url = Uri.parse("${_api.getApiHost()}/user");
+    final String? uploadedImageName;
 
-    final uploadedImageName = await _upload(_image);
-
-    final response = await http.post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': email,
-          'id': userId,
-          'location': _location,
-          'name': _name,
-          'phone_number': _phone,
-          'profile_picture_path': uploadedImageName
-        }));
-
-    if (response.statusCode == 200) {
-      // registration successful, navigate to main page
-      Navigator.pushReplacement(
-        _formKey.currentContext!,
-        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
-      );
+    if (imagePicked) {
+      uploadedImageName = await _upload(_image);
     } else {
-      print("registration failed!${response.statusCode}");
+      uploadedImageName = 'defaultProfilePicture.png';
+    }
+
+    if (_name!.isNotEmpty && _location!.isNotEmpty && _phone!.isNotEmpty) {
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({
+            'email': email,
+            'id': userId,
+            'location': _location,
+            'name': _name,
+            'phone_number': _phone,
+            'profile_picture_path': uploadedImageName
+          }));
+
+      if (response.statusCode == 200) {
+        // registration successful, navigate to main page
+        Navigator.pushReplacement(
+          _formKey.currentContext!,
+          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+        );
+      } else {
+        print("registration failed!${response.statusCode}");
+      }
     }
   }
 
@@ -101,6 +107,8 @@ class _CreateProfileState extends State<CreateProfile> {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
     final image = File('${directory.path}/$userId$ext');
+
+    imagePicked = true;
 
     return File(imagePath).copy(image.path);
   }
