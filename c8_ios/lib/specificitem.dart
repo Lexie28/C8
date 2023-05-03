@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'otherProfile.dart';
 import 'createbid.dart';
+import 'profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -18,6 +20,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   late Future<Listing> futureListing;
   late String userId = '';
   String imagePath = 'loading.png';
+  String profilePicturePath = 'loading.png';
   Api _api = Api();
 
   @override
@@ -36,9 +39,26 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
       setState(() {
         userId = listing.user['id'];
         imagePath = listing.listingPic.toString();
+        fetchPP(userId);
       });
 
       return listing;
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  Future<void> fetchPP(String userId) async {
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
+
+    if (response.statusCode == 200) {
+      User user = User.fromJson(jsonDecode(response.body));
+      print(user.profilePicturePath);
+
+      setState(() {
+        profilePicturePath = user.profilePicturePath;
+      });
     } else {
       throw Exception('Failed to load album');
     }
@@ -65,7 +85,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
               Align(
                 alignment: FractionalOffset.topLeft,
                 child: ProductName(
-                  string: ListingName(
+                    string: ListingName(
                   futureListing: futureListing,
                 )),
               ),
@@ -102,6 +122,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                         futureListing: futureListing,
                       ),
                       location: Location(futureListing: futureListing),
+                      profilePicturePath: profilePicturePath,
                     )),
               ),
             ],
@@ -318,17 +339,18 @@ class ProductListing extends StatelessWidget {
 }
 
 class ListingProfile extends StatelessWidget {
-  const ListingProfile({
-    required this.name,
-    required this.id,
-    required this.likes,
-    required this.location,
-  });
+  const ListingProfile(
+      {required this.name,
+      required this.id,
+      required this.likes,
+      required this.location,
+      required this.profilePicturePath});
 
   final UserName name;
   final String id;
   final Likes likes;
   final Location location;
+  final String profilePicturePath;
 
   @override
   Widget build(BuildContext context) {
@@ -372,8 +394,8 @@ class ListingProfile extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Image.asset(
-                    'images/man.jpg',
+                  child: Image.network(
+                    'https://circle8.s3.eu-north-1.amazonaws.com/$profilePicturePath',
                     fit: BoxFit.cover,
                   ),
                 ),
