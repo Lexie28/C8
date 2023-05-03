@@ -1,33 +1,22 @@
 import 'package:c8_ios/categories.dart';
-//import 'package:c8_ios/otherProduct.dart';
-//import 'package:c8_ios/popularItems.dart';
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
-//import 'secondmain.dart';
-//import '../toolbar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'listingscategory.dart';
 import 'specificitem.dart';
 import 'api.dart';
 import 'popularItems.dart';
-import 'otherProduct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:c8_ios/categories.dart';
-//import 'package:c8_ios/otherProduct.dart';
-//import 'package:c8_ios/popularItems.dart';
 import 'package:flutter/material.dart';
-//import 'package:provider/provider.dart';
-//import 'secondmain.dart';
-//import '../toolbar.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'listingscategory.dart';
 import 'specificitem.dart';
 import 'api.dart';
 import 'popularItems.dart';
-import 'otherProduct.dart';
 
 class HomePage3 extends StatefulWidget {
   const HomePage3({Key? key}) : super(key: key);
@@ -47,8 +36,10 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     final response = await http
-        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
+        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5&exclude_user=$userId'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -274,7 +265,7 @@ class _HomePageState extends State<HomePage3> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ListingDetailPage(
-                                        listingId: listings[i]['id'].toString(),
+                                        listingId: listings[i]['id'],
                                       ),
                                     ),
                                   );
@@ -299,20 +290,24 @@ class _HomePageState extends State<HomePage3> {
                                     ),
                                   );
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    color: Color.fromARGB(255, 210, 208, 208),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Text(
-                                        'See more items',
-                                        style: TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 83, 83, 83),
-                                          fontWeight: FontWeight.bold,
+                                child: Material(
+                                  elevation: 10,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      color: Color.fromARGB(255, 228, 228, 228),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Text(
+                                          'See more items',
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 83, 83, 83),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),

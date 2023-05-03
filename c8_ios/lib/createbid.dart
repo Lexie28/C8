@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateBid extends StatefulWidget {
   final String listingId;
@@ -10,14 +11,14 @@ class CreateBid extends StatefulWidget {
   CreateBid({required this.listingId, required this.userId});
 
   @override
-  _CreateBidState createState() => _CreateBidState();
+  State<CreateBid> createState() => _CreateBidState();
 }
 
 class _CreateBidState extends State<CreateBid> {
   List<dynamic> myListingData = [];
   List<dynamic> theirListingData = [];
-  List<int> selectedMyListingIds = [];
-  List<int> selectedTheirListingIds = [];
+  List<String> selectedMyListingIds = [];
+  List<String> selectedTheirListingIds = [];
   Api _api = Api();
 
   @override
@@ -27,8 +28,13 @@ class _CreateBidState extends State<CreateBid> {
   }
 
   Future<void> fetchListingData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    print(userId);
+    print(widget.userId);
+
     final myListingResponse =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/user/1'));
+        await http.get(Uri.parse('${_api.getApiHost()}/listing/user/$userId'));
     final theirListingResponse = await http
         .get(Uri.parse('${_api.getApiHost()}/listing/user/${widget.userId}'));
     print(myListingResponse.body);
@@ -48,33 +54,35 @@ class _CreateBidState extends State<CreateBid> {
 
   void toggleMyListingSelection(int id) {
     setState(() {
-      if (selectedMyListingIds.contains(id)) {
-        selectedMyListingIds.remove(id);
+      if (selectedMyListingIds.contains(id.toString())) {
+        selectedMyListingIds.remove(id.toString());
       } else {
-        selectedMyListingIds.add(id);
+        selectedMyListingIds.add(id.toString());
       }
     });
   }
 
   void toggleTheirListingSelection(int id) {
     setState(() {
-      if (selectedTheirListingIds.contains(id)) {
-        selectedTheirListingIds.remove(id);
+      if (selectedTheirListingIds.contains(id.toString())) {
+        selectedTheirListingIds.remove(id.toString());
       } else {
-        selectedTheirListingIds.add(id);
+        selectedTheirListingIds.add(id.toString());
       }
     });
   }
 
   Future<void> createBid() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
     final data = {
-      "bid_maker_id": 1,
-      "bid_receiver_id": widget.userId,
-      "bid_active": "YES",
-      "listing_ids": [...selectedMyListingIds, ...selectedTheirListingIds],
+      "user_making_offer": userId,
+      "user_receiving_offer": widget.userId,
+      "id_of_listings": [...selectedMyListingIds, ...selectedTheirListingIds],
     };
     final response = await http.post(
-      Uri.parse('${_api.getApiHost()}/offer/create'),
+      Uri.parse('${_api.getApiHost()}/offer'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
@@ -105,25 +113,25 @@ class _CreateBidState extends State<CreateBid> {
                     itemCount: theirListingData.length,
                     itemBuilder: (BuildContext context, int index) {
                       return CheckboxListTile(
-                        title: Text(theirListingData[index]['listing_name']),
+                        title: Text(theirListingData[index]['name']),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                                theirListingData[index]['listing_description']),
-                            Text(theirListingData[index]['listing_category']),
+                            Text(theirListingData[index]['description']),
+                            Text(theirListingData[index]['category']),
                           ],
                         ),
                         value: selectedTheirListingIds
-                            .contains(theirListingData[index]['listing_id']),
+                            .contains(theirListingData[index]['id']),
                         onChanged: (bool? value) {
                           setState(() {
+                            print(theirListingData[index]['id']);
                             if (value!) {
                               selectedTheirListingIds
-                                  .add(theirListingData[index]['listing_id']);
+                                  .add(theirListingData[index]['id']);
                             } else {
                               selectedTheirListingIds
-                                  .remove(theirListingData[index]['listing_id']);
+                                  .remove(theirListingData[index]['id']);
                             }
                           });
                         },
@@ -140,24 +148,24 @@ class _CreateBidState extends State<CreateBid> {
                     itemCount: myListingData.length,
                     itemBuilder: (BuildContext context, int index) {
                       return CheckboxListTile(
-                        title: Text(myListingData[index]['listing_name']),
+                        title: Text(myListingData[index]['name']),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(myListingData[index]['listing_description']),
-                            Text(myListingData[index]['listing_category']),
+                            Text(myListingData[index]['description']),
+                            Text(myListingData[index]['category']),
                           ],
                         ),
                         value: selectedMyListingIds
-                            .contains(myListingData[index]['listing_id']),
+                            .contains(myListingData[index]['id']),
                         onChanged: (bool? value) {
                           setState(() {
                             if (value!) {
                               selectedMyListingIds
-                                  .add(myListingData[index]['listing_id']);
+                                  .add(myListingData[index]['id']);
                             } else {
                               selectedMyListingIds
-                                  .remove(myListingData[index]['listing_id']);
+                                  .remove(myListingData[index]['id']);
                             }
                           });
                         },
@@ -167,25 +175,7 @@ class _CreateBidState extends State<CreateBid> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    var data = {
-                      "bid_maker_id": 1,
-                      "bid_receiver_id": widget.userId,
-                      "bid_active": "YES",
-                      "listing_ids": [
-                        ...selectedMyListingIds,
-                        ...selectedTheirListingIds
-                      ]
-                    };
-                    var response = await http.post(
-                      Uri.parse('${_api.getApiHost()}/offer/create'),
-                      headers: <String, String>{
-                        'Content-Type': 'application/json'
-                      },
-                      body: jsonEncode(data),
-                    );
-                    print(response.body);
-                    // TODO: Handle response
-                    
+                    createBid();
                   },
                   child: Text('Create Bid'),
                 ),

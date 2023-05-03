@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
-  _SignInScreenState createState() => _SignInScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
@@ -72,7 +72,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
 class GoogleSignInButton extends StatefulWidget {
   @override
-  _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
+  State<GoogleSignInButton> createState() => _GoogleSignInButtonState();
 }
 
 class _GoogleSignInButtonState extends State<GoogleSignInButton> {
@@ -111,6 +111,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   print(user);
                   final prefs = await SharedPreferences.getInstance();
                   await prefs.setString("uid", user.uid);
+                  
                 }
               },
               child: Padding(

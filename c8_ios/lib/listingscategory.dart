@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'specificitem.dart';
 import 'api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListingsPage extends StatefulWidget {
   final String category;
@@ -24,8 +25,11 @@ class _ListingsPageState extends State<ListingsPage> {
   }
 
   Future<void> fetchListings() async {
-    final response = await http.get(
-        Uri.parse('${_api.getApiHost()}/listing?category=${widget.category}'));
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
+    final response = await http.get(Uri.parse(
+        '${_api.getApiHost()}/listing?category=${widget.category}&exclude_user=$userId'));
     if (response.statusCode == 200) {
       setState(() {
         listings = jsonDecode(response.body);
