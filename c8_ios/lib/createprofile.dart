@@ -48,7 +48,7 @@ class _CreateProfileState extends State<CreateProfile> {
   File? _image;
 
   void _submitForm() async {
-    final permission = await Permission.storage.request();
+    //final permission = await Permission.storage.request();
     _formKey.currentState!.save();
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
