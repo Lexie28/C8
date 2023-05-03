@@ -13,7 +13,7 @@ exports.seed = async function(knex) {
 	  name: "Elsa Larsson",
 	  likes: 3205,
 	  dislikes: 42,
-	  profile_picture_path: null,
+	  profile_picture_path: "defaultProfilePicture.png",
 	  phone_number: "0701234567",
 	  email: "elsa_larsson@protonmail.com"
       },
@@ -23,7 +23,7 @@ exports.seed = async function(knex) {
 	  name: "Lars Svensson",
 	  likes: 2,
 	  dislikes: 2,
-	  profile_picture_path: null,
+	  profile_picture_path: "defaultProfilePicture.png",
 	  phone_number: "0709876543",
 	  email: "lars_svensson@hotmail.com"
       }
