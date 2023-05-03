@@ -16,10 +16,6 @@ import 'package:path/path.dart';
 import 'package:simple_s3/simple_s3.dart';
 import 'package:uuid/uuid.dart';
 
-
-
-
-
 SimpleS3 _simpleS3 = SimpleS3();
 Future<String?> _upload(File? fileToUpload) async {
   String? result;
@@ -41,7 +37,6 @@ Future<String?> _upload(File? fileToUpload) async {
   }
   return result;
 }
-
 
 class CreateListingPage extends StatefulWidget {
   @override
@@ -86,10 +81,10 @@ class _CreateListingPageState extends State<CreateListingPage> {
     }
   }
 
-  
   Future<File> saveFilePermanently(String imagePath) async {
     var uuid = Uuid();
-    var uuidCrypto = uuid.v4(options: {'rng': UuidUtil.cryptoRNG});  //Brag about this
+    var uuidCrypto =
+        uuid.v4(options: {'rng': UuidUtil.cryptoRNG}); //Brag about this
 
     final directory = await getApplicationDocumentsDirectory();
     final ext = extension(imagePath);
@@ -97,79 +92,38 @@ class _CreateListingPageState extends State<CreateListingPage> {
 
     return File(imagePath).copy(image.path);
   }
+
   Future<void> _submitForm() async {
-     _formKey.currentState!.save();
-      final uploadedImageName = await _upload(_image);
+    _formKey.currentState!.save();
+    final uploadedImageName = await _upload(_image);
 
-      final prefs = await SharedPreferences.getInstance();
-      final userId = prefs.getString('uid');
-      //{ name, description, creation_date, image_path, category, owner_id
-      final url = Uri.parse('${_api.getApiHost()}/listing');
-      final headers = {'Content-Type': 'application/json'};
-      final body = {
-        'name': _listingName,
-        'description': _listingDescription,
-        'creation_date': null, //TODO! CREATION DATE
-        'image_path': uploadedImageName, //TODO
-        'category': _listingCategory,
-        'owner_id': userId
-      };
-      final jsonBody = json.encode(body);
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    //{ name, description, creation_date, image_path, category, owner_id
+    final url = Uri.parse('${_api.getApiHost()}/listing');
+    final headers = {'Content-Type': 'application/json'};
+    final body = {
+      'name': _listingName,
+      'description': _listingDescription,
+      'creation_date': null, //TODO! CREATION DATE
+      'image_path': uploadedImageName, //TODO
+      'category': _listingCategory,
+      'owner_id': userId
+    };
+    final jsonBody = json.encode(body);
 
-      final response = await http.post(url, headers: headers, body: jsonBody);
-      if (response.statusCode == 200) {
-        // Success
-        print('Good! New listing created!');
-        Navigator.pushReplacement(
+    final response = await http.post(url, headers: headers, body: jsonBody);
+    if (response.statusCode == 200) {
+      // Success
+      print('Good! New listing created!');
+      Navigator.pushReplacement(
         _formKey.currentContext!,
         MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
       );
-      } else {
-        print('NOOOO');
-      }
-    
-  }
-
-/*
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('http://130.243.238.100:5000/listing/create');
-      final headers = {'Content-Type': 'application/json'};
-      final body = {
-        'id': _userId,
-        'name': _listingName,
-        'description': _listingDescription,
-        'category': _listingCategory,
-      };
-      final jsonBody = json.encode(body);
-      final response = await http.post(url, headers: headers, body: jsonBody);
-      if (response.statusCode == 200) {
-        // Success
-        print('Good! New listing created!');
-      } else {
-        print('NOOOO');
-      }
+    } else {
+      print('NOOOO');
     }
   }
-*/
-/*
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      final url = Uri.parse('http://130.243.238.100:5000/listing/create');
-      final response = await http.post(url, body: {
-        'id': _userId,
-        'name': _listingName,
-        'description': _listingDescription,
-        'category': _listingCategory,
-      });
-      if (response.statusCode == 200) {
-        // Success
-        print('Good! New listing created!');
-      } else {
-        // Error, handle it
-      }
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -225,18 +179,37 @@ class _CreateListingPageState extends State<CreateListingPage> {
                     });
                   },
                 ),
-                CustomButton(
-                    title: 'Pick from Gallery',
-                    icon: Icons.image_outlined,
-                    onClick: () => getImage(ImageSource.gallery)),
-                CustomButton(
-                    title: 'Pick from Camera',
-                    icon: Icons.camera,
-                    onClick: () => getImage(ImageSource.camera)),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.1,
+                    left: MediaQuery.of(context).size.width * 0.15,
+                    right: MediaQuery.of(context).size.width * 0.15,
+                  ),
+                  child: CustomButton(
+                      title: 'Pick from Gallery',
+                      icon: Icons.image_outlined,
+                      onClick: () => getImage(ImageSource.gallery)),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.15,
+                    right: MediaQuery.of(context).size.width * 0.15,
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  child: CustomButton(
+                      title: 'Pick from Camera',
+                      icon: Icons.camera,
+                      onClick: () => getImage(ImageSource.camera)),
+                ),
                 SizedBox(height: 16.0),
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  child: Text('Create Listing'),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.3,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    child: Text('Create Listing'),
+                  ),
                 ),
               ],
             ),
