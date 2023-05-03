@@ -129,7 +129,7 @@ function user_exists(req, res) {
       if (result) {
         res.status(200).json({ message: 'User found' });
       } else {
-        res.status(404).json({ message: 'User not found' });
+	  res.status(404).json({ message: 'User not found' });
       }
     })
     .catch(err => {
@@ -201,9 +201,61 @@ router.patch('/user/:id/dislike', (req, res) => user_dislike(req, res));
 //Deleting user
 router.delete('/user/:id', (req, res) => user_delete(req, res));
 
+async function get_listings_for_user_and_offer(user_id, offer_id) {
+    return db
+	.from("listing")
+	.innerJoin("offer_listing", "listing.id", "offer_listing.listing_id")
+	.where({owner_id: user_id, offer_id: offer_id});
+}
+
 router.get("/user/:id/offers", async (req, res) => {
-    //TODO: flytta implementationen från offer.js hit    
-});
+    //1. Hitta alla offers där användaren med id är involverad i.
+    //   En lista för offers där användaren erbjuder, en annan för där
+    //   hen blir erbjuden
+    //2. Hitta alla items som är involverade i buden. I varje bud, lägg in
+    //   varje item i en lista som antingen är budgivar eller budtagar-items
+    const user_id  = req.params.id;
+
+    user_query_result = await db("user").where({id: user_id});
+    if (user_query_result.length == 0) {
+	res.status(404).json({ message: 'User not found' });
+	return;
+    }
+    
+    const offers = new Object();
+    
+    offers.making_offer =
+	await db
+	.select("*")
+	.from("offer")
+	.where("user_making_offer", user_id);
+
+    offers.receiving_offer = 
+	await db("offer")
+	.select("*")
+	.where({user_receiving_offer: user_id});
+
+    for (const offer of offers.making_offer) {
+	offer.offered_items = [];
+	offer.offered_items.push(await get_listings_for_user_and_offer(user_id, offer.id));
+
+	offer.wanted_items = [];
+	offer.wanted_items.push(await get_listings_for_user_and_offer(offer.user_receiving_offer, offer.id));
+    }
+
+    for (const offer of offers.receiving_offer) {
+	offer.offered_items = [];
+	offer.offered_items.push(await get_listings_for_user_and_offer(offer.user_making_offer, offer.id));
+
+	offer.wanted_items = [];
+	offer.wanted_items.push(await get_listings_for_user_and_offer(user_id, offer.id));
+	console.log(offer.offered_items);
+	console.log(offer.wanted_items);				
+    }
+
+    res.status(200).json(offers);
+})
+
 
 
 

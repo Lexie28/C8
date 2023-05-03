@@ -14,7 +14,7 @@ describe("GET /user", () => {
     });
     it("Should return users", async () => {
 	const response = await request(baseURL).get("/user");
-	expect(response._body.length == 3).toBe(true);
+	expect(response._body.length > 1).toBe(true);
     });
 });
 

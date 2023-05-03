@@ -5,9 +5,10 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
-    "prestart": "npm run swagger-autogen",
+    "prestart": "npm run swagger-autogen && ./init_db.sh",
     "start": "node server.js",
-    "swagger-autogen": "node swagger.js"
+    "swagger-autogen": "node swagger.js",
+    "ci": "start-server-and-test start http://localhost:3000 test"
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "knex": "^2.4.2",
     "mocha": "^10.2.0",
     "mysql2": "^3.2.0",
+    "start-server-and-test": "^2.0.0",
     "supertest": "^6.3.3",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.6.2",

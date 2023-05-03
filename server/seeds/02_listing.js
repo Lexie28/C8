@@ -15,7 +15,7 @@ exports.seed = async function(knex) {
 	  creation_date: "2023-03-23 10:12:21",
 	  image_path: null,
 	  category: "Food",
-	  owner_id: "1"
+	  owner_id: "1"	  
       },
 
       {

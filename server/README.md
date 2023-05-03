@@ -21,3 +21,10 @@ i ```./init_db.sh``` där vanliga problem  bemöts.
 3. Gå in på routen "doc" (exempel på URL: http://localhost:3000/doc/). Där finns dokumentationen.
 
 
+## Köra tester
+
+```npm run ci``` så startas servern, körs testerna och servern stängs.
+Observera att ./init_db.sh behöver fungera för att du ska kunna köra testerna.
+Alternativt kan du starta servern manuellt och köra ```npm test```.
+Just nu är testerna inte helt oberoende av seed-datan som skapas genom knex.
+Du bör köra testerna på en lokal server genom ./init_db.sh
