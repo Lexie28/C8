@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage3> {
                           )),
                       GestureDetector(
                           onTap: () {
-                            _navigateToListingsPage('Shoes');
+                            _navigateToListingsPage('Accessories');
                           },
                           child: Material(
                             elevation: 10,
@@ -151,7 +151,7 @@ class _HomePageState extends State<HomePage3> {
                                             MediaQuery.of(context).size.width *
                                                 0.2,
                                         'images/shoeicon.png'),
-                                    Text('Shoes')
+                                    Text('Accesories')
                                   ],
                                 ),
                               ),
