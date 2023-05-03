@@ -11,6 +11,17 @@ async function offer_create(req, res) {
     const { user_making_offer, user_receiving_offer, id_of_listings} = req.body;
 
     const offerId = newId();
+
+    const listings = await db("listing")
+	  .whereIn("id", id_of_listings);
+
+    for(listing of listings) {
+	if(listing.available == 0) {
+	    res.status(400).json({message:"One of the listings in the offer are no longer available!"});
+	    return;
+	}
+    }
+    
     db.transaction(function(trx) {
 
 	return trx.insert({
@@ -20,11 +31,10 @@ async function offer_create(req, res) {
 	    creation_date: currentDateTime()
         })
             .into('offer')
-            .returning('id')
             .then(async function(result) {
-		console.log(result);
 		var offerListings = [];
 		for (var i = 0; i < id_of_listings.length; i++) {
+
 		    await db("listing")
 			.where("id", id_of_listings[i])
 			.increment("number_of_bids", 1);
@@ -39,10 +49,12 @@ async function offer_create(req, res) {
     })
 	.then(function() {
 	    res.status(200).json({ message: 'Trade offer created successfully' , id: offerId});
+	    return;
 	})
 	.catch(function(err) {
 	    console.log(err);
 	    res.status(500).json({ message: 'An error occurred while creating the trade offer' });
+	    return;
 	});
 };
 
@@ -204,14 +216,16 @@ router.patch("/offer/:id/accept", async (req, res) => {
 	.update({accepted: 1})
 	.then(async (result) => {
 	    //SQL query: update listing set available=0 where id in (select listing_id from offer_listing where offer_id = 1);
-	    //TODO: Fixa logiken för om någon listing ej är available
+	    if(!listings_in_offer_is_available(offer_id)) {
+		res.status(400).json({message: "One of the listings in proposed offer isn't available!"});
+		return;
+	    }
 	    await db('listing')
 		.whereIn('id', function() {
 		    this.select('listing_id')
 			.from('offer_listing')
 			.where('offer_id', offer_id);
-		})
-		.update({available:0});
+		}).update({available:0});
 
 	    res.status(200).json({message: "Offer accepted!"});
 	    return;
@@ -232,7 +246,7 @@ router.patch("/offer/:id/reject", async (req, res) => {
     
     const offer = (await db("offer").where({id: offer_id}))[0];
     
-    if (offer.rejected == 1) {
+    if (offer.rejected != 0) {
 	res.status(400).json({message: "Offer is already rejected"});
 	return;
     }
@@ -262,10 +276,23 @@ router.delete("/offer/:id",async (req, res) => {
 	res.status(404).json({message: "Offer doesn't exist!"});
 	return;
     }
+
+    
+    await db('listing')
+	  .whereIn('id', function() {
+	      this.select('listing_id')
+		  .from('offer_listing')
+		  .where('offer_id', offer_id);
+	  }).decrement("number_of_bids", 1)
+	.update({available:1});
+    
     db("offer")
 	.where({id:offer_id})
 	.del()
-	.then((result) => {
+	.then( async(result) => {	    
+
+
+
 	    res.status(200).json({message: "Offer successfully deleted!"});
 	})
 	.catch((err) => {
@@ -273,4 +300,21 @@ router.delete("/offer/:id",async (req, res) => {
 	})
 	      	      	      
 })
+
+
+async function listings_in_offer_is_available(offer_id) {
+    const listings_in_offer = await db('listing')
+	  .whereIn('id', function() {
+	      this.select('listing_id')
+		  .from('offer_listing')
+		  .where('offer_id', offer_id);
+	  });
+    for(listing of listings_in_offer) {
+	if(listing.available == 0) {
+	    return false;
+	}
+    }
+
+    return true;
+}
 module.exports = router;

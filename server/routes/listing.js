@@ -71,7 +71,7 @@ function get_listing(req, res) {
       if (listing.length === 0) {
         res.status(404).send("Listing not found");
       } else {
-        const id = listing[0].id;
+        const id = listing[0].owner_id;
         db
           .select("*")
           .from("user")

@@ -45,20 +45,20 @@ describe("GET /offer/:id", () => {
 describe("POST /offer", () => {
     var response;
 
-    const listing_1_id = "1";
-    const listing_2_id = "2";
+    const offered_listing_id = "1";
+    const wanted_listing_id = "3";
     
     const offer = {
 	"user_making_offer": "1",
 	"user_receiving_offer" : "2",
-	"id_of_listings": [listing_1_id, listing_2_id]
+	"id_of_listings": [offered_listing_id, wanted_listing_id]
     }
     
-    var listing_1_amount_of_bids_before_request;
-    var listing_2_amount_of_bids_before_request;
+    var offered_listing_number_of_bids_before_request;
+    var wanted_listing_number_of_bids_before_request;
     beforeAll(async () => {
-	listing_1_amount_of_bids_before_request = (await request(baseURL).get("/listing/" + listing_1_id))._body.amount_of_bids;
-	listing_2_amount_of_bids_before_request = (await request(baseURL).get("/listing/" + listing_2_id))._body.amount_of_bids;
+	offered_listing_number_of_bids_before_request = (await request(baseURL).get("/listing/" + offered_listing_id))._body.number_of_bids;	
+	wanted_listing_number_of_bids_before_request = (await request(baseURL).get("/listing/" + wanted_listing_id))._body.number_of_bids;
     })
     
     it("Should return status code 200 when sent", async () => {
@@ -74,14 +74,32 @@ describe("POST /offer", () => {
     });
     
     it("Should increase the number of bids which a listing is involved with by 1", async () => {
-	const listing_1 = (await request(baseURL).get("/listing/" + listing_1_id))._body;
-	const listing_1_amount_of_bids = listing_1.amount_of_bids;
-	const listing_2 = (await request(baseURL).get("/listing/" + listing_2_id))._body;
-	const listing_2_amount_of_bids = listing_2.amount_of_bids;
-	expect(listing_1_amount_of_bids).toBe(listing_1_amount_of_bids_before_request);
-	expect(listing_2_amount_of_bids).toBe(listing_2_amount_of_bids_before_request);	
+	const offered_listing = (await request(baseURL).get("/listing/" + offered_listing_id))._body;
+	const offered_listing_number_of_bids = offered_listing.number_of_bids;
+	const wanted_listing = (await request(baseURL).get("/listing/" + wanted_listing_id))._body;
+	const wanted_listing_number_of_bids = wanted_listing.number_of_bids;
+	expect(offered_listing_number_of_bids).toBe(offered_listing_number_of_bids_before_request + 1);
+	expect(wanted_listing_number_of_bids).toBe(wanted_listing_number_of_bids_before_request + 1);	
     })
 
+    it("Should return status code 400 if one of the listings are unavailable", async () => {
+	request(baseURL).delete("/offer/" + response._body.id);
+	
+	const offered_listing_in_other_bid= "2";
+	const wanted_listing_in_other_bid = "3";
+	const offer = {
+	    "user_making_offer": "1",
+	    "user_receiving_offer" : "2",
+	    "id_of_listings": [offered_listing_in_other_bid, wanted_listing_in_other_bid]
+	}
+	const other_bid_post_request = await request(baseURL).post("/offer").send(offer);
+	await request(baseURL).patch("/offer/" + other_bid_post_request._body.id + "/accept");
+	response = await request(baseURL).post("/offer").send(offer);
+	expect(response.statusCode).toBe(400);
+	
+	await request(baseURL).delete("/offer/" + other_bid_post_request._body.id);
+	
+    });
     afterAll(async () => {
 	request(baseURL).delete("/offer/" + response._body.id);
     })
@@ -89,20 +107,20 @@ describe("POST /offer", () => {
 });
 
 describe("PATCH /offer/:id/accept", () => {
-    const listing_1_id = "1";
-    const listing_2_id = "2";
+    const offered_listing_id = "1";
+    const wanted_listing_id = "3";
     
     const offer = {
 	"user_making_offer": "1",
 	"user_receiving_offer" : "2",
-	"id_of_listings": [listing_1_id, listing_2_id]
+	"id_of_listings": [offered_listing_id, wanted_listing_id]
     }
 
     var post_offer_request;
     var offer_id;
     beforeAll(async () => {
 	post_offer_request = await request(baseURL).post("/offer").send(offer);
-	offer_id = post_offer_request._body.id;
+	offer_id = post_offer_request._body.id;	
     });
 
 
@@ -120,24 +138,47 @@ describe("PATCH /offer/:id/accept", () => {
 	const reject_response = await request(baseURL).patch("/offer/" + offer_id + "/accept");   
 	expect(reject_response.statusCode).toBe(400);
     });
+    it("Should make all listings involved unavailable", async () => {
+	const offered_listing_after_accepted_bid = (await request(baseURL).get("/listing/" + offered_listing_id))._body;
+	expect(offered_listing_after_accepted_bid.available).toBe(0);
 
-    //TODO: gör ett test för att se att alla listings har blivit unavailable
+	const wanted_listing_after_accepted_bid = (await request(baseURL).get("/listing/" + wanted_listing_id))._body;
+	expect(wanted_listing_after_accepted_bid.available).toBe(0);
+    })
+    
+    
+    it("Should not be possible if the listings are no longer available", async () => {
+	const offered_listing_in_other_bid= "2";
+	const wanted_listing_in_other_bid = "3";
+	const offer = {
+	    "user_making_offer": "1",
+	    "user_receiving_offer" : "2",
+	    "id_of_listings": [offered_listing_in_other_bid, wanted_listing_in_other_bid]
+	}
+	const other_bid_post_request = await request(baseURL).post("/offer").send(offer);
+	await request(baseURL).patch("/offer/" + other_bid_post_request._body.id + "/accept");
+	
+	response = await request(baseURL).patch("/offer/" + offer_id + "/accept").send(offer);
+	expect(response.statusCode).toBe(400);
+	
+	await request(baseURL).delete("/offer/" + other_bid_post_request._body.id);
+	
+    })
+
     afterAll(async () => {
 	await request(baseURL).delete("/offer/" + offer_id);
     })
 });
 
 
-//TODO: skriva om copy-pastead del så att den är för reject
-/*
 describe("PATCH /offer/:id/reject", () => {
-    const listing_1_id = "1";
-    const listing_2_id = "2";
+    const offered_listing_id = "1";
+    const wanted_listing_id = "3";
     
     const offer = {
 	"user_making_offer": "1",
 	"user_receiving_offer" : "2",
-	"id_of_listings": [listing_1_id, listing_2_id]
+	"id_of_listings": [offered_listing_id, wanted_listing_id]
     }
 
     var post_offer_request;
@@ -157,16 +198,63 @@ describe("PATCH /offer/:id/reject", () => {
 	const reject_again_response = await request(baseURL).patch("/offer/" + offer_id + "/reject");
 	expect(reject_again_response.statusCode).toBe(400);
 	
-	const reject_response = await request(baseURL).patch("/offer/" + offer_id + "/reject");   
-	expect(reject_response.statusCode).toBe(400);
+	const accept_response = await request(baseURL).patch("/offer/" + offer_id + "/accept");   
+	expect(accept_response.statusCode).toBe(400);
     });
 
     afterAll(async () => {
 	await request(baseURL).delete("/offer/" + offer_id);
     })
 });
-*/
-//TODO: gör tester för delete
-/*describe("DELETE /offer/:id", async () => {
+
+
+describe("DELETE /offer/:id",  () => {
+    const offered_listing_id = "1";
+    const wanted_listing_id = "3";
+
+    var offered_listing_bids_before_post;
+    var wanted_listing_bids_before_post;
+
+    const offer = {
+	"user_making_offer": "1",
+	"user_receiving_offer" : "2",
+	"id_of_listings": [offered_listing_id, wanted_listing_id]
+    }
+
+    var post_offer_request;
+    var offer_id;
+    beforeAll(async () => {
+	offered_listing_bids_before_post =
+	    (await request(baseURL).get("/listing/" + offered_listing_id))._body.number_of_bids;
+	wanted_listing_bids_before_post =
+	    (await request(baseURL).get("/listing/" + wanted_listing_id))._body.number_of_bids;
+	
+	post_offer_request = await request(baseURL).post("/offer").send(offer);
+	offer_id = post_offer_request._body.id;
+	
+
+    });
+
+    it("Should return code 200 when successful", async () => {
+	const delete_offer_request = await request(baseURL).delete("/offer/" + offer_id);
+	expect(delete_offer_request.statusCode).toBe(200);	
+    })
     
-}*/
+    it("Should decrease the amount of bids for each listing", async () => {
+	const offered_listing_get_request = await request(baseURL).get("/listing/" + offered_listing_id);
+	expect(offered_listing_get_request._body.number_of_bids).toBe(offered_listing_bids_before_post);
+	
+	const wanted_listing_get_request = await request(baseURL).get("/listing/" + wanted_listing_id);
+	expect(wanted_listing_get_request._body.number_of_bids).toBe(wanted_listing_bids_before_post)
+    });
+    
+    it("Should remove the offer from the database", async() => {
+	const get_delteted_user_request = await request(baseURL).get("/offer/" + offer_id);
+	expect(get_delteted_user_request.statusCode).toBe(404);
+    });
+    it("Should return code 404 when trying to delete non-existing offer", async () => {
+	const delete_non_existing_offer_request = await request(baseURL).delete("/offer/this_user_id_is_impossible");
+	expect(delete_non_existing_offer_request.statusCode).toBe(404);
+    });
+})
+
