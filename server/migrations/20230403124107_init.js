@@ -20,8 +20,8 @@ exports.up = function(knex) {
 		    .defaultTo(0);
 		table.integer("dislikes")
 		    .defaultTo(0);
-		//table.string("profile_picture_path");
-		table.binary("profile_picture_path");
+		table.string("profile_picture_path");
+		//table.binary("profile_picture_path")
 		table.string("phone_number", 12);
 		table.string("email");
 		table.string("location");
