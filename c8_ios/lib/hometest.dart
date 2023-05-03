@@ -36,8 +36,10 @@ class _HomePageState extends State<HomePage3> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     final response = await http
-        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5'));
+        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5&exclude_user=$userId'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
