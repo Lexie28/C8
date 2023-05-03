@@ -78,7 +78,9 @@ class _PopularItemsState extends State<PopularItems> {
                             );
                           },
                           child: ListTile(
-                            leading: Image.asset('images/shoes.png'),
+                            leading: Image.network(
+                              'https://circle8.s3.eu-north-1.amazonaws.com/${listing['image_path']}',
+                            ),
                             title: Text(listing['name']),
                             subtitle: Text(listing['description']),
                             trailing: Icon(Icons.arrow_forward_ios),
