@@ -175,7 +175,7 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['name']),
+                              child: Item(string: listings[i]['name'], picturePath: listings[i]['image_path'],),
                             ),
                           ),
                       ]);
@@ -274,9 +274,16 @@ class User {
 class Item extends StatelessWidget {
   // TODO se till att strängen int är längre än en rad för då blir rutan ful
 
-  Item({required this.string});
+  Item({
+    required this.string,
+    required this.picturePath,
+    
+    
+    });
 
   final String string;
+  final String picturePath;
+
 
   @override
   Widget build(BuildContext context) {
@@ -294,8 +301,8 @@ class Item extends StatelessWidget {
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
             child: ClipRRect(
               //borderRadius: BorderRadius.circular(50.0),
-              child: Image.asset(
-                'images/shoes.png',
+              child: Image.network(
+                'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
                 height: MediaQuery.of(context).size.width * 0.25,
                 width: MediaQuery.of(context).size.width * 0.25,
               ),
