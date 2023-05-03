@@ -206,6 +206,7 @@ class _FirstPageState extends State<FirstPage> {
                   },
                 ),
               ),
+              /*
               GestureDetector(
                 onTap: () async {
                   setState(() {
@@ -254,6 +255,7 @@ class _FirstPageState extends State<FirstPage> {
                   ),
                 ),
               ),
+              */
               Container(
                 margin: EdgeInsets.fromLTRB(
                   MediaQuery.of(context).size.width * 0,
