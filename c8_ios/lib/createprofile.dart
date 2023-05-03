@@ -168,10 +168,12 @@ class _CreateProfileState extends State<CreateProfile> {
                   onPressed: _submitForm,
                   child: Text("Create Profile"),
                 ),
-                CustomButton(
-                    title: 'Pick from Gallery',
-                    icon: Icons.image_outlined,
-                    onClick: () => getImage(ImageSource.gallery)),
+                Container(
+                  child: CustomButton(
+                      title: 'Pick from Gallery',
+                      icon: Icons.image_outlined,
+                      onClick: () => getImage(ImageSource.gallery)),
+                ),
                 CustomButton(
                     title: 'Pick from Camera',
                     icon: Icons.camera,
@@ -183,24 +185,21 @@ class _CreateProfileState extends State<CreateProfile> {
       ),
     );
   }
-
 }
-  Widget CustomButton(
-      {required String title,
-      required IconData icon,
-      required VoidCallback onClick}) {
-    return Container(
-      width: 280,
-      child: ElevatedButton(
-          onPressed: onClick,
-          child: Row(
-            children: [
-              Icon(icon),
-              SizedBox(
-                width: 20,
-              ),
-              Text(title),
-            ],
-          )),
-    );
-  }
+
+Widget CustomButton(
+    {required String title,
+    required IconData icon,
+    required VoidCallback onClick}) {
+  return ElevatedButton(
+      onPressed: onClick,
+      child: Row(
+        children: [
+          Icon(icon),
+          SizedBox(
+            width: 20,
+          ),
+          Text(title),
+        ],
+      ));
+}
