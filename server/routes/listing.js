@@ -29,7 +29,7 @@ async function get_listings(req, res) {
 
   // Check if exclude_user parameter is present
   if (req.query.exclude_user != undefined) {
-    all_listings = all_listings.whereNot({ user_id: req.query.exclude_user });
+    all_listings = all_listings.whereNot({ owner_id: req.query.exclude_user });
   }
 
 
