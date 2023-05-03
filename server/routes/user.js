@@ -156,6 +156,27 @@ function get_user(req, res) {
 }
 
 
+function edit_user_all(req, res) {
+  const { id } = req.params;
+  const { name, profile_picture_path, phone_number, email, location } = req.body;
+
+  db('user')
+    .where({ id })
+    .update({ name, profile_picture_path, phone_number, email, location })
+    .then(result => {
+      if (result === 1) {
+        res.status(200).json({ message: 'user updated successfully' });
+      } else {
+        res.status(404).json({ message: 'user not found' });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'An error occurred while updating the user' });
+    });
+};
+
+
 //Get all users in the database
 router.get('/user', (req, res) => get_users(req, res));
 
@@ -167,6 +188,9 @@ router.get('/user/:id', (req, res) => get_user(req, res))
 
 //Registering a new user
 router.post('/user', (req, res) => user_registration(req, res));
+
+//Edit all parts of user
+router.patch('/user/:id', (req, res) => edit_user_all(req, res));
 
 //Adding a like (/thumbs up) to a user
 router.patch('/user/:id/like', (req, res) => user_like(req, res));
