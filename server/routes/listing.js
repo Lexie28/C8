@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {currentDateTime, newId, amountOfQueryStrings} = require("../utils.js");
+const { currentDateTime, newId, amountOfQueryStrings } = require("../utils.js");
 
 
 
@@ -17,39 +17,44 @@ Retrieves all records from the "listing" table using Db.js and sends the result 
 */
 async function get_listings(req, res) {
 
-    /*
-      #swagger.description = 'Gets all listings. Use query strings to filter and sort. \\nPossible values for sort: popular.'
-    */
-    var all_listings = db.select("*").from("listing");
-    
-    if(amountOfQueryStrings(req) === 0) {
-	res.send(await all_listings);
-	return;
-    }
- 
+  /*
+    #swagger.description = 'Gets all listings. Use query strings to filter and sort. \\nPossible values for sort: popular.'
+  */
+  var all_listings = db.select("*").from("listing");
 
-    //Query strings
-    var result = all_listings;
-    
-    if(req.query.category != undefined) {
-	result = result.where({category: req.query.category});
-    }
+  if (amountOfQueryStrings(req) === 0) {
+    res.send(await all_listings);
+    return;
+  }
 
-    const sort = req.query.sort;
-    if(sort != undefined) {
-	if(sort === "popular") {
-	    result = result.orderBy('number_of_bids');
-	}
-    }
+  // Check if exclude_user parameter is present
+  if (req.query.exclude_user != undefined) {
+    all_listings = all_listings.whereNot({ owner_id: req.query.exclude_user });
+  }
 
-    const amount = req.query.amount;
-    //TODO: edge case om amount inte är ett positivt heltal
-    if(amount != undefined) {
-	result = result.limit(amount);
-    }
 
-    result = await result;
-    res.send(result);
+  //Query strings
+  var result = all_listings;
+
+  if (req.query.category != undefined) {
+    result = result.where({ category: req.query.category });
+  }
+
+  const sort = req.query.sort;
+  if (sort != undefined) {
+    if (sort === "popular") {
+      result = result.orderBy('number_of_bids');
+    }
+  }
+
+  const amount = req.query.amount;
+  //TODO: edge case om amount inte är ett positivt heltal
+  if (amount != undefined) {
+    result = result.limit(amount);
+  }
+
+  result = await result;
+  res.send(result);
 }
 
 
@@ -71,28 +76,28 @@ function get_listing(req, res) {
       if (listing.length === 0) {
         res.status(404).send("Listing not found");
       } else {
-        const id = listing[0].id;
+        const owner_id = listing[0].owner_id;
         db
           .select("*")
           .from("user")
-          .where({ id: id })
+          .where({ id: owner_id })
           .then((user) => {
             if (user.length === 0) {
               res.status(404).send("User not found");
             } else {
               const listingWithUser = { ...listing[0], user: user[0] };
-		res.send(listingWithUser);
+              res.send(listingWithUser);
             }
           })
           .catch((err) => {
-              res.status(500).send("Error retrieving user.");
-	      	      console.log(err);
+            res.status(500).send("Error retrieving user.");
+            console.log(err);
           });
       }
     })
     .catch((err) => {
-	res.status(500).send("Error retrieving listing");
-		      console.log(err);
+      res.status(500).send("Error retrieving listing");
+      console.log(err);
     });
 }
 
@@ -103,11 +108,11 @@ Creates a new listing using imput received from the client.
 @returns {undefined} This function does not return anything.
 */
 function listing_create(req, res) {
-    const { name, description, category, image_path, owner_id } = req.body;
-    const id = newId();
-    const creation_date = currentDateTime();
+  const { name, description, category, image_path, owner_id } = req.body;
+  const id = newId();
+  const creation_date = currentDateTime();
   db('listing')
-	.insert({ id, name, description, creation_date, image_path, category, owner_id})
+    .insert({ id, name, description, creation_date, image_path, category, owner_id })
     .then(result => {
       if (result) {
         res.status(200).json({ message: 'listing created successfully' });
@@ -129,11 +134,11 @@ Edits all editable fields in a listing (name, description and category)
 */
 function edit_listing_all(req, res) {
   const { id } = req.params;
-  const { name, description, category } = req.body;
+  const { name, description, category, image_path } = req.body;
 
   db('listing')
     .where({ id })
-	.update({ name, description, category, image_path })
+    .update({ name, description, category, image_path })
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'listing updated successfully' });
@@ -172,16 +177,31 @@ function listing_delete(req, res) {
       res.status(500).json({ message: 'An error occurred while deleting the listing' });
     });
 
-    //FIXME: allt som borde försvinna i offer_listing gör inte det
+  //FIXME: allt som borde försvinna i offer_listing gör inte det
 };
+
+function listing_user(req, res) {
+  const { id } = req.params;
+
+  db.select("*").from("listing").where("owner_id", id).then((result) => {
+    res.send(result)
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+}
 
 
 
 router.get("/listing", get_listings);
 
+router.get('/listing/category/:category', (req, res) => listing_category(req, res));
+
+router.get('/listing/user/:id', (req, res) => listing_user(req, res));
+
 router.get('/listing/:id', (req, res) => get_listing(req, res));
 
-router.post('/listing', (req,res) => listing_create(req, res));
+router.post('/listing', (req, res) => listing_create(req, res));
 
 router.patch('/listing/:id', (req, res) => edit_listing_all(req, res));
 

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'secondmain.dart';
-import 'otherProduct.dart';
-import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api.dart';
 import 'specificitem.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopularItems extends StatefulWidget {
   const PopularItems({Key? key});
 
   @override
-  _PopularItemsState createState() => _PopularItemsState();
+  State<PopularItems> createState() => _PopularItemsState();
 }
 
 class _PopularItemsState extends State<PopularItems> {
@@ -26,8 +24,11 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing?sort=popular'));
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
+    final response = await http.get(Uri.parse(
+        '${_api.getApiHost()}/listing?sort=popular&exclude_user=$userId'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -71,8 +72,7 @@ class _PopularItemsState extends State<PopularItems> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ListingDetailPage(
-                                  listingId:
-                                      listings[index]['id'].toString(),
+                                  listingId: listings[index]['id'].toString(),
                                 ),
                               ),
                             );
@@ -99,11 +99,7 @@ class _PopularItemsState extends State<PopularItems> {
       ),
     );
   }
-
-
 }
-
-
 
 class Category extends StatelessWidget {
   const Category({
@@ -118,7 +114,7 @@ class Category extends StatelessWidget {
     final style = theme.textTheme.displayMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
-    return Container(
+    return SizedBox(
       height: MediaQuery.of(context).size.height * 0.15,
       width: MediaQuery.of(context).size.width * 1,
       child: Card(

@@ -53,6 +53,29 @@
 	<string>Take photo from camera.</string>
 	<key>NSMicrophoneUsageDesription</key>
 	<string>Used to capture audio for image picker plugin.</string>
-
+	<!--<key>GIDClientID</key>-->
+	<!--<string>878613974982-np1puqsuq0e7jl7bdh26qtc97r6smfvf.apps.googleusercontent.com</string>-->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<!-- <key>CFBundleURLName</key> -->
+			<!-- <string>com.googleusercontent.apps.878613974982-np1puqsuq0e7jl7bdh26qtc97r6smfvf</string>-->
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.878613974982-rpgmfv178jhf0edi20bfpmscch0164ef</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>google</string>
+		<string>googleauth</string>
+		<string>googlechrome</string>
+		<string>gmai</string>
+		<string>http</string>
+		<string>https</string>
+	</array>
 </dict>
 </plist>
