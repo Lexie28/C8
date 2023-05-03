@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api.dart';
 import 'specificitem.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopularItems extends StatefulWidget {
   const PopularItems({Key? key});
@@ -23,8 +24,11 @@ class _PopularItemsState extends State<PopularItems> {
   }
 
   Future<List<dynamic>> fetchPopular() async {
-    final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing?sort=popular'));
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
+    final response = await http.get(Uri.parse(
+        '${_api.getApiHost()}/listing?sort=popular&exclude_user=$userId'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
