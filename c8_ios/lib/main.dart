@@ -1,3 +1,4 @@
+import 'package:c8_ios/api.dart';
 import 'package:c8_ios/myoffers.dart';
 import 'package:c8_ios/signin.dart';
 import 'package:flutter/foundation.dart';
@@ -114,7 +115,7 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> {
   bool _isSigningIn = false;
-
+  Api _api = Api();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -207,13 +208,22 @@ class _FirstPageState extends State<FirstPage> {
               ),
               GestureDetector(
                 onTap: () async {
-                  print("Next button pressed");
+                  setState(() {
+                    _isSigningIn = true;
+                  });
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MyBottomNavigationbar()),
-                  );
+                  auth.User? user =
+                      await Authentication.signInWithGoogle(context: context);
+
+                  setState(() {
+                    _isSigningIn = false;
+                  });
+
+                  if (user != null) {
+                    print(user);
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString("uid", user.uid);
+                  }
                 },
                 child: Card(
                   color: Color.fromARGB(0, 244, 238, 238),

@@ -15,7 +15,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<User> futureUser;
   late String id = '';
-  late String profile_picture_path = '';
+  late String profile_picture_path = 'loading.png';
 
   Api _api = Api();
 
