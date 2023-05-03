@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,8 +6,6 @@ import 'api.dart';
 import 'editListing.dart';
 import 'main.dart';
 import 'profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
@@ -26,6 +23,8 @@ class _YourProductState extends State<YourProduct> {
   Api _api = Api();
 
   String itemId = '';
+  String imagePath = 'loading.png';
+
   @override
   void initState() {
     super.initState();
@@ -33,13 +32,20 @@ class _YourProductState extends State<YourProduct> {
   }
 
   Future<User> fetchUser() async {
-  final prefs = await SharedPreferences.getInstance();
-  final userId = prefs.getString('uid');
-  final response = await http
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    final response = await http
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      User user = User.fromJson(jsonDecode(response.body));
+
+      setState(() {
+        itemId = user.listings[widget.itemIndex].toString();
+        imagePath = user.listings[widget.itemIndex]['image_path'].toString();
+      });
+
+      return user;
     } else {
       throw Exception('Failed to load album');
     }
@@ -47,29 +53,12 @@ class _YourProductState extends State<YourProduct> {
 
   @override
   Widget build(BuildContext context) {
-    // det sanna itemID!! == id
-    String itemId = '';
-
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
         backgroundColor: Color(0xFFA2BABF),
         title: Text('Listing'),
         actions: [
-          FutureBuilder<User>(
-            future: futureUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List listings = snapshot.data!.listings;
-                itemId = listings[widget.itemIndex]['id'];
-                return Text('');
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -87,14 +76,13 @@ class _YourProductState extends State<YourProduct> {
                 children: [
                   Align(
                     alignment: FractionalOffset.topLeft,
-                    child: ProductListing(string: 'images/apple.jpg'),
+                    child: ProductListing(string: imagePath),
                   ),
                   Align(
                       alignment: FractionalOffset.topRight,
                       child: ListingProfile(
                         futureUser: futureUser,
                       )),
-                  //CardProduct(string: 'Hej'),
                 ],
               ),
               Align(
@@ -108,7 +96,7 @@ class _YourProductState extends State<YourProduct> {
                     futureUser: futureUser,
                     itemId: widget.itemIndex,
                   ),
-                ), //Hämta namnet från databasen
+                ),
               ),
               Align(
                   alignment: FractionalOffset.topLeft,
@@ -118,7 +106,6 @@ class _YourProductState extends State<YourProduct> {
                 alignment: FractionalOffset.topLeft,
                 child: Container(
                   margin: EdgeInsets.fromLTRB(
-                    //35,
                     MediaQuery.of(context).size.width * 0.1,
                     MediaQuery.of(context).size.width * 0.065,
                     MediaQuery.of(context).size.width * 0,
@@ -152,12 +139,11 @@ class _YourProductState extends State<YourProduct> {
                   // By default, show a loading spinner.
                   return const CircularProgressIndicator();
                 },
-              ), // hmmmm vilken behövs itemId eller itemIndex?? tänk
+              ),
             ],
           ),
         ),
       ),
-      //bottomNavigationBar: toolbar(),
     );
   }
 }
@@ -280,10 +266,10 @@ class DeleteProduct extends StatelessWidget {
       );
       Navigator.pop(context);
       Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
-        );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -356,8 +342,8 @@ class ProductListing extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(17.0),
-        child: Image.asset(
-          string,
+        child: Image.network(
+          'https://circle8.s3.eu-north-1.amazonaws.com/$string',
           fit: BoxFit.cover,
         ),
       ),
