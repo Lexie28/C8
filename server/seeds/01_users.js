@@ -15,7 +15,8 @@ exports.seed = async function(knex) {
 	  dislikes: 42,
 	  profile_picture_path: "defaultProfilePicture.png",
 	  phone_number: "0701234567",
-	  email: "elsa_larsson@protonmail.com"
+	  email: "elsa_larsson@protonmail.com",
+	  location: "Stockholm"
       },
       
       {
@@ -25,7 +26,8 @@ exports.seed = async function(knex) {
 	  dislikes: 2,
 	  profile_picture_path: "defaultProfilePicture.png",
 	  phone_number: "0709876543",
-	  email: "lars_svensson@hotmail.com"
+	  email: "lars_svensson@hotmail.com",
+	  location: "Borås"
       }
   ]);
 };
