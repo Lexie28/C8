@@ -24,6 +24,7 @@ class _YourProductState extends State<YourProduct> {
 
   String itemId = '';
   String imagePath = 'loading.png';
+  String profilePicturePath = 'loading.png';
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _YourProductState extends State<YourProduct> {
       setState(() {
         itemId = user.listings[widget.itemIndex].toString();
         imagePath = user.listings[widget.itemIndex]['image_path'].toString();
+        profilePicturePath = user.profilePicturePath;
       });
 
       return user;
@@ -82,6 +84,7 @@ class _YourProductState extends State<YourProduct> {
                       alignment: FractionalOffset.topRight,
                       child: ListingProfile(
                         futureUser: futureUser,
+                        picturePath: profilePicturePath,
                       )),
                 ],
               ),
@@ -354,9 +357,11 @@ class ProductListing extends StatelessWidget {
 class ListingProfile extends StatelessWidget {
   const ListingProfile({
     required this.futureUser,
+    required this.picturePath,
   });
 
   final Future<User> futureUser;
+  final String picturePath;
 
   @override
   Widget build(BuildContext context) {
@@ -373,8 +378,8 @@ class ListingProfile extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.2,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100.0),
-            child: Image.asset(
-              'images/woman.jpg',
+            child: Image.network(
+              'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
               fit: BoxFit.cover,
             ),
           ),
