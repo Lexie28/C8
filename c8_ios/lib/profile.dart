@@ -83,22 +83,18 @@ class _ProfileState extends State<Profile> {
           children: [
             // Profile picture
             Center(
-                child: TextButton(
-              onPressed: () {
-                // TODO: Implement camera logic
-              },
               child: Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.width * 0.02,
-                    horizontal: MediaQuery.of(context).size.width * 0.08),
+                height: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.6,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.network(
                     'https://circle8.s3.eu-north-1.amazonaws.com/$profile_picture_path',
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            )),
+            ),
 
             Center(
               child: FutureBuilder<User>(
