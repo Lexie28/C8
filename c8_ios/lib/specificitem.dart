@@ -17,6 +17,7 @@ class ListingDetailPage extends StatefulWidget {
 class _ListingDetailPageState extends State<ListingDetailPage> {
   late Future<Listing> futureListing;
   late String userId = '';
+  String imagePath = 'loading.png';
   Api _api = Api();
 
   @override
@@ -34,6 +35,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
       setState(() {
         userId = listing.user['id'];
+        imagePath = listing.listingPic.toString();
       });
 
       return listing;
@@ -56,12 +58,14 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
             children: [
               Align(
                 alignment: FractionalOffset.topCenter,
-                child: ProductListing(string: 'images/shoes.jpg'),
+                child: ProductListing(
+                  imagePath: imagePath,
+                ),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
                 child: ProductName(
-                    string: ListingName(
+                  string: ListingName(
                   futureListing: futureListing,
                 )),
               ),
@@ -272,10 +276,10 @@ class _BidButtonState extends State<BidButton> {
 
 class ProductListing extends StatelessWidget {
   const ProductListing({
-    required this.string,
+    required this.imagePath,
   });
 
-  final String string;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -304,8 +308,8 @@ class ProductListing extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(17.0),
-        child: Image.asset(
-          string,
+        child: Image.network(
+          'https://circle8.s3.eu-north-1.amazonaws.com/$imagePath',
           fit: BoxFit.cover,
         ),
       ),
@@ -482,6 +486,7 @@ class Listing {
   final String listingName;
   final String listingDesc;
   final int listingBids;
+  final String listingPic;
 
   const Listing({
     required this.listingId,
@@ -489,6 +494,7 @@ class Listing {
     required this.listingName,
     required this.listingDesc,
     required this.listingBids,
+    required this.listingPic,
   });
 
   factory Listing.fromJson(Map<String, dynamic> json) {
@@ -498,6 +504,7 @@ class Listing {
       listingName: json['name'],
       listingDesc: json['description'],
       listingBids: json['number_of_bids'],
+      listingPic: json['image_path'],
     );
   }
 }
@@ -673,6 +680,39 @@ class ListingBids extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           int productName = snapshot.data!.listingBids;
+          return Text(
+            productName.toString(),
+            style:
+                TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055),
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ListingPic extends StatelessWidget {
+  ListingPic({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String productName = snapshot.data!.listingPic;
           return Text(
             productName.toString(),
             style:
