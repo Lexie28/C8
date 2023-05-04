@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {
+    "scripts": {
+    "pretest": "./init_db.sh",
     "test": "jest",
     "prestart": "npm run swagger-autogen && ./init_db.sh",
     "start": "node server.js",
