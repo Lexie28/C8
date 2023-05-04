@@ -86,6 +86,7 @@ class _ProfileState extends State<Profile> {
               child: Container(
                 height: MediaQuery.of(context).size.width * 0.6,
                 width: MediaQuery.of(context).size.width * 0.6,
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05, bottom: MediaQuery.of(context).size.width * 0.05,),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.network(
