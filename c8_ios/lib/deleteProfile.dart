@@ -63,8 +63,6 @@ class DeleteProfile extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // TODO ta bort user från databasen
-
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => Deletion(),
