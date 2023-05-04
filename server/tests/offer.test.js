@@ -16,6 +16,14 @@ describe("GET /offer", () => {
     it("Should return at least one offer", async () => {
 	expect(response._body.length >= 1).toBe(true);
     })
+    it("Should return the listings related to the offer as a part of each object", () => {
+	for(offer of response._body) {
+	    expect(offer.wanted_items.length >= 1).toBe(true);
+	    expect(offer.offered_items.length >= 1).toBe(true);
+	}
+	
+    })
+
 });
 
 
@@ -40,7 +48,11 @@ describe("GET /offer/:id", () => {
 	const nonexistant_response = await request(baseURL).get("/offer/this_id_doesnt_exist");
 	expect(nonexistant_response.statusCode).toBe(404);
     })
-    
+    it("Should return the listings related to the offer as a part of the object", () => {
+	expect(response._body[0].wanted_items.length >= 1).toBe(true);
+	expect(response._body[0].offered_items.length >= 1).toBe(true);
+    })
+
 });
 
 describe("POST /offer", () => {
@@ -166,9 +178,15 @@ describe("PATCH /offer/:id/accept", () => {
 	
     })
 
+    it("Should get status code 404 if offer doesn't exist", async () => {
+	const accept_nonexisting_offer_response = await request(baseURL).patch("/offer/this_offer_id_is_completely_bogus/accept");
+	expect(accept_nonexisting_offer_response.statusCode).toBe(404);
+    })
     afterAll(async () => {
 	await request(baseURL).delete("/offer/" + offer_id);
     })
+
+    //TODO: gör test som visar att det inte går att acceptera ett offer där en listing inte är tillgänglig
 });
 
 
@@ -203,8 +221,38 @@ describe("PATCH /offer/:id/reject", () => {
 	expect(accept_response.statusCode).toBe(400);
     });
 
+    it("Should get status code 404 if offer doesn't exist", async () => {
+	const reject_nonexisting_offer_response = await request(baseURL).patch("/offer/this_offer_id_is_completely_bogus/reject");
+	expect(reject_nonexisting_offer_response.statusCode).toBe(404);
+    })
     afterAll(async () => {
 	await request(baseURL).delete("/offer/" + offer_id);
+    })
+
+    it("Should not be able to reject an already accepted offer", async () => {
+	const offered_listing_in_accepted_bid= "2";
+	const wanted_listing_in_accepted_bid = "3";
+	const offer = {
+	    "user_making_offer": "1",
+	    "user_receiving_offer" : "2",
+	    "id_of_listings": [offered_listing_in_accepted_bid, wanted_listing_in_accepted_bid]
+	}
+	const create_offer_response =
+	      await request(baseURL)
+	      .post("/offer")
+	      .send(offer);
+	const accept_offer_response =
+	      await request(baseURL)
+	      .patch("/offer/" + create_offer_response._body.id+"/accept");
+	
+	const reject_accepted_offer_response =
+	      await request(baseURL)
+	      .patch("/offer/" + create_offer_response._body.id + "/reject");
+	expect(reject_accepted_offer_response.statusCode).toBe(400);
+
+	await await request(baseURL)
+	    .delete("/offer/" + create_offer_response._body.id);
+	
     })
 });
 
@@ -258,3 +306,4 @@ describe("DELETE /offer/:id",  () => {
 	expect(delete_non_existing_offer_request.statusCode).toBe(404);
     });
 })
+
