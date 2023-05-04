@@ -314,6 +314,7 @@ class ListingProfile extends StatelessWidget {
         Column(
           children: [
             Container(
+              width: MediaQuery.of(context).size.width * 0.5,
               margin: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.05,
                   top: MediaQuery.of(context).size.width * 0.1),
@@ -357,9 +358,11 @@ class ListingProfile extends StatelessWidget {
               ),
             ),
             Container(
+              width: MediaQuery.of(context).size.width * 0.5,
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.width * 0.01,
-                    bottom: MediaQuery.of(context).size.width * 0.05),
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                    left: MediaQuery.of(context).size.width * 0.05),
                 child: name),
           ],
         ),
