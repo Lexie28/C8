@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 const request = require("supertest");
-const baseURL = process.env.DATABASE_HOST + ":" + process.env.PORT;
+const app = require("../server.js");
+const baseURL = app; //process.env.DATABASE_HOST + ":" + process.env.PORT;
 
 describe("GET /offer", () => {
     var response;
@@ -61,9 +62,9 @@ describe("POST /offer", () => {
 	wanted_listing_number_of_bids_before_request = (await request(baseURL).get("/listing/" + wanted_listing_id))._body.number_of_bids;
     })
     
-    it("Should return status code 200 when sent", async () => {
+    it("Should return status code 201 when sent", async () => {
 	response = await request(baseURL).post("/offer").send(offer);
-	expect(response.statusCode).toBe(200);
+	expect(response.statusCode).toBe(201);
     });
     
     it("Should return the generated id for the offer", async() => {
@@ -83,7 +84,7 @@ describe("POST /offer", () => {
     })
 
     it("Should return status code 400 if one of the listings are unavailable", async () => {
-	request(baseURL).delete("/offer/" + response._body.id);
+	await request(baseURL).delete("/offer/" + response._body.id);
 	
 	const offered_listing_in_other_bid= "2";
 	const wanted_listing_in_other_bid = "3";
@@ -101,7 +102,7 @@ describe("POST /offer", () => {
 	
     });
     afterAll(async () => {
-	request(baseURL).delete("/offer/" + response._body.id);
+	await request(baseURL).delete("/offer/" + response._body.id);
     })
     
 });
@@ -257,4 +258,3 @@ describe("DELETE /offer/:id",  () => {
 	expect(delete_non_existing_offer_request.statusCode).toBe(404);
     });
 })
-
