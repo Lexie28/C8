@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'api.dart';
 import 'specificitem.dart';
-import 'package:c8_ios/yourProduct.dart';
 import 'profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -17,9 +15,10 @@ class OtherProfile extends StatefulWidget {
 }
 
 class _OtherProfileState extends State<OtherProfile> {
-  late Future<User> futureUser = fetchUser();
+  late Future<User> futureUser;
   String userName = '';
   String location = '';
+  String profilePicturePath = 'loading.png';
 
   @override
   void initState() {
@@ -39,6 +38,7 @@ class _OtherProfileState extends State<OtherProfile> {
       setState(() {
         userName = user.userName;
         location = user.location;
+        profilePicturePath = user.profilePicturePath;
       });
 
       return user;
@@ -60,7 +60,9 @@ class _OtherProfileState extends State<OtherProfile> {
           children: [
             Align(
               alignment: FractionalOffset.topCenter,
-              child: ProfilePicture(),
+              child: ProfilePicture(
+                picturePath: profilePicturePath,
+              ),
             ),
             Align(
               alignment: FractionalOffset.topCenter,
@@ -88,11 +90,15 @@ class _OtherProfileState extends State<OtherProfile> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        ListingDetailPage(listingId: listings[i]['id']),
+                                        ListingDetailPage(
+                                            listingId: listings[i]['id']),
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['name'], picturePath: listings[i]['image_path'],),
+                              child: Item(
+                                string: listings[i]['name'],
+                                picturePath: listings[i]['image_path'],
+                              ),
                             ),
                           ),
                       ]);
@@ -112,7 +118,9 @@ class _OtherProfileState extends State<OtherProfile> {
 }
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({super.key});
+  const ProfilePicture({required this.picturePath});
+
+  final String picturePath;
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +135,8 @@ class ProfilePicture extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.4,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
-        child: Image.asset(
-          'images/man.jpg',
+        child: Image.network(
+          'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
           fit: BoxFit.cover,
         ),
       ),

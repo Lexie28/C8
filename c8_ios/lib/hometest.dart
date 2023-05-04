@@ -11,21 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:c8_ios/categories.dart';
 import 'package:flutter/material.dart';
 
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'listingscategory.dart';
-import 'specificitem.dart';
-import 'api.dart';
-import 'popularItems.dart';
-
-class HomePage3 extends StatefulWidget {
-  const HomePage3({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage3> {
+class _HomePageState extends State<HomePage> {
   late Future<List<dynamic>> _futureListings;
   Api _api = Api();
 
@@ -38,8 +31,8 @@ class _HomePageState extends State<HomePage3> {
   Future<List<dynamic>> fetchPopular() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
-    final response = await http
-        .get(Uri.parse('${_api.getApiHost()}/listing?sort=popular&amount=5&exclude_user=$userId'));
+    final response = await http.get(Uri.parse(
+        '${_api.getApiHost()}/listing?sort=popular&amount=5&exclude_user=$userId'));
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
@@ -367,11 +360,10 @@ class Item extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
                 */
-                
+
               child: Image.network(
                 'https://circle8.s3.eu-north-1.amazonaws.com/$image',
                 fit: BoxFit.cover,
-              
               ),
             ),
           ),
