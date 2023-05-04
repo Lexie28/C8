@@ -1,13 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { currentDateTime, newId, amountOfQueryStrings } = require("../utils.js");
-
-
+const { currentDateTime, newId, amountOfQueryStrings, entryExists } = require("../utils.js");
 
 const db = require("../db-config.js");
-
-
-
 
 /**
 Retrieves all records from the "listing" table using Db.js and sends the result back to the client as a response.
@@ -48,13 +43,22 @@ async function get_listings(req, res) {
   }
 
   const amount = req.query.amount;
-  //TODO: edge case om amount inte är ett positivt heltal
-  if (amount != undefined) {
+
+    if (amount != undefined) {
+	if(isNaN(amount)) {
+	    res.status(400).json({message: "The parameter amount must have a value which is a number"});
+	    return;
+	}
+	if(parseInt(amount) <= 0) {
+	    res.status(400).json({message: "The parameter amount must have a value which is a postivie integer"});
+	    return;
+	}
     result = result.limit(amount);
   }
 
-  result = await result;
-  res.send(result);
+    result = await result;
+    res.status(200).json(result);
+
 }
 
 
@@ -133,19 +137,18 @@ Edits all editable fields in a listing (name, description and category)
 @param {Object} res - The response object to send data back to the client.
 @returns {undefined} This function does not return anything.
 */
-function edit_listing_all(req, res) {
+async function edit_listing_all(req, res) {
   const { id } = req.params;
   const { name, description, category, image_path } = req.body;
-
+    if(!(await entryExists("listing", id))) {
+	res.status(404).json({ message: 'listing not found' });
+	return;
+    };
   db('listing')
     .where({ id })
 	.update({ name, description, category})
     .then(result => {
-      if (result === 1) {
         res.status(200).json({ message: 'listing updated successfully' });
-      } else {
-        res.status(404).json({ message: 'listing not found' });
-      }
     })
     .catch(err => {
       console.log(err);

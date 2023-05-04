@@ -17,6 +17,57 @@ describe("GET /listing", () => {
     it("Should return at least one offer", async () => {
 	expect(get_listing_response._body.length >= 1).toBe(true);
     })
+
+    it("Should exclude user passed as parameter", async () => {
+	const id_of_excluded_user = "1";
+	const exclude_user_response =
+	      await request(baseURL)
+	      .get("/user?exclude_user="+ id_of_excluded_user);
+	
+	for(listing of exclude_user_response._body) {
+	    expect(listing.owner_id !== id_of_excluded_user);
+	}
+    });
+
+    it("Should sort in a correct way given a value for query string popularity", async () => {
+	const popular_sort_response =
+	      await request(baseURL)
+	      .get("/user?sort=popular");
+	const listings = popular_sort_response._body;
+	
+	var previous_listings_amount_of_bids = listings[0];
+	for(listing of listings) {
+	    expect(previous_listings_amount_of_bids >= listing.amount_of_bids);
+	    previous_listings_amount_of_bids = listing.amount_of_bids;
+	}
+    })
+
+    it("Should return what is expected from ceirtan values of query amount", async () => {
+	const one_listing_response =
+	      await request(baseURL)
+	      .get("/listing?amount=1");
+
+	expect(one_listing_response._body.length).toBe(1);
+
+
+	const three_listings_response =
+	      await request(baseURL)
+	      .get("/listing?amount=3");
+
+	expect(three_listings_response._body.length).toBe(3);
+
+	const non_integer_amount_response =
+	      await request(baseURL)
+	      .get("/listing?amount=lololol");
+
+	expect(non_integer_amount_response.statusCode).toBe(400);
+
+	const negative_number_amount_response =
+	      await request(baseURL)
+	      .get("/listing?amount=-1");
+
+	expect(negative_number_amount_response.statusCode).toBe(400);
+    });
     
 })
 
@@ -112,6 +163,14 @@ describe("DELETE /listing/:id", () => {
 	expect(get_deleted_listing_response.statusCode).toBe(404);
 	    
     })
+
+    it("Should return status code 404 if listing doesn't exist", async () => {
+	const delete_non_existing_listing_response =
+	      await request(baseURL)
+	      .delete("/listing/this_listing_id_will_never_exist");
+
+	expect(delete_non_existing_listing_response.statusCode).toBe(404);
+    })
 })
 
 
@@ -154,7 +213,14 @@ describe("PATCH /listing", () => {
 	      .get("/listing/" + post_listing_response._body.id);
 	expect(get_patched_listing_response._body.name).toBe(listing_patch.name);	
     })
-    
+
+    it("Should return status code 404 if no listing with id exists", async () => {
+	const patch_non_existing_listing_response =
+	      await request(baseURL)
+	      .patch("/listing/alert_bogus_listing_id");
+
+	expect(patch_non_existing_listing_response.statusCode).toBe(404);
+    })
 })
 
 

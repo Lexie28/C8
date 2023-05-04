@@ -58,66 +58,6 @@ async function offer_create(req, res) {
 };
 
 
-function offers_get(req, res) {
-    const { id } = req.params;
-    
-    db.select('offer.id', 'offer.user_making_offer', 'offer.user_receiving_offer')
-	.from('offer')
-	.where('offer.user_making_offer', id)
-	.orWhere('offer.user_receiving_offer', id)
-	.then(function(offers) {
-            const promises = offers.map(function(offer) {
-		return db.select('offer_listing.id', 'listing.name', 'listing.description', 'user.id', 'user.name')
-		    .from('offer_listing')
-		    .innerJoin('listing', 'listing.id', 'offer_listing.id')
-		    .innerJoin('user', 'user.id', 'listing.id')
-		    .where('offer_listing.id', offer.id)
-		    .then(function(listings) {
-			const bidMaker = listings.find(function(listing) { return listing.id === offer.user_making_offer; });
-			const bidReceiver = listings.find(function(listing) { return listing.id === offer.user_receiving_offer; });
-			const bidListings = {
-			    bid_maker: {
-				id: bidMaker.id,
-				name: bidMaker.name,
-				listings: []
-			    },
-			    bid_receiver: {
-				id: bidReceiver.id,
-				name: bidReceiver.name,
-				listings: []
-			    }
-			};
-			listings.forEach(function(listing) {
-			    if (listing.id === offer.user_making_offer) {
-				bidListings.bid_maker.listings.push({
-				    id: listing.id,
-				    name: listing.name,
-				    description: listing.description
-				});
-			    } else if (listing.id === offer.user_receiving_offer) {
-				bidListings.bid_receiver.listings.push({
-				    id: listing.id,
-				    name: listing.name,
-				    description: listing.description
-				});
-			    }
-			});
-			return bidListings;
-		    });
-            });
-	    
-            Promise.all(promises)
-		.then(function(results) {
-		    res.status(200).json(results);
-		})
-		.catch(function(err) {
-		    console.log(err);
-		    res.status(500).json({ message: 'An error occurred while retrieving trade offers' });
-		});
-	});
-}
-
-
 router.get("/offer", async (req, res) => {
     db("offer").select("*").then(async (result) => {
 	for(offer of result) {
