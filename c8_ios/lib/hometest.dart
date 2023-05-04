@@ -1,5 +1,6 @@
 import 'package:c8_ios/categories.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'listingscategory.dart';
@@ -7,6 +8,7 @@ import 'specificitem.dart';
 import 'api.dart';
 import 'popularItems.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'color.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -53,22 +55,27 @@ class _HomePageState extends State<HomePage> {
           child: const Text('Circle 8'),
         ),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: primary,
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: Color.fromARGB(255, 232, 237, 238),
+          color: Color.fromARGB(255, 255, 255, 255),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                color: Color.fromARGB(255, 232, 237, 238),
+                color: Color.fromARGB(255, 255, 255, 255),
                 child: Align(
                   alignment: FractionalOffset.topCenter,
                   child: Text(
                     'Categories',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                    style: GoogleFonts.kalam(
+                      //kalam
+                      textStyle: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.1,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
                     ),
                   ),
                 ),
@@ -76,7 +83,7 @@ class _HomePageState extends State<HomePage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  color: Color.fromARGB(255, 232, 237, 238),
+                  color: Color.fromARGB(255, 226, 232, 234),
                   child: Row(
                     children: [
                       GestureDetector(
@@ -93,7 +100,6 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(100),
                                 ),
-                                //color: Colors.yellow,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
@@ -127,7 +133,6 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(100),
                                 ),
-                                //color: Colors.yellow,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
@@ -161,7 +166,6 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(100),
                                 ),
-                                //color: Colors.yellow,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
@@ -197,7 +201,6 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(100),
                                 ),
-                                //color: Colors.yellow,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(18.0),
@@ -231,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Container(
-                color: Color.fromARGB(255, 241, 245, 246),
+                color: Color.fromARGB(255, 255, 255, 255),
                 child: FutureBuilder<List<dynamic>>(
                   future: _futureListings,
                   builder: (context, snapshot) {
@@ -239,10 +242,8 @@ class _HomePageState extends State<HomePage> {
                       final listings = snapshot.data!;
                       final showMoreItems = listings.length > 4;
                       return Wrap(
-                        spacing:
-                            16.0, // set the horizontal spacing between items
-                        runSpacing:
-                            16.0, // set the vertical spacing between items
+                        spacing: 16.0, // horizontal spacing between items
+                        runSpacing: 16.0, // vertical spacing between items
                         children: [
                           for (int i = 0; i < listings.length && i < 5; i++)
                             SizedBox(
@@ -286,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
-                                      color: Color.fromARGB(255, 228, 228, 228),
+                                      color: Color.fromARGB(255, 215, 215, 215),
                                     ),
                                     child: Center(
                                       child: Padding(
@@ -335,8 +336,8 @@ class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final style = theme.textTheme.labelMedium!.copyWith(
-      color: theme.colorScheme.onTertiary,
+    final style = theme.textTheme.labelLarge!.copyWith(
+      color: theme.colorScheme.onBackground,
     );
 
     return Material(
@@ -348,117 +349,18 @@ class Item extends StatelessWidget {
             child: SizedBox(
               height: MediaQuery.of(context).size.width * 0.4,
               width: MediaQuery.of(context).size.width * 0.4,
-              /*
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('https://circle8.s3.eu-north-1.amazonaws.com/$image'),
-                  fit: BoxFit.cover,
-                ),
-                */
-
               child: Image.network(
                 'https://circle8.s3.eu-north-1.amazonaws.com/$image',
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          Text(string),
+          Text(
+            string,
+            style: style,
+          ),
         ],
       ),
-    );
-  }
-}
-
-class Header extends StatelessWidget {
-  Header({required this.string});
-
-  final String string;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onTertiary,
-    );
-
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: theme.colorScheme.tertiary),
-      ),
-      color: theme.colorScheme.tertiary,
-      elevation: 10,
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.07,
-        child: Center(
-          child: Text(
-            string,
-            style: style,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Category extends StatelessWidget {
-  Category({required this.string});
-
-  final String string;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.titleLarge!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Card(
-      color: theme.colorScheme.inversePrimary,
-      elevation: 5,
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.width * 0.2,
-        width: MediaQuery.of(context).size.width * 0.35,
-        child: Center(
-          child: Text(
-            string,
-            style: style,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-Future<Album> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-
-  if (response.statusCode == 200) {
-    // allt är lugnt
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
-
-class Album {
-  final int userId;
-  final int id;
-  final String title;
-
-  const Album({
-    required this.userId,
-    required this.id,
-    required this.title,
-  });
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
     );
   }
 }

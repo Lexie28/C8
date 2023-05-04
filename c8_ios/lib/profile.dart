@@ -6,6 +6,7 @@ import 'yourProduct.dart';
 import 'api.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'color.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -56,7 +57,7 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text('Your Profile'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: primary,
         actions: [
           IconButton(
               onPressed: () {

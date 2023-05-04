@@ -24,7 +24,8 @@ class C8 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF3D4640)),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 55, 178, 255)),
       ),
       home: FirstPage(),
     );
@@ -55,11 +56,13 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         selectedItemColor: Color.fromARGB(255, 80, 102, 106),
         unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
         showSelectedLabels: false,
@@ -102,7 +105,6 @@ class _FirstPageState extends State<FirstPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        //color: Color.fromARGB(255, 233, 247, 249),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/holdingplant.jpg'),
