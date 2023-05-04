@@ -1,11 +1,14 @@
+import 'package:c8_ios/specificitem.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:convert';
 import 'api.dart';
 import 'editListing.dart';
 import 'main.dart';
 import 'profile.dart';
+import 'color.dart';
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
@@ -23,6 +26,8 @@ class _YourProductState extends State<YourProduct> {
   String itemId = '';
   String imagePath = 'loading.png';
   String profilePicturePath = 'loading.png';
+  String location = '';
+  int likes = 0;
 
   @override
   void initState() {
@@ -43,6 +48,8 @@ class _YourProductState extends State<YourProduct> {
         itemId = user.listings[widget.itemIndex].toString();
         imagePath = user.listings[widget.itemIndex]['image_path'].toString();
         profilePicturePath = user.profilePicturePath;
+        location = user.location;
+        likes = user.likes;
       });
 
       return user;
@@ -54,9 +61,9 @@ class _YourProductState extends State<YourProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(249, 253, 255, 1),
+      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: primary,
         title: Text('Listing'),
         actions: [
           IconButton(
@@ -97,11 +104,11 @@ class _YourProductState extends State<YourProduct> {
                       itemId: widget.itemIndex,
                     ),
                   ),
-                  Align(
+                  /*Align(
                     alignment: FractionalOffset.center,
                     // bitbutton
                     child: BidButton(),
-                  )
+                  )*/
                 ],
               ),
               Container(
@@ -111,6 +118,8 @@ class _YourProductState extends State<YourProduct> {
                   child: ListingProfile(
                     futureUser: futureUser,
                     picturePath: profilePicturePath,
+                    likes: likes,
+                    location: location,
                   ),
                 ),
               ),
@@ -149,34 +158,36 @@ class ProductInfo extends StatelessWidget {
       color: theme.colorScheme.onBackground,
     );
 
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.8,
-      child: Card(
-        margin: EdgeInsets.only(
-          left: MediaQuery.of(context).size.width * 0.1,
-        ),
-        color: theme.colorScheme.onSecondary,
-        elevation: 10,
-        child: Padding(
-          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.04),
-          child: FutureBuilder<User>(
-            future: futureUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List listings = snapshot.data!.listings;
-                return Text(
-                  listings[itemId]['description'].toString(),
-                  style: style,
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-        ),
-      ),
+    return FutureBuilder<User>(
+      future: futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List listings = snapshot.data!.listings;
+          return FittedBox(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.05,
+                  MediaQuery.of(context).size.width * 0.03,
+                  MediaQuery.of(context).size.width * 0,
+                  MediaQuery.of(context).size.width * 0,
+                ),
+                //color: Color.fromARGB(255, 255, 255, 255),
+                //elevation: 10,
+                child: Text(listings[itemId]['description'].toString(),
+                    style: TextStyle(
+                      fontSize: 15,
+                    )),
+              ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
@@ -192,29 +203,33 @@ class NumBids extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+    return FutureBuilder<User>(
+      future: futureUser,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          List listings = snapshot.data!.listings;
+          return Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: MediaQuery.of(context).size.width * 0.05,
+                vertical: MediaQuery.of(context).size.width * 0.05),
+            child: Row(
+              children: [
+                Text("Current bids: ${listings[itemId]['number_of_bids']}",
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.055,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+          );
 
-    return Card(
-
-      child: FutureBuilder<User>(
-        future: futureUser,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List listings = snapshot.data!.listings;
-            return Text(
-              listings[itemId]['number_of_bids'].toString(),
-              style: style,
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          // By default, show a loading spinner.
-          return const CircularProgressIndicator();
-        },
-      ),
+          ;
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
     );
   }
 }
@@ -366,10 +381,14 @@ class ListingProfile extends StatelessWidget {
   const ListingProfile({
     required this.futureUser,
     required this.picturePath,
+    required this.likes,
+    required this.location,
   });
 
   final Future<User> futureUser;
   final String picturePath;
+  final String location;
+  final int likes;
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +400,7 @@ class ListingProfile extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.5,
               margin: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.05,
-                  top: MediaQuery.of(context).size.width * 0.1),
+                  top: MediaQuery.of(context).size.width * 0.05),
               child: Text(
                 "About the seller",
                 style: TextStyle(
@@ -451,6 +470,31 @@ class ListingProfile extends StatelessWidget {
                                   MediaQuery.of(context).size.width * 0.04),
                         ),
                       ),
+                      Row(
+                        children: [
+                          Container(
+                              margin: EdgeInsets.only(
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.12),
+                              child: Text(
+                                likes.toString(),
+                                style: TextStyle(
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.06),
+                              )),
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width * 0.04),
+                            height: MediaQuery.of(context).size.height * 0.05,
+                            width: MediaQuery.of(context).size.width * 0.07,
+                            child: Image.asset(
+                              'images/like.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -460,6 +504,54 @@ class ListingProfile extends StatelessWidget {
               width: MediaQuery.of(context).size.width * 0.4,
               child: Container(
                 color: Colors.white,
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.width * 0.02,
+                          top: MediaQuery.of(context).size.width * 0.02),
+                      child: Text(
+                        "Location:",
+                        style: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.04),
+                      ),
+                    ),
+                    Row(children: [
+                      Container(
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.07),
+                          child: Text(
+                            location,
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.04),
+                          )), //TODO
+                      GestureDetector(
+                        onTap: () {
+                          launchUrlString(
+                            'https://www.google.com/maps/search/?api=1&query=location',
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.02),
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          width: MediaQuery.of(context).size.width * 0.07,
+                          child: Image.asset(
+                            'images/locationicon.png', //TODO
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
               ),
             ),
           ],
