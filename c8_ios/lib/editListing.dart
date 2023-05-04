@@ -1,10 +1,6 @@
-//import 'dart:io';
-//import 'package:c8_ios/otherProduct.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
-
 import 'api.dart';
 import 'main.dart';
 
@@ -66,14 +62,11 @@ class _EditListingState extends State<EditListing> {
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
         );
-      }
-      else if(response.statusCode == 404){
+      } else if (response.statusCode == 404) {
         print("Error 404");
-      }
-      else if(response.statusCode == 500){
+      } else if (response.statusCode == 500) {
         print("Error 500");
-      }
-       else {
+      } else {
         print('Failed to update listing');
       }
     }
@@ -144,7 +137,6 @@ class _EditListingState extends State<EditListing> {
                 ),
               ),
 
-
               /*
               DropdownButtonFormField(
                   decoration: InputDecoration(labelText: 'Listing Category'),
@@ -162,7 +154,7 @@ class _EditListingState extends State<EditListing> {
                   },
                 ),
                 */
-                Container(
+              Container(
                 margin: EdgeInsets.all(
                   MediaQuery.of(context).size.width * 0.01,
                 ),

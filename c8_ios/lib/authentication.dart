@@ -19,14 +19,14 @@ class Authentication {
   }
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
-    Api _api = Api();
+    Api api = Api();
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
+        await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -47,22 +47,22 @@ class Authentication {
           final prefs = await SharedPreferences.getInstance();
           final userId = prefs.getString('uid');
           final response = await http
-              .post(Uri.parse('${_api.getApiHost()}/user/exists/$userId'));
+              .post(Uri.parse('${api.getApiHost()}/user/exists/$userId'));
           final data = jsonDecode(response.body);
           //final userExists = data['userExists'];
 
           if (response.statusCode == 200 && data['message'] == 'User found') {
             // User exists, redirect to main page
-            await prefs.setString('uid', user!.uid);
-            await prefs.setString('email', user!.email!);
+            await prefs.setString('uid', user.uid);
+            await prefs.setString('email', user.email!);
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => MyBottomNavigationbar()));
           } else {
             // User does not exist, redirect to CreateProfile page
-            await prefs.setString('uid', user!.uid);
-            await prefs.setString('email', user!.email!);
+            await prefs.setString('uid', user.uid);
+            await prefs.setString('email', user.email!);
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => CreateProfile()));
           }

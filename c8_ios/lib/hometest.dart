@@ -8,9 +8,6 @@ import 'api.dart';
 import 'popularItems.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:c8_ios/categories.dart';
-import 'package:flutter/material.dart';
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -248,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                             16.0, // set the vertical spacing between items
                         children: [
                           for (int i = 0; i < listings.length && i < 5; i++)
-                            Container(
+                            SizedBox(
                               width: (MediaQuery.of(context).size.width -
                                       32.0) /
                                   2, // calculate the width of each item based on the screen width and the spacing between items
@@ -270,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           if (showMoreItems)
-                            Container(
+                            SizedBox(
                               width: (MediaQuery.of(context).size.width * 0.45),
                               height: (MediaQuery.of(context).size.width *
                                   0.45), // calculate the width of the "See more items" box based on the screen width and the spacing between items
@@ -327,8 +324,6 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Item extends StatelessWidget {
-  // TODO se till att strängen int är längre än en rad för då blir rutan ful
-
   Item({
     required this.string,
     required this.image,
@@ -350,7 +345,7 @@ class Item extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 1,
-            child: Container(
+            child: SizedBox(
               height: MediaQuery.of(context).size.width * 0.4,
               width: MediaQuery.of(context).size.width * 0.4,
               /*

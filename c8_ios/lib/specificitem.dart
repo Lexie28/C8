@@ -7,7 +7,6 @@ import 'api.dart';
 import 'otherProfile.dart';
 import 'createbid.dart';
 import 'profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -56,7 +55,6 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
     if (response.statusCode == 200) {
       User user = User.fromJson(jsonDecode(response.body));
-      print(user.profilePicturePath);
 
       setState(() {
         profilePicturePath = user.profilePicturePath;
@@ -86,10 +84,9 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: ProductName(
-                    string: ListingName(
+                child: ListingName(
                   futureListing: futureListing,
-                )),
+                ),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
@@ -131,48 +128,6 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
           ),
         ),
       ),
-    );
-
-    /*
-        } else if(snapshot.hasError){
-          return Center(
-            child: Text('Failed to fetch listing information'),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-
-        }*/
-  }
-  //),
-  //bottomNavigationBar: toolbar(),
-  //);
-}
-//}
-
-class ProductName extends StatelessWidget {
-  const ProductName({
-    required this.string,
-  });
-
-  final ListingName string;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Container(
-      margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.05,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0.02,
-      ),
-      child: string,
     );
   }
 }
@@ -647,10 +602,17 @@ class ListingName extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           String productName = snapshot.data!.listingName;
-          return Text(
-            productName,
-            style: style,
-          );
+          return Container(
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.05,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.02,
+              ),
+              child: Text(
+                productName,
+                style: style,
+              ));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
