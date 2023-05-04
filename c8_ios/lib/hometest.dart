@@ -348,13 +348,6 @@ class Item extends StatelessWidget {
             child: SizedBox(
               height: MediaQuery.of(context).size.width * 0.4,
               width: MediaQuery.of(context).size.width * 0.4,
-              /*
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('https://circle8.s3.eu-north-1.amazonaws.com/$image'),
-                  fit: BoxFit.cover,
-                ),
-                */
 
               child: Image.network(
                 'https://circle8.s3.eu-north-1.amazonaws.com/$image',

@@ -292,19 +292,19 @@ class Item extends StatelessWidget {
       color: theme.colorScheme.onTertiary,
     );
 
-    return Container(
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-      color: Color.fromARGB(255, 195, 195, 195),
+     return Material(
+      elevation: 7,
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-            child: ClipRRect(
-              //borderRadius: BorderRadius.circular(50.0),
+          AspectRatio(
+            aspectRatio: 1,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.4,
+
               child: Image.network(
                 'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
-                height: MediaQuery.of(context).size.width * 0.25,
-                width: MediaQuery.of(context).size.width * 0.25,
+                fit: BoxFit.cover,
               ),
             ),
           ),
