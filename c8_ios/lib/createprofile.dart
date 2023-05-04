@@ -126,6 +126,21 @@ class _CreateProfileState extends State<CreateProfile> {
             key: _formKey,
             child: Column(
               children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.6,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(120),
+                    child: imagePicked
+                        ? Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            'https://circle8.s3.eu-north-1.amazonaws.com/defaultProfilePicture.png',
+                          ),
+                  ),
+                ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Name"),
                   validator: (value) {
@@ -164,20 +179,34 @@ class _CreateProfileState extends State<CreateProfile> {
                   },
                 ),
                 SizedBox(height: 20),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.1,
+                    left: MediaQuery.of(context).size.width * 0.15,
+                    right: MediaQuery.of(context).size.width * 0.15,
+                  ),
+                  child: CustomButton(
+                    title: 'Pick from Gallery',
+                    icon: Icons.image_outlined,
+                    onClick: () => getImage(ImageSource.gallery),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.15,
+                    right: MediaQuery.of(context).size.width * 0.15,
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  child: CustomButton(
+                    title: 'Pick from Camera',
+                    icon: Icons.camera,
+                    onClick: () => getImage(ImageSource.camera),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: _submitForm,
                   child: Text("Create Profile"),
                 ),
-                Container(
-                  child: CustomButton(
-                      title: 'Pick from Gallery',
-                      icon: Icons.image_outlined,
-                      onClick: () => getImage(ImageSource.gallery)),
-                ),
-                CustomButton(
-                    title: 'Pick from Camera',
-                    icon: Icons.camera,
-                    onClick: () => getImage(ImageSource.camera))
               ],
             ),
           ),

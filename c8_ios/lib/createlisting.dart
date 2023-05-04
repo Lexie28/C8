@@ -64,6 +64,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
     'Houseware',
     'Sports'
   ];
+  bool imagePicked = false;
 
   Api _api = Api();
 
@@ -91,12 +92,20 @@ class _CreateListingPageState extends State<CreateListingPage> {
     final ext = extension(imagePath);
     final image = File('${directory.path}/$uuidCrypto$ext');
 
+    imagePicked = true;
+
     return File(imagePath).copy(image.path);
   }
 
   Future<void> _submitForm() async {
     _formKey.currentState!.save();
-    final uploadedImageName = await _upload(_image);
+    final String? uploadedImageName;
+
+    if(imagePicked){
+      uploadedImageName = await _upload(_image);
+    } else{
+      uploadedImageName = 'defaultProfilePicture.png';    //ANNAN BILD!
+    }
 
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
@@ -122,7 +131,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
         MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
       );
     } else {
-      print('NOOOO');
+      print('Failed to create listing!');
     }
   }
 
@@ -144,10 +153,14 @@ class _CreateListingPageState extends State<CreateListingPage> {
                 Container(
                   height: MediaQuery.of(context).size.width*0.8,
                   width: MediaQuery.of(context).size.width*0.9,
-                  child: Image.file(
-                      _image!,
-                    fit: BoxFit.cover,
-                  ),
+                  child: imagePicked
+                        ? Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'images/noImage.jpg',
+                          ),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Listing Name'),
