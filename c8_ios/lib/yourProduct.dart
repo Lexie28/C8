@@ -10,8 +10,6 @@ import 'profile.dart';
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
 
-  // platsen den är på i user/listings-listan INTE SAMMA som itemId
-
   final int itemIndex;
 
   @override
@@ -196,7 +194,7 @@ class ProductInfo extends StatelessWidget {
   }
 }
 
-class NumBids extends StatefulWidget {
+class NumBids extends StatelessWidget {
   const NumBids({
     required this.futureUser,
     required this.itemId,
@@ -205,11 +203,6 @@ class NumBids extends StatefulWidget {
   final Future<User> futureUser;
   final int itemId;
 
-  @override
-  State<NumBids> createState() => _NumBidsState();
-}
-
-class _NumBidsState extends State<NumBids> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -232,12 +225,12 @@ class _NumBidsState extends State<NumBids> {
             vertical: MediaQuery.of(context).size.width * 0.04,
           ),
           child: FutureBuilder<User>(
-            future: widget.futureUser,
+            future: futureUser,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 List listings = snapshot.data!.listings;
                 return Text(
-                  listings[widget.itemId]['number_of_bids'].toString(),
+                  listings[itemId]['number_of_bids'].toString(),
                   style: style,
                 );
               } else if (snapshot.hasError) {
@@ -372,7 +365,7 @@ class ListingProfile extends StatelessWidget {
             MediaQuery.of(context).size.width * 0.05,
             MediaQuery.of(context).size.width * 0.1,
             MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0,
+            MediaQuery.of(context).size.width * 0.0,
           ),
           height: MediaQuery.of(context).size.height * 0.1,
           width: MediaQuery.of(context).size.width * 0.2,
@@ -389,7 +382,7 @@ class ListingProfile extends StatelessWidget {
             MediaQuery.of(context).size.width * 0.04,
             MediaQuery.of(context).size.width * 0.04,
             MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0,
+            MediaQuery.of(context).size.width * 0.0,
           ),
           width: MediaQuery.of(context).size.width * 0.2,
           child: Column(
@@ -402,7 +395,7 @@ class ListingProfile extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width * 0.07,
                 child: Image.asset(
-                  'images/like.png', //TODO
+                  'images/like.png',
                   fit: BoxFit.contain,
                 ),
               ),

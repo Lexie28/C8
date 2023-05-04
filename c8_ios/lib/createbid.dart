@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
+import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateBid extends StatefulWidget {
@@ -87,6 +88,8 @@ class _CreateBidState extends State<CreateBid> {
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => MyBottomNavigationbar()));
       // Bid created successfully, do something here
     } else {
       throw Exception('Failed to create bid');
