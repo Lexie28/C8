@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                     ))),
         ),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
-        backgroundColor: Color.fromARGB(255, 142, 219, 250),
+        backgroundColor: primary,
       ),
       body: SingleChildScrollView(
         child: Container(color:Color.fromARGB(255, 245, 253, 255),
@@ -73,7 +73,6 @@ class _HomePageState extends State<HomePage> {
                 child: Text(
                   'Categories',
                   style: GoogleFonts.kalam(
-                    //kalam
                     textStyle: TextStyle(
                       fontSize: MediaQuery.of(context).size.height * 0.04,
                       fontWeight: FontWeight.bold,
