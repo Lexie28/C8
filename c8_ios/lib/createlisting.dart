@@ -1,4 +1,5 @@
 import 'package:c8_ios/main.dart';
+import 'package:c8_ios/specificitem.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -140,6 +141,14 @@ class _CreateListingPageState extends State<CreateListingPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Container(
+                  height: MediaQuery.of(context).size.width*0.8,
+                  width: MediaQuery.of(context).size.width*0.9,
+                  child: Image.file(
+                      _image!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Listing Name'),
                   validator: (value) {
