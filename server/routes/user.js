@@ -31,7 +31,7 @@ function user_registration(req, res) {
 	.insert({id, name, profile_picture_path, phone_number, email, location})
     .then(result => {
       if (result) {
-        res.status(200).json({ message: 'User created successfully' });
+        res.status(201).json({ message: 'User created successfully' });
       } else {
         res.status(500).json({ message: 'An error occurred while creating the user' });
       }
@@ -257,10 +257,19 @@ router.get("/user/:id/offers", async (req, res) => {
 })
 
 
+router.get("/user/:id/listings", () => {
+  const { id } = req.params;
 
+    db
+	.select("*")
+	.from("listing")
+	.where("owner_id", id)
+	.then((result) => {
+	    res.status(200).json(result)
+	}).catch((err) => {
+	    console.log(err);
+	    res.status(500).json({message: "Error!" + err})
+	});
+})
 
 module.exports = router;
-
-/*
-    
-*/

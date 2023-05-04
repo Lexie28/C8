@@ -109,14 +109,14 @@ Creates a new listing using imput received from the client.
 @returns {undefined} This function does not return anything.
 */
 function listing_create(req, res) {
-  const { name, description, category, image_path, owner_id } = req.body;
+    const { name, description, category, image_path, owner_id } = req.body;
   const id = newId();
   const creation_date = currentDateTime();
   db('listing')
     .insert({ id, name, description, creation_date, image_path, category, owner_id })
     .then(result => {
       if (result) {
-        res.status(200).json({ message: 'listing created successfully' });
+          res.status(201).json({ message: 'listing created successfully' , id: id});
       } else {
         res.status(500).json({ message: 'An error occurred while creating the listing' });
       }
@@ -181,24 +181,7 @@ function listing_delete(req, res) {
   //FIXME: allt som borde försvinna i offer_listing gör inte det
 };
 
-function listing_user(req, res) {
-  const { id } = req.params;
-
-  db.select("*").from("listing").where("owner_id", id).then((result) => {
-    res.send(result)
-  }).catch((err) => {
-    console.log(err);
-    res.sendStatus(500);
-  });
-}
-
-
-
 router.get("/listing", get_listings);
-
-router.get('/listing/category/:category', (req, res) => listing_category(req, res));
-
-router.get('/listing/user/:id', (req, res) => listing_user(req, res));
 
 router.get('/listing/:id', (req, res) => get_listing(req, res));
 

@@ -7,8 +7,7 @@
     "test": "jest",
     "prestart": "npm run swagger-autogen && ./init_db.sh",
     "start": "node server.js",
-    "swagger-autogen": "node swagger.js",
-    "ci": "start-server-and-test start http://localhost:3000 test"
+    "swagger-autogen": "node swagger.js"      
   },
   "author": "",
   "license": "ISC",

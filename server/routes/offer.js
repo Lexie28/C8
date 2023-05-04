@@ -48,7 +48,7 @@ async function offer_create(req, res) {
             });
     })
 	.then(function() {
-	    res.status(200).json({ message: 'Trade offer created successfully' , id: offerId});
+	    res.status(201).json({ message: 'Trade offer created successfully' , id: offerId});
 	    return;
 	})
 	.catch(function(err) {
