@@ -1,12 +1,9 @@
-//import 'dart:io';
-//import 'package:c8_ios/otherProduct.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
-
 import 'api.dart';
 import 'main.dart';
+import 'profile.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.userId});
@@ -27,16 +24,22 @@ class _EditProfileState extends State<EditProfile> {
 
   String _userName = '';
   String _userLocation = '';
-  String _userContact= '';
+  String _userContact = '';
 
-  //Någon variabel som håller bilden kanske
+  String profilePicturePath = 'loading.png';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPP(widget.userId);
+  }
+
   Future<void> changeTitle() async {
     print('New product title: ${_nameController.text}');
 
     if (_formKey.currentState!.validate()) {
-      //final url = Uri.parse('${_api.getApiHost()}/listing/:id');
-      final url =
-          Uri.parse('${_api.getApiHost()}/listing/${widget.userId}');   //TODO: ändra path NÄR DEN FINNS
+      final url = Uri.parse(
+          '${_api.getApiHost()}/listing/${widget.userId}'); //TODO: ändra path NÄR DEN FINNS
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
@@ -54,16 +57,29 @@ class _EditProfileState extends State<EditProfile> {
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
         );
-      }
-      else if(response.statusCode == 404){
+      } else if (response.statusCode == 404) {
         print("Error 404");
-      }
-      else if(response.statusCode == 500){
+      } else if (response.statusCode == 500) {
         print("Error 500");
-      }
-       else {
+      } else {
         print('Failed to update listing');
       }
+    }
+  }
+
+  Future<void> fetchPP(String userId) async {
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
+
+    if (response.statusCode == 200) {
+      User user = User.fromJson(jsonDecode(response.body));
+      print(user.profilePicturePath);
+
+      setState(() {
+        profilePicturePath = user.profilePicturePath;
+      });
+    } else {
+      throw Exception('Failed to load album');
     }
   }
 
@@ -85,17 +101,18 @@ class _EditProfileState extends State<EditProfile> {
                   // TODO: Implement change profile picture logic
                 },
                 child: Container(
-                  margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
+                  margin:
+                      EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(120.0),
-                    child: Image.asset(
-                      'images/woman.jpg',
+                    child: Image.network(
+                      'https://circle8.s3.eu-north-1.amazonaws.com/$profilePicturePath',
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
-      
+
               // TODO: knapp för ändra profil
               // Name field
               Container(
@@ -113,7 +130,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                 ),
               ),
-      
+
               // Name field
               Container(
                 margin: EdgeInsets.all(
@@ -130,7 +147,6 @@ class _EditProfileState extends State<EditProfile> {
                   },
                 ),
               ),
-
 
               /*
               DropdownButtonFormField(
@@ -149,7 +165,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                 ),
                 */
-                Container(
+              Container(
                 margin: EdgeInsets.all(
                   MediaQuery.of(context).size.width * 0.01,
                 ),

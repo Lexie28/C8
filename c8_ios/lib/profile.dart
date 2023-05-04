@@ -15,7 +15,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<User> futureUser;
   late String id = '';
-  late String profile_picture_path = 'loading.png';
+  late String profilePicturePath = 'loading.png';
 
   Api _api = Api();
 
@@ -35,7 +35,7 @@ class _ProfileState extends State<Profile> {
       User user = User.fromJson(jsonDecode(response.body));
       setState(() {
         id = userId as String;
-        profile_picture_path = user.profilePicturePath;
+        profilePicturePath = user.profilePicturePath;
       });
       return user;
     } else {
@@ -86,11 +86,14 @@ class _ProfileState extends State<Profile> {
               child: Container(
                 height: MediaQuery.of(context).size.width * 0.6,
                 width: MediaQuery.of(context).size.width * 0.6,
-                margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05, bottom: MediaQuery.of(context).size.width * 0.05,),
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.05,
+                  bottom: MediaQuery.of(context).size.width * 0.05,
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.network(
-                    'https://circle8.s3.eu-north-1.amazonaws.com/$profile_picture_path',
+                    'https://circle8.s3.eu-north-1.amazonaws.com/$profilePicturePath',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -172,7 +175,10 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['name'], picturePath: listings[i]['image_path'],),
+                              child: Item(
+                                string: listings[i]['name'],
+                                picturePath: listings[i]['image_path'],
+                              ),
                             ),
                           ),
                       ]);
@@ -190,7 +196,7 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-class ProfileProducts extends StatelessWidget {
+/*class ProfileProducts extends StatelessWidget {
   final String string;
 
   const ProfileProducts({
@@ -234,7 +240,7 @@ class ProfileProducts extends StatelessWidget {
       ],
     );
   }
-}
+}*/
 
 class User {
   final String userId;
@@ -274,13 +280,10 @@ class Item extends StatelessWidget {
   Item({
     required this.string,
     required this.picturePath,
-    
-    
-    });
+  });
 
   final String string;
   final String picturePath;
-
 
   @override
   Widget build(BuildContext context) {
