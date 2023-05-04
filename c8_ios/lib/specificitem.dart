@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'api.dart';
 import 'otherProfile.dart';
 import 'createbid.dart';
@@ -314,6 +316,7 @@ class ListingProfile extends StatelessWidget {
         Column(
           children: [
             Container(
+              width: MediaQuery.of(context).size.width * 0.5,
               margin: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.05,
                   top: MediaQuery.of(context).size.width * 0.1),
@@ -357,9 +360,11 @@ class ListingProfile extends StatelessWidget {
               ),
             ),
             Container(
+              width: MediaQuery.of(context).size.width * 0.5,
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.width * 0.01,
-                    bottom: MediaQuery.of(context).size.width * 0.05),
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                    left: MediaQuery.of(context).size.width * 0.05),
                 child: name),
           ],
         ),
@@ -428,13 +433,18 @@ class ListingProfile extends StatelessWidget {
                             fontSize: MediaQuery.of(context).size.width * 0.04),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.07),
-                            child: location), //TODO
-                        Container(
+                    Row(children: [
+                      Container(
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.07),
+                          child: location), //TODO
+                      GestureDetector(
+                        onTap: () {
+                          launchUrlString(
+                            'https://www.google.com/maps/search/?api=1&query=$location',
+                          );
+                        },
+                        child: Container(
                           margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width * 0.02),
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -444,8 +454,8 @@ class ListingProfile extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ]),
                   ],
                 ),
               ),
