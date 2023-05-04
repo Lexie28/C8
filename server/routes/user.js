@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../db-config.js");
-
+const {add_listing_objects_to_offer} = require("../utils.js");
 
 /**
 Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
@@ -201,12 +201,6 @@ router.patch('/user/:id/dislike', (req, res) => user_dislike(req, res));
 //Deleting user
 router.delete('/user/:id', (req, res) => user_delete(req, res));
 
-async function get_listings_for_user_and_offer(user_id, offer_id) {
-    return db
-	.from("listing")
-	.innerJoin("offer_listing", "listing.id", "offer_listing.listing_id")
-	.where({owner_id: user_id, offer_id: offer_id});
-}
 
 router.get("/user/:id/offers", async (req, res) => {
     //1. Hitta alla offers där användaren med id är involverad i.
@@ -236,21 +230,11 @@ router.get("/user/:id/offers", async (req, res) => {
 	.where({user_receiving_offer: user_id});
 
     for (const offer of offers.making_offer) {
-	offer.offered_items = [];
-	offer.offered_items.push(await get_listings_for_user_and_offer(user_id, offer.id));
-
-	offer.wanted_items = [];
-	offer.wanted_items.push(await get_listings_for_user_and_offer(offer.user_receiving_offer, offer.id));
+	await add_listing_objects_to_offer(offer);
     }
 
     for (const offer of offers.receiving_offer) {
-	offer.offered_items = [];
-	offer.offered_items.push(await get_listings_for_user_and_offer(offer.user_making_offer, offer.id));
-
-	offer.wanted_items = [];
-	offer.wanted_items.push(await get_listings_for_user_and_offer(user_id, offer.id));
-	console.log(offer.offered_items);
-	console.log(offer.wanted_items);				
+	await add_listing_objects_to_offer(offer);
     }
 
     res.status(200).json(offers);

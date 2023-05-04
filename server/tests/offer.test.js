@@ -16,6 +16,14 @@ describe("GET /offer", () => {
     it("Should return at least one offer", async () => {
 	expect(response._body.length >= 1).toBe(true);
     })
+    it("Should return the listings related to the offer as a part of each object", () => {
+	for(offer of response._body) {
+	    expect(offer.wanted_items.length >= 1).toBe(true);
+	    expect(offer.offered_items.length >= 1).toBe(true);
+	}
+	
+    })
+
 });
 
 
@@ -40,7 +48,11 @@ describe("GET /offer/:id", () => {
 	const nonexistant_response = await request(baseURL).get("/offer/this_id_doesnt_exist");
 	expect(nonexistant_response.statusCode).toBe(404);
     })
-    
+    it("Should return the listings related to the offer as a part of the object", () => {
+	expect(response._body[0].wanted_items.length >= 1).toBe(true);
+	expect(response._body[0].offered_items.length >= 1).toBe(true);
+    })
+
 });
 
 describe("POST /offer", () => {
