@@ -154,21 +154,26 @@ class _EditListingState extends State<EditListing> {
                   },
                 ),
                 */
-              Container(
-                margin: EdgeInsets.all(
+                Container(
+                  margin: EdgeInsets.all(
                   MediaQuery.of(context).size.width * 0.01,
                 ),
-                child: TextField(
-                  controller: _catController,
-                  decoration: InputDecoration(
-                    labelText: 'New Category',
-                    border: OutlineInputBorder(),
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(labelText: 'Listing Category'),
+                    value: _categories[0],
+                    items: _categories.map((category) {
+                      return DropdownMenuItem(
+                        value: category,
+                        child: Text(category),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _listingCategory = value.toString();
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    _listingCategory = value;
-                  },
                 ),
-              ),
               // Bio field
               // Save button
               Container(
