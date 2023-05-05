@@ -1,8 +1,11 @@
 import 'dart:convert';
+//import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:simple_s3/simple_s3.dart';
 import 'api.dart';
 import 'main.dart';
+import 'package:path/path.dart' as p;
 
 class EditListing extends StatefulWidget {
   const EditListing({super.key, required this.itemId});
@@ -21,10 +24,6 @@ class _EditListingState extends State<EditListing> {
 
   Api _api = Api();
 
-  String _listingName = '';
-  String _listingDescription = '';
-  String _listingCategory = '';
-  //String _listingCategory = 'Other';
   List<String> _categories = [
     'Other',
     'Clothing',
@@ -38,7 +37,6 @@ class _EditListingState extends State<EditListing> {
     'Sports'
   ];
 
-  //Någon variabel som håller bilden kanske
   Future<void> changeTitle() async {
     print('New product title: ${_titleController.text}');
 
@@ -48,9 +46,9 @@ class _EditListingState extends State<EditListing> {
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'name': '${_titleController.text}',
-        'description': '${_descController.text}',
-        'category': '${_catController.text}',
+        'name': _titleController.text,
+        'description': _descController.text,
+        'category': _catController.text,
         'image_path': null,
       };
       final jsonBody = json.encode(body);
@@ -87,7 +85,7 @@ class _EditListingState extends State<EditListing> {
               // Profile picture
               GestureDetector(
                 onTap: () {
-                  // TODO: Implement change profile picture logic
+                  ; //TODO här
                 },
                 child: Container(
                   margin:
@@ -114,9 +112,6 @@ class _EditListingState extends State<EditListing> {
                     labelText: 'New Title',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _listingName = value;
-                  },
                 ),
               ),
 
@@ -131,14 +126,14 @@ class _EditListingState extends State<EditListing> {
                     labelText: 'New Description',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _listingDescription = value;
-                  },
                 ),
               ),
 
-              /*
-              DropdownButtonFormField(
+              Container(
+                margin: EdgeInsets.all(
+                  MediaQuery.of(context).size.width * 0.01,
+                ),
+                child: DropdownButtonFormField(
                   decoration: InputDecoration(labelText: 'Listing Category'),
                   value: _categories[0],
                   items: _categories.map((category) {
@@ -148,32 +143,10 @@ class _EditListingState extends State<EditListing> {
                     );
                   }).toList(),
                   onChanged: (value) {
-                    setState(() {
-                      _listingCategory = value.toString();
-                    });
+                    setState(() {});
                   },
                 ),
-                */
-                Container(
-                  margin: EdgeInsets.all(
-                  MediaQuery.of(context).size.width * 0.01,
-                ),
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(labelText: 'Listing Category'),
-                    value: _categories[0],
-                    items: _categories.map((category) {
-                      return DropdownMenuItem(
-                        value: category,
-                        child: Text(category),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        _listingCategory = value.toString();
-                      });
-                    },
-                  ),
-                ),
+              ),
               // Bio field
               // Save button
               Container(

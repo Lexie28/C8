@@ -8,7 +8,8 @@ import 'main.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart' as p;
 
 SimpleS3 _simpleS3 = SimpleS3();
 Future<String?> _upload(File? fileToUpload) async {
@@ -24,7 +25,7 @@ Future<String?> _upload(File? fileToUpload) async {
         s3FolderPath: "",
         accessControl: S3AccessControl.publicReadWrite,
       );
-      result = basename(fileToUpload.path);
+      result = p.basename(fileToUpload.path);
     } catch (e) {
       print(e);
     }
@@ -103,7 +104,7 @@ class _CreateProfileState extends State<CreateProfile> {
 
   Future<File> saveFilePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
-    final ext = extension(imagePath);
+    final ext = p.extension(imagePath);
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
     final image = File('${directory.path}/$userId$ext');
@@ -126,7 +127,7 @@ class _CreateProfileState extends State<CreateProfile> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.width * 0.6,
                 width: MediaQuery.of(context).size.width * 0.6,
                   child: ClipRRect(
@@ -185,7 +186,7 @@ class _CreateProfileState extends State<CreateProfile> {
                     left: MediaQuery.of(context).size.width * 0.15,
                     right: MediaQuery.of(context).size.width * 0.15,
                   ),
-                  child: CustomButton(
+                  child: customButton(
                     title: 'Pick from Gallery',
                     icon: Icons.image_outlined,
                     onClick: () => getImage(ImageSource.gallery),
@@ -197,7 +198,7 @@ class _CreateProfileState extends State<CreateProfile> {
                     right: MediaQuery.of(context).size.width * 0.15,
                     bottom: MediaQuery.of(context).size.width * 0.05,
                   ),
-                  child: CustomButton(
+                  child: customButton(
                     title: 'Pick from Camera',
                     icon: Icons.camera,
                     onClick: () => getImage(ImageSource.camera),
@@ -216,7 +217,7 @@ class _CreateProfileState extends State<CreateProfile> {
   }
 }
 
-Widget CustomButton(
+Widget customButton(
     {required String title,
     required IconData icon,
     required VoidCallback onClick}) {
