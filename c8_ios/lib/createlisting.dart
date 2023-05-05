@@ -104,7 +104,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
     if(imagePicked){
       uploadedImageName = await _upload(_image);
     } else{
-      uploadedImageName = 'defaultProfilePicture.png';    //ANNAN BILD!
+      uploadedImageName = 'noImage.jpg';    
     }
 
     final prefs = await SharedPreferences.getInstance();
