@@ -25,7 +25,7 @@ class C8 extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 55, 178, 255)),
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 142, 219, 250)),
       ),
       home: FirstPage(),
     );
