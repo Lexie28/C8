@@ -56,7 +56,7 @@ class _YourProductState extends State<YourProduct> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         title: Text('Listing'),
         actions: [
           IconButton(
@@ -100,7 +100,7 @@ class _YourProductState extends State<YourProduct> {
                   Align(
                     alignment: FractionalOffset.center,
                     // bitbutton
-                    child: BidButton(),
+                    //child: BidButton(),
                   )
                 ],
               ),

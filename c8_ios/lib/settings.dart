@@ -28,7 +28,7 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         actions: [
           IconButton(
               onPressed: () {

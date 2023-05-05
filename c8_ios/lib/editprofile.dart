@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'api.dart';
 import 'main.dart';
 import 'profile.dart';
+import 'createprofile.dart' as cp;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.userId});
@@ -22,10 +23,6 @@ class _EditProfileState extends State<EditProfile> {
 
   Api _api = Api();
 
-  String _userName = '';
-  String _userLocation = '';
-  String _userContact = '';
-
   String profilePicturePath = 'loading.png';
 
   @override
@@ -39,14 +36,13 @@ class _EditProfileState extends State<EditProfile> {
 
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(
-          '${_api.getApiHost()}/listing/${widget.userId}'); //TODO: ändra path NÄR DEN FINNS
+          '${_api.getApiHost()}/user/${widget.userId}'); //TODO: ändra path NÄR DEN FINNS
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'name': '${_nameController.text}',
-        'description': '${_locationController.text}',
-        'category': '${_contactController.text}',
-        'image_path': null,
+        'name': _nameController.text,
+        'location': _locationController.text,
+        'phone_number': _contactController.text,
       };
       final jsonBody = json.encode(body);
       final response = await http.patch(url, headers: headers, body: jsonBody);
@@ -73,7 +69,6 @@ class _EditProfileState extends State<EditProfile> {
 
     if (response.statusCode == 200) {
       User user = User.fromJson(jsonDecode(response.body));
-      print(user.profilePicturePath);
 
       setState(() {
         profilePicturePath = user.profilePicturePath;
@@ -88,7 +83,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
       ),
       body: Form(
         key: _formKey,
@@ -122,12 +117,9 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    labelText: 'New Name',
+                    labelText: 'Edit Name',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _userName = value;
-                  },
                 ),
               ),
 
@@ -139,12 +131,9 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _locationController,
                   decoration: InputDecoration(
-                    labelText: 'New Location',
+                    labelText: 'Edit Location',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _userLocation = value;
-                  },
                 ),
               ),
 
@@ -172,14 +161,12 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _contactController,
                   decoration: InputDecoration(
-                    labelText: 'New Contact info',
+                    labelText: 'Edit phone number',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _userContact = value;
-                  },
                 ),
               ),
+
               // Bio field
               // Save button
               Container(

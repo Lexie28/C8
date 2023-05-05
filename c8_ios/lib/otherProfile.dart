@@ -55,61 +55,63 @@ class _OtherProfileState extends State<OtherProfile> {
         backgroundColor: Color(0xFFA2BABF),
         title: Text('Circle Eight'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Align(
-              alignment: FractionalOffset.topCenter,
-              child: ProfilePicture(
-                picturePath: profilePicturePath,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: ProfilePicture(
+                  picturePath: profilePicturePath,
+                ),
               ),
-            ),
-            Align(
-              alignment: FractionalOffset.topCenter,
-              child: ProfileName(string: userName, location: location),
-            ),
-
-            // Alla produkter!!
-            FutureBuilder<User>(
-              future: futureUser,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final listings = snapshot.data!.listings;
-
-                  return Wrap(
-                      spacing: 16.0, // set the horizontal spacing between items
-                      runSpacing:
-                          16.0, // set the vertical spacing between items
-                      children: [
-                        for (int i = 0; i < listings.length && i < 5; i++)
-                          SizedBox(
-                            width: (MediaQuery.of(context).size.width - 48.0) /
-                                3, // calculate the width of each item based on the screen width and the spacing between items
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        ListingDetailPage(
-                                            listingId: listings[i]['id']),
-                                  ),
-                                );
-                              },
-                              child: Item(
-                                string: listings[i]['name'],
-                                picturePath: listings[i]['image_path'],
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: ProfileName(string: userName, location: location),
+              ),
+      
+              // Alla produkter!!
+              FutureBuilder<User>(
+                future: futureUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final listings = snapshot.data!.listings;
+      
+                    return Wrap(
+                        spacing: 16.0, // set the horizontal spacing between items
+                        runSpacing:
+                            16.0, // set the vertical spacing between items
+                        children: [
+                          for (int i = 0; i < listings.length && i < 5; i++)
+                            SizedBox(
+                              width: (MediaQuery.of(context).size.width - 48.0) /
+                                  3, // calculate the width of each item based on the screen width and the spacing between items
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ListingDetailPage(
+                                              listingId: listings[i]['id']),
+                                    ),
+                                  );
+                                },
+                                child: Item(
+                                  string: listings[i]['name'],
+                                  picturePath: listings[i]['image_path'],
+                                ),
                               ),
                             ),
-                          ),
-                      ]);
-                } else if (snapshot.hasError) {
-                  return Text('Failed to fetch listings');
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ],
+                        ]);
+                  } else if (snapshot.hasError) {
+                    return Text('Failed to fetch listings');
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
       //bottomNavigationBar: toolbar(),
