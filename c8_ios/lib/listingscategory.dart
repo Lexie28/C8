@@ -11,7 +11,7 @@ class ListingsPage extends StatefulWidget {
   const ListingsPage({required this.category});
 
   @override
-  _ListingsPageState createState() => _ListingsPageState();
+  State<ListingsPage> createState() => _ListingsPageState();
 }
 
 class _ListingsPageState extends State<ListingsPage> {

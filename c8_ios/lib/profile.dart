@@ -6,6 +6,7 @@ import 'yourProduct.dart';
 import 'api.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'color.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   late Future<User> futureUser;
   late String id = '';
-  late String profile_picture_path = 'loading.png';
+  late String profilePicturePath = 'loading.png';
 
   Api _api = Api();
 
@@ -35,7 +36,7 @@ class _ProfileState extends State<Profile> {
       User user = User.fromJson(jsonDecode(response.body));
       setState(() {
         id = userId as String;
-        profile_picture_path = user.profilePicturePath;
+        profilePicturePath = user.profilePicturePath;
       });
       return user;
     } else {
@@ -56,7 +57,7 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text('Your Profile'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: primary,
         actions: [
           IconButton(
               onPressed: () {
@@ -83,22 +84,22 @@ class _ProfileState extends State<Profile> {
           children: [
             // Profile picture
             Center(
-                child: TextButton(
-              onPressed: () {
-                // TODO: Implement camera logic
-              },
               child: Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.width * 0.02,
-                    horizontal: MediaQuery.of(context).size.width * 0.08),
+                height: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width * 0.6,
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.05,
+                  bottom: MediaQuery.of(context).size.width * 0.05,
+                ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(120),
                   child: Image.network(
-                    'https://circle8.s3.eu-north-1.amazonaws.com/$profile_picture_path',
+                    'https://circle8.s3.eu-north-1.amazonaws.com/$profilePicturePath',
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            )),
+            ),
 
             Center(
               child: FutureBuilder<User>(
@@ -175,7 +176,10 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 );
                               },
-                              child: Item(string: listings[i]['name']),
+                              child: Item(
+                                string: listings[i]['name'],
+                                picturePath: listings[i]['image_path'],
+                              ),
                             ),
                           ),
                       ]);
@@ -193,7 +197,7 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-class ProfileProducts extends StatelessWidget {
+/*class ProfileProducts extends StatelessWidget {
   final String string;
 
   const ProfileProducts({
@@ -237,7 +241,7 @@ class ProfileProducts extends StatelessWidget {
       ],
     );
   }
-}
+}*/
 
 class User {
   final String userId;
@@ -274,9 +278,13 @@ class User {
 class Item extends StatelessWidget {
   // TODO se till att strängen int är längre än en rad för då blir rutan ful
 
-  Item({required this.string});
+  Item({
+    required this.string,
+    required this.picturePath,
+  });
 
   final String string;
+  final String picturePath;
 
   @override
   Widget build(BuildContext context) {
@@ -285,19 +293,19 @@ class Item extends StatelessWidget {
       color: theme.colorScheme.onTertiary,
     );
 
-    return Container(
-      margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-      color: Color.fromARGB(255, 195, 195, 195),
+     return Material(
+      elevation: 7,
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
-            child: ClipRRect(
-              //borderRadius: BorderRadius.circular(50.0),
-              child: Image.asset(
-                'images/shoes.png',
-                height: MediaQuery.of(context).size.width * 0.25,
-                width: MediaQuery.of(context).size.width * 0.25,
+          AspectRatio(
+            aspectRatio: 1,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.of(context).size.width * 0.4,
+
+              child: Image.network(
+                'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
+                fit: BoxFit.cover,
               ),
             ),
           ),

@@ -158,11 +158,11 @@ function get_user(req, res) {
 
 function edit_user_all(req, res) {
   const { id } = req.params;
-  const { name, profile_picture_path, phone_number, email, location } = req.body;
+  const { name, location, phone_number } = req.body;
 
   db('user')
     .where({ id })
-    .update({ name, profile_picture_path, phone_number, email, location })
+    .update({ name, location, phone_number })
     .then(result => {
       if (result === 1) {
         res.status(200).json({ message: 'user updated successfully' });

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
+import 'main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateBid extends StatefulWidget {
@@ -87,6 +88,8 @@ class _CreateBidState extends State<CreateBid> {
       body: jsonEncode(data),
     );
     if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => MyBottomNavigationbar()));
       // Bid created successfully, do something here
     } else {
       throw Exception('Failed to create bid');
@@ -112,63 +115,133 @@ class _CreateBidState extends State<CreateBid> {
                   child: ListView.builder(
                     itemCount: theirListingData.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return CheckboxListTile(
-                        title: Text(theirListingData[index]['name']),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(theirListingData[index]['description']),
-                            Text(theirListingData[index]['category']),
-                          ],
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          border:
+                              Border.all(color: Color.fromARGB(255, 0, 0, 0)),
+                          borderRadius: BorderRadius.circular(0),
                         ),
-                        value: selectedTheirListingIds
-                            .contains(theirListingData[index]['id']),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            print(theirListingData[index]['id']);
-                            if (value!) {
-                              selectedTheirListingIds
-                                  .add(theirListingData[index]['id']);
-                            } else {
-                              selectedTheirListingIds
-                                  .remove(theirListingData[index]['id']);
-                            }
-                          });
-                        },
+                        child: CheckboxListTile(
+                          title: Text(theirListingData[index]['name']),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Image.network(
+                                      'https://circle8.s3.eu-north-1.amazonaws.com/${theirListingData[index]['image_path']}',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.only(
+                                          left:
+                                              MediaQuery.of(context).size.width *
+                                                  0.03,
+                                          bottom:
+                                              MediaQuery.of(context).size.width *
+                                                  0.02),
+                                      width:
+                                          MediaQuery.of(context).size.width * 0.4,
+                                      child: Text(theirListingData[index]
+                                          ['description'])),
+                                ],
+                              ),
+                              Text("Category: " +
+                                  theirListingData[index]['category']),
+                            ],
+                          ),
+                          value: selectedTheirListingIds
+                              .contains(theirListingData[index]['id']),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              print(theirListingData[index]['id']);
+                              if (value!) {
+                                selectedTheirListingIds
+                                    .add(theirListingData[index]['id']);
+                              } else {
+                                selectedTheirListingIds
+                                    .remove(theirListingData[index]['id']);
+                              }
+                            });
+                          },
+                        ),
                       );
                     },
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Mine:', style: TextStyle(fontSize: 24)),
+                Container(
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.01),
+                  width: MediaQuery.of(context).size.width * 1,
+                 color: Color.fromARGB(73, 122, 202, 231),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Mine:', style: TextStyle(fontSize: 24)),
+                  ),
                 ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: myListingData.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return CheckboxListTile(
-                        title: Text(myListingData[index]['name']),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(myListingData[index]['description']),
-                            Text(myListingData[index]['category']),
-                          ],
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(73, 122, 202, 231),
+                          border:
+                              Border.all(color: Color.fromARGB(255, 0, 0, 0)),
+                          borderRadius: BorderRadius.circular(0),
                         ),
-                        value: selectedMyListingIds
-                            .contains(myListingData[index]['id']),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value!) {
-                              selectedMyListingIds
-                                  .add(myListingData[index]['id']);
-                            } else {
-                              selectedMyListingIds
-                                  .remove(myListingData[index]['id']);
-                            }
-                          });
-                        },
+                        child: CheckboxListTile(
+                          title: Text(myListingData[index]['name']),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    child: Image.network(
+                                      'https://circle8.s3.eu-north-1.amazonaws.com/${myListingData[index]['image_path']}',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
+                                        bottom:
+                                            MediaQuery.of(context).size.width *
+                                                0.02),
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: Text(
+                                        myListingData[index]['description']),
+                                  ),
+                                ],
+                              ),
+                              Text("Category: " +
+                                  myListingData[index]['category']),
+                            ],
+                          ),
+                          value: selectedMyListingIds
+                              .contains(myListingData[index]['id']),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              if (value!) {
+                                selectedMyListingIds
+                                    .add(myListingData[index]['id']);
+                              } else {
+                                selectedMyListingIds
+                                    .remove(myListingData[index]['id']);
+                              }
+                            });
+                          },
+                        ),
                       );
                     },
                   ),

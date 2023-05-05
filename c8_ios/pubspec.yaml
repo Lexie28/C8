@@ -52,6 +52,8 @@ dependencies:
   google_sign_in: ^6.1.0
   shared_preferences: ^2.1.0
   google_fonts: ^4.0.4
+  uuid: ^3.0.7
+  url_launcher: ^6.1.10
 
 dev_dependencies:
   flutter_test:

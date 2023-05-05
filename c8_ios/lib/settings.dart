@@ -1,31 +1,19 @@
-
 import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
-import 'deleteProfile.dart';
-import 'authentication.dart';
-import 'main.dart';
-
-import 'package:flutter/material.dart';
-import 'deleteProfile.dart';
 import 'authentication.dart';
 import 'main.dart';
 
 class Settings extends StatelessWidget {
-
-
   Future<void> _deleteUserId(BuildContext context) async {
-
-  final prefs = await SharedPreferences.getInstance();
-  final userId = prefs.getString('uid');
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     final api = Api();
     final url = '${api.getApiHost()}/user/$userId';
     final response = await http.delete(Uri.parse(url));
 
     if (response.statusCode == 200) {
-
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -35,13 +23,12 @@ class Settings extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         actions: [
           IconButton(
               onPressed: () {
@@ -57,14 +44,11 @@ class Settings extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-            child: SettingsOption(
-              text: 'About us',
-              onPressed: () {
-
-              },
-            )
-          ),
+              margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+              child: SettingsOption(
+                text: 'About us',
+                onPressed: () {},
+              )),
           Container(
             margin: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
             child: SettingsOption(

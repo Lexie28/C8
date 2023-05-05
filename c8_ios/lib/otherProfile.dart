@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'api.dart';
 import 'specificitem.dart';
-import 'package:c8_ios/yourProduct.dart';
 import 'profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -17,9 +15,10 @@ class OtherProfile extends StatefulWidget {
 }
 
 class _OtherProfileState extends State<OtherProfile> {
-  late Future<User> futureUser = fetchUser();
+  late Future<User> futureUser;
   String userName = '';
   String location = '';
+  String profilePicturePath = 'loading.png';
 
   @override
   void initState() {
@@ -39,6 +38,7 @@ class _OtherProfileState extends State<OtherProfile> {
       setState(() {
         userName = user.userName;
         location = user.location;
+        profilePicturePath = user.profilePicturePath;
       });
 
       return user;
@@ -55,55 +55,63 @@ class _OtherProfileState extends State<OtherProfile> {
         backgroundColor: Color(0xFFA2BABF),
         title: Text('Circle Eight'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Align(
-              alignment: FractionalOffset.topCenter,
-              child: ProfilePicture(),
-            ),
-            Align(
-              alignment: FractionalOffset.topCenter,
-              child: ProfileName(string: userName, location: location),
-            ),
-
-            // Alla produkter!!
-            FutureBuilder<User>(
-              future: futureUser,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final listings = snapshot.data!.listings;
-
-                  return Wrap(
-                      spacing: 16.0, // set the horizontal spacing between items
-                      runSpacing:
-                          16.0, // set the vertical spacing between items
-                      children: [
-                        for (int i = 0; i < listings.length && i < 5; i++)
-                          SizedBox(
-                            width: (MediaQuery.of(context).size.width - 48.0) /
-                                3, // calculate the width of each item based on the screen width and the spacing between items
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        ListingDetailPage(listingId: listings[i]['id']),
-                                  ),
-                                );
-                              },
-                              child: Item(string: listings[i]['name']),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: ProfilePicture(
+                  picturePath: profilePicturePath,
+                ),
+              ),
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: ProfileName(string: userName, location: location),
+              ),
+      
+              // Alla produkter!!
+              FutureBuilder<User>(
+                future: futureUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final listings = snapshot.data!.listings;
+      
+                    return Wrap(
+                        spacing: 16.0, // set the horizontal spacing between items
+                        runSpacing:
+                            16.0, // set the vertical spacing between items
+                        children: [
+                          for (int i = 0; i < listings.length && i < 5; i++)
+                            SizedBox(
+                              width: (MediaQuery.of(context).size.width - 48.0) /
+                                  3, // calculate the width of each item based on the screen width and the spacing between items
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          ListingDetailPage(
+                                              listingId: listings[i]['id']),
+                                    ),
+                                  );
+                                },
+                                child: Item(
+                                  string: listings[i]['name'],
+                                  picturePath: listings[i]['image_path'],
+                                ),
+                              ),
                             ),
-                          ),
-                      ]);
-                } else if (snapshot.hasError) {
-                  return Text('Failed to fetch listings');
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-          ],
+                        ]);
+                  } else if (snapshot.hasError) {
+                    return Text('Failed to fetch listings');
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
       //bottomNavigationBar: toolbar(),
@@ -112,7 +120,9 @@ class _OtherProfileState extends State<OtherProfile> {
 }
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({super.key});
+  const ProfilePicture({required this.picturePath});
+
+  final String picturePath;
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +137,8 @@ class ProfilePicture extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.4,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100.0),
-        child: Image.asset(
-          'images/man.jpg',
+        child: Image.network(
+          'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
           fit: BoxFit.cover,
         ),
       ),

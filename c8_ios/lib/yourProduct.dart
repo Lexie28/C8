@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,13 +6,9 @@ import 'api.dart';
 import 'editListing.dart';
 import 'main.dart';
 import 'profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
-
-  // platsen den är på i user/listings-listan INTE SAMMA som itemId
 
   final int itemIndex;
 
@@ -26,6 +21,9 @@ class _YourProductState extends State<YourProduct> {
   Api _api = Api();
 
   String itemId = '';
+  String imagePath = 'loading.png';
+  String profilePicturePath = 'loading.png';
+
   @override
   void initState() {
     super.initState();
@@ -33,13 +31,21 @@ class _YourProductState extends State<YourProduct> {
   }
 
   Future<User> fetchUser() async {
-  final prefs = await SharedPreferences.getInstance();
-  final userId = prefs.getString('uid');
-  final response = await http
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    final response = await http
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
 
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      User user = User.fromJson(jsonDecode(response.body));
+
+      setState(() {
+        itemId = user.listings[widget.itemIndex].toString();
+        imagePath = user.listings[widget.itemIndex]['image_path'].toString();
+        profilePicturePath = user.profilePicturePath;
+      });
+
+      return user;
     } else {
       throw Exception('Failed to load album');
     }
@@ -47,29 +53,12 @@ class _YourProductState extends State<YourProduct> {
 
   @override
   Widget build(BuildContext context) {
-    // det sanna itemID!! == id
-    String itemId = '';
-
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         title: Text('Listing'),
         actions: [
-          FutureBuilder<User>(
-            future: futureUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List listings = snapshot.data!.listings;
-                itemId = listings[widget.itemIndex]['id'];
-                return Text('');
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -83,60 +72,46 @@ class _YourProductState extends State<YourProduct> {
         child: Center(
           child: Column(
             children: [
-              Row(
-                children: [
-                  Align(
-                    alignment: FractionalOffset.topLeft,
-                    child: ProductListing(string: 'images/apple.jpg'),
-                  ),
-                  Align(
-                      alignment: FractionalOffset.topRight,
-                      child: ListingProfile(
-                        futureUser: futureUser,
-                      )),
-                  //CardProduct(string: 'Hej'),
-                ],
+              Align(
+                alignment: FractionalOffset.topCenter,
+                child: ProductListing(imagePath: imagePath),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.1,
-                    vertical: MediaQuery.of(context).size.width * 0.05,
-                  ),
-                  child: ItemName(
-                    futureUser: futureUser,
-                    itemId: widget.itemIndex,
-                  ),
-                ), //Hämta namnet från databasen
-              ),
-              Align(
-                  alignment: FractionalOffset.topLeft,
-                  child: ProductInfo(
-                      futureUser: futureUser, itemId: widget.itemIndex)),
-              Align(
-                alignment: FractionalOffset.topLeft,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(
-                    //35,
-                    MediaQuery.of(context).size.width * 0.1,
-                    MediaQuery.of(context).size.width * 0.065,
-                    MediaQuery.of(context).size.width * 0,
-                    MediaQuery.of(context).size.width * 0,
-                  ),
-                  child: Text(
-                    'Number of bids',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                  ),
+                child: ListingName(
+                  futureUser: futureUser,
+                  itemId: widget.itemIndex,
                 ),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: NumBids(
-                  futureUser: futureUser,
-                  itemId: widget.itemIndex,
+                child: ProductInfo(
+                    futureUser: futureUser, itemId: widget.itemIndex),
+              ),
+              Row(
+                children: [
+                  Align(
+                    alignment: FractionalOffset.topLeft,
+                    child: NumBids(
+                      futureUser: futureUser,
+                      itemId: widget.itemIndex,
+                    ),
+                  ),
+                  Align(
+                    alignment: FractionalOffset.center,
+                    // bitbutton
+                    //child: BidButton(),
+                  )
+                ],
+              ),
+              Container(
+                color: Color.fromARGB(255, 233, 239, 240),
+                child: Align(
+                  alignment: FractionalOffset.topLeft,
+                  child: ListingProfile(
+                    futureUser: futureUser,
+                    picturePath: profilePicturePath,
+                  ),
                 ),
               ),
               FutureBuilder<User>(
@@ -152,12 +127,11 @@ class _YourProductState extends State<YourProduct> {
                   // By default, show a loading spinner.
                   return const CircularProgressIndicator();
                 },
-              ), // hmmmm vilken behövs itemId eller itemIndex?? tänk
+              ),
             ],
           ),
         ),
       ),
-      //bottomNavigationBar: toolbar(),
     );
   }
 }
@@ -207,7 +181,7 @@ class ProductInfo extends StatelessWidget {
   }
 }
 
-class NumBids extends StatefulWidget {
+class NumBids extends StatelessWidget {
   const NumBids({
     required this.futureUser,
     required this.itemId,
@@ -217,11 +191,6 @@ class NumBids extends StatefulWidget {
   final int itemId;
 
   @override
-  State<NumBids> createState() => _NumBidsState();
-}
-
-class _NumBidsState extends State<NumBids> {
-  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
@@ -229,35 +198,63 @@ class _NumBidsState extends State<NumBids> {
     );
 
     return Card(
-      margin: EdgeInsets.only(
-        left: MediaQuery.of(context).size.width * 0.1,
+
+      child: FutureBuilder<User>(
+        future: futureUser,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List listings = snapshot.data!.listings;
+            return Text(
+              listings[itemId]['number_of_bids'].toString(),
+              style: style,
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
+          // By default, show a loading spinner.
+          return const CircularProgressIndicator();
+        },
       ),
-      color: theme.colorScheme.primary,
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(100),
+    );
+  }
+}
+
+class BidButton extends StatefulWidget {
+  @override
+  State<BidButton> createState() => _BidButtonState();
+}
+
+class _BidButtonState extends State<BidButton> {
+  String buttonName = "Make a bid";
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      //margin: const EdgeInsets.fromLTRB(80, 40, 10, 0),
+      margin: EdgeInsets.fromLTRB(
+        MediaQuery.of(context).size.width * 0.2,
+        MediaQuery.of(context).size.width * 0,
+        MediaQuery.of(context).size.width * 0.05,
+        MediaQuery.of(context).size.width * 0.05,
       ),
-      child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: MediaQuery.of(context).size.width * 0.06,
-            vertical: MediaQuery.of(context).size.width * 0.04,
-          ),
-          child: FutureBuilder<User>(
-            future: widget.futureUser,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List listings = snapshot.data!.listings;
-                return Text(
-                  listings[widget.itemId]['number_of_bids'].toString(),
-                  style: style,
-                );
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          )),
+      height: MediaQuery.of(context).size.height * 0.09,
+      width: MediaQuery.of(context).size.height * 0.2,
+      child: ElevatedButton.icon(
+        label: Text(
+          buttonName,
+          style: TextStyle(color: Colors.white),
+        ),
+        icon: Icon(
+          Icons.handshake_outlined,
+          color: Colors.white,
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color(0xFFA2BABF),
+
+          //elevated btton background color
+        ),
+        onPressed: () {},
+      ),
     );
   }
 }
@@ -280,10 +277,10 @@ class DeleteProduct extends StatelessWidget {
       );
       Navigator.pop(context);
       Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
-        );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -324,22 +321,22 @@ class DeleteProduct extends StatelessWidget {
 
 class ProductListing extends StatelessWidget {
   const ProductListing({
-    required this.string,
+    required this.imagePath,
   });
 
-  final String string;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.08,
+        MediaQuery.of(context).size.width * 0.05,
         MediaQuery.of(context).size.width * 0.1,
         MediaQuery.of(context).size.width * 0.05,
         MediaQuery.of(context).size.width * 0.08,
       ),
-      height: MediaQuery.of(context).size.height * 0.25,
-      width: MediaQuery.of(context).size.height * 0.25,
+      height: MediaQuery.of(context).size.height * 0.35,
+      width: MediaQuery.of(context).size.height * 0.35,
       decoration: BoxDecoration(
         border: Border.all(width: 2.2, color: Colors.white),
         borderRadius: BorderRadius.all(
@@ -356,8 +353,8 @@ class ProductListing extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(17.0),
-        child: Image.asset(
-          string,
+        child: Image.network(
+          'https://circle8.s3.eu-north-1.amazonaws.com/$imagePath',
           fit: BoxFit.cover,
         ),
       ),
@@ -368,55 +365,104 @@ class ProductListing extends StatelessWidget {
 class ListingProfile extends StatelessWidget {
   const ListingProfile({
     required this.futureUser,
+    required this.picturePath,
   });
 
   final Future<User> futureUser;
+  final String picturePath;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Container(
-          margin: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0.1,
-            MediaQuery.of(context).size.width * 0.05,
-            MediaQuery.of(context).size.width * 0,
-          ),
-          height: MediaQuery.of(context).size.height * 0.1,
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(100.0),
-            child: Image.asset(
-              'images/woman.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0.04,
-            MediaQuery.of(context).size.width * 0,
-          ),
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: Column(
-            children: [
-              Name(
-                futureUser: futureUser,
+        Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              margin: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.05,
+                  top: MediaQuery.of(context).size.width * 0.1),
+              child: Text(
+                "About the seller",
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.07),
               ),
-              Text("80% (599)"), //TODO
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-                width: MediaQuery.of(context).size.width * 0.07,
-                child: Image.asset(
-                  'images/like.png', //TODO
-                  fit: BoxFit.contain,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(width: 2.2, color: Colors.white),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100.0),
                 ),
               ),
-            ],
-          ),
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.05,
+                MediaQuery.of(context).size.width * 0.0,
+                MediaQuery.of(context).size.width * 0,
+              ),
+              height: MediaQuery.of(context).size.height * 0.15,
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Image.network(
+                    'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.5,
+              margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.width * 0.01,
+                  bottom: MediaQuery.of(context).size.width * 0.05,
+                  left: MediaQuery.of(context).size.width * 0.05),
+              child: Name(
+                futureUser: futureUser,
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            SizedBox(
+              child: Container(
+                margin: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.0,
+                  MediaQuery.of(context).size.width * 0.1,
+                  MediaQuery.of(context).size.width * 0.0,
+                  MediaQuery.of(context).size.width * 0,
+                ),
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: Container(
+                  color: Color.fromARGB(93, 255, 254, 254),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.width * 0.02),
+                        child: Text(
+                          "Total likes:",
+                          style: TextStyle(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.04),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+              child: Container(
+                color: Colors.white,
+              ),
+            ),
+          ],
         )
       ],
     );
@@ -453,8 +499,8 @@ class Name extends StatelessWidget {
   }
 }
 
-class ItemName extends StatelessWidget {
-  ItemName({required this.futureUser, required this.itemId});
+class ListingName extends StatelessWidget {
+  ListingName({required this.futureUser, required this.itemId});
 
   final Future<User> futureUser;
   final int itemId;
@@ -471,10 +517,17 @@ class ItemName extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List listings = snapshot.data!.listings;
-          return Text(
-            listings[itemId]['name'].toString(),
-            style: style,
-          );
+          return Container(
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.05,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.02,
+              ),
+              child: Text(
+                listings[itemId]['name'].toString(),
+                style: style,
+              ));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }

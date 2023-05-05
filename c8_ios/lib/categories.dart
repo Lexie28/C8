@@ -147,7 +147,7 @@ class Category extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
+      color: theme.colorScheme.onBackground,
     );
     return Card(
       color: Color.fromARGB(255, 255, 255, 255),
@@ -165,12 +165,7 @@ class Category extends StatelessWidget {
               Container(
                 margin: EdgeInsets.only(
                     left: MediaQuery.of(context).size.width * 0.05),
-                child: Text(
-                  string,
-                  style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width * 0.1,
-                  ),
-                ),
+                child: Text(string, style: style),
               ),
             ],
           ),

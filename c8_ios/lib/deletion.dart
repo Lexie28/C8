@@ -2,8 +2,6 @@ import 'package:c8_ios/main.dart';
 import 'package:flutter/material.dart';
 
 class Deletion extends StatelessWidget {
-  //Variabler som namn och bilder
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

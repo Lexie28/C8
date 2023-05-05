@@ -1,30 +1,12 @@
 import 'package:c8_ios/api.dart';
 import 'package:c8_ios/myoffers.dart';
 import 'package:c8_ios/signin.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-// ws används inte?
-//import 'package:web_socket_channel/web_socket_channel.dart';
-//import 'package:web_socket_channel/io.dart';
-// for access to jsonEncode to encode the data
-//import 'homePage2.dart';
-
-//Tovas sidor
-import 'otherProfile.dart';
-import 'categories.dart';
-import 'editprofile.dart';
-import 'createprofile.dart';
 import 'profile.dart';
-import 'offers.dart';
 import 'hometest.dart';
 import 'createlisting.dart';
 
@@ -42,7 +24,8 @@ class C8 extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF3D4640)),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 142, 219, 250)),
       ),
       home: FirstPage(),
     );
@@ -59,7 +42,7 @@ class MyBottomNavigationbar extends StatefulWidget {
 class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    HomePage3(),
+    HomePage(),
     CreateListingPage(),
     OffersPage(),
     Profile(),
@@ -73,11 +56,13 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         selectedItemColor: Color.fromARGB(255, 80, 102, 106),
         unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
         showSelectedLabels: false,
@@ -120,92 +105,89 @@ class _FirstPageState extends State<FirstPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        //color: Color.fromARGB(255, 233, 247, 249),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/holdingplant.jpg'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width * 0,
-                  MediaQuery.of(context).size.width * 0.45,
-                  MediaQuery.of(context).size.width * 0,
-                  MediaQuery.of(context).size.width * 0.34,
-                ),
-                child: Card(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  child: Text(
-                    'Circle 8',
-                    style: GoogleFonts.kalam(
-                      //kalam
-                      textStyle: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.065,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                        // Use a readable text color
-                      ),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.45,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.34,
+              ),
+              child: Card(
+                color: Colors.transparent,
+                elevation: 0,
+                child: Text(
+                  'Circle 8',
+                  style: GoogleFonts.kalam(
+                    //kalam
+                    textStyle: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.065,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () async {
-                  print("Button pressed");
-                  setState(() {
-                    _isSigningIn = true;
-                  });
+            ),
+            GestureDetector(
+              onTap: () async {
+                print("Button pressed");
+                setState(() {
+                  _isSigningIn = true;
+                });
 
-                  auth.User? user =
-                      await Authentication.signInWithGoogle(context: context);
+                auth.User? user =
+                    await Authentication.signInWithGoogle(context: context);
 
-                  setState(() {
-                    _isSigningIn = false;
-                  });
+                setState(() {
+                  _isSigningIn = false;
+                });
 
-                  if (user != null) {
-                    print(user);
-                    final prefs = await SharedPreferences.getInstance();
-                    await prefs.setString("uid", user.uid);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MyBottomNavigationbar()),
-                    );
+                if (user != null) {
+                  print(user);
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString("uid", user.uid);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyBottomNavigationbar()),
+                  );
+                }
+              },
+              child: FutureBuilder(
+                future: Authentication.initializeFirebase(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Error initializing Firebase');
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return GoogleSignInButton();
                   }
-                },
-                child: FutureBuilder(
-                  future: Authentication.initializeFirebase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Text('Error initializing Firebase');
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.done) {
-                      return GoogleSignInButton();
-                    }
-                    return Card(
-                      color: Colors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Color.fromARGB(255, 255, 174, 0),
-                          ),
+                  return Card(
+                    color: Colors.white,
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          Color.fromARGB(255, 255, 174, 0),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
+            ),
+            /*
               GestureDetector(
                 onTap: () async {
                   setState(() {
@@ -254,22 +236,22 @@ class _FirstPageState extends State<FirstPage> {
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(
-                  MediaQuery.of(context).size.width * 0,
-                  MediaQuery.of(context).size.width * 0.55,
-                  MediaQuery.of(context).size.width * 0,
-                  MediaQuery.of(context).size.width * 0,
+              */
+            Container(
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.55,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0,
+              ),
+              child: Text(
+                'Circle 8 2023',
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                child: Text(
-                  'Circle 8 2023',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

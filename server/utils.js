@@ -1,9 +1,16 @@
 const { v4: uuidv4 } = require('uuid');
 const db = require("./db-config.js");
 
-const currentDateTime = function() {
+/*const currentDateTime = function() {
     return new Date().toISOString().slice(0, 19).replace('T', ' ');
-}
+}*/
+
+const currentDateTime = function() {
+    const now = new Date();
+    const stockholmTime = now.toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm' });
+    return stockholmTime.slice(0, 19).replace('T', ' ');
+  }
+  
 
 const newId = function() {
     return uuidv4();

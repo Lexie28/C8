@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher_string.dart';
 import 'api.dart';
 import 'otherProfile.dart';
 import 'createbid.dart';
+import 'profile.dart';
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -17,6 +19,8 @@ class ListingDetailPage extends StatefulWidget {
 class _ListingDetailPageState extends State<ListingDetailPage> {
   late Future<Listing> futureListing;
   late String userId = '';
+  String imagePath = 'loading.png';
+  String profilePicturePath = 'loading.png';
   Api _api = Api();
 
   @override
@@ -34,9 +38,26 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
       setState(() {
         userId = listing.user['id'];
+        imagePath = listing.listingPic.toString();
+        fetchPP(userId);
       });
 
       return listing;
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
+  Future<void> fetchPP(String userId) async {
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$userId'));
+
+    if (response.statusCode == 200) {
+      User user = User.fromJson(jsonDecode(response.body));
+
+      setState(() {
+        profilePicturePath = user.profilePicturePath;
+      });
     } else {
       throw Exception('Failed to load album');
     }
@@ -47,7 +68,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         title: Text('Listing'),
       ),
       body: SingleChildScrollView(
@@ -56,14 +77,15 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
             children: [
               Align(
                 alignment: FractionalOffset.topCenter,
-                child: ProductListing(string: 'images/shoes.jpg'),
+                child: ProductListing(
+                  imagePath: imagePath,
+                ),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
-                child: ProductName(
-                    string: ListingName(
+                child: ListingName(
                   futureListing: futureListing,
-                )),
+                ),
               ),
               Align(
                 alignment: FractionalOffset.topLeft,
@@ -98,54 +120,13 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                         futureListing: futureListing,
                       ),
                       location: Location(futureListing: futureListing),
+                      profilePicturePath: profilePicturePath,
                     )),
               ),
             ],
           ),
         ),
       ),
-    );
-
-    /*
-        } else if(snapshot.hasError){
-          return Center(
-            child: Text('Failed to fetch listing information'),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-
-        }*/
-  }
-  //),
-  //bottomNavigationBar: toolbar(),
-  //);
-}
-//}
-
-class ProductName extends StatelessWidget {
-  const ProductName({
-    required this.string,
-  });
-
-  final ListingName string;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-
-    return Container(
-      margin: EdgeInsets.fromLTRB(
-        MediaQuery.of(context).size.width * 0.05,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0,
-        MediaQuery.of(context).size.width * 0.02,
-      ),
-      child: string,
     );
   }
 }
@@ -247,7 +228,7 @@ class _BidButtonState extends State<BidButton> {
           color: Colors.white,
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFA2BABF),
+          backgroundColor: Color.fromARGB(255, 142, 219, 250),
 
           //elevated btton background color
         ),
@@ -272,10 +253,10 @@ class _BidButtonState extends State<BidButton> {
 
 class ProductListing extends StatelessWidget {
   const ProductListing({
-    required this.string,
+    required this.imagePath,
   });
 
-  final String string;
+  final String imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -304,8 +285,8 @@ class ProductListing extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(17.0),
-        child: Image.asset(
-          string,
+        child: Image.network(
+          'https://circle8.s3.eu-north-1.amazonaws.com/$imagePath',
           fit: BoxFit.cover,
         ),
       ),
@@ -314,17 +295,18 @@ class ProductListing extends StatelessWidget {
 }
 
 class ListingProfile extends StatelessWidget {
-  const ListingProfile({
-    required this.name,
-    required this.id,
-    required this.likes,
-    required this.location,
-  });
+  const ListingProfile(
+      {required this.name,
+      required this.id,
+      required this.likes,
+      required this.location,
+      required this.profilePicturePath});
 
   final UserName name;
   final String id;
   final Likes likes;
   final Location location;
+  final String profilePicturePath;
 
   @override
   Widget build(BuildContext context) {
@@ -333,6 +315,7 @@ class ListingProfile extends StatelessWidget {
         Column(
           children: [
             Container(
+              width: MediaQuery.of(context).size.width * 0.5,
               margin: EdgeInsets.only(
                   left: MediaQuery.of(context).size.width * 0.05,
                   top: MediaQuery.of(context).size.width * 0.1),
@@ -368,17 +351,19 @@ class ListingProfile extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Image.asset(
-                    'images/man.jpg',
+                  child: Image.network(
+                    'https://circle8.s3.eu-north-1.amazonaws.com/$profilePicturePath',
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
             ),
             Container(
+              width: MediaQuery.of(context).size.width * 0.5,
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.width * 0.01,
-                    bottom: MediaQuery.of(context).size.width * 0.05),
+                    bottom: MediaQuery.of(context).size.width * 0.05,
+                    left: MediaQuery.of(context).size.width * 0.05),
                 child: name),
           ],
         ),
@@ -447,13 +432,18 @@ class ListingProfile extends StatelessWidget {
                             fontSize: MediaQuery.of(context).size.width * 0.04),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width * 0.07),
-                            child: location), //TODO
-                        Container(
+                    Row(children: [
+                      Container(
+                          margin: EdgeInsets.only(
+                              left: MediaQuery.of(context).size.width * 0.07),
+                          child: location), //TODO
+                      GestureDetector(
+                        onTap: () {
+                          launchUrlString(
+                            'https://www.google.com/maps/search/?api=1&query=$location',
+                          );
+                        },
+                        child: Container(
                           margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width * 0.02),
                           height: MediaQuery.of(context).size.height * 0.05,
@@ -463,8 +453,8 @@ class ListingProfile extends StatelessWidget {
                             fit: BoxFit.contain,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ]),
                   ],
                 ),
               ),
@@ -482,6 +472,7 @@ class Listing {
   final String listingName;
   final String listingDesc;
   final int listingBids;
+  final String listingPic;
 
   const Listing({
     required this.listingId,
@@ -489,6 +480,7 @@ class Listing {
     required this.listingName,
     required this.listingDesc,
     required this.listingBids,
+    required this.listingPic,
   });
 
   factory Listing.fromJson(Map<String, dynamic> json) {
@@ -498,6 +490,7 @@ class Listing {
       listingName: json['name'],
       listingDesc: json['description'],
       listingBids: json['number_of_bids'],
+      listingPic: json['image_path'],
     );
   }
 }
@@ -611,10 +604,17 @@ class ListingName extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           String productName = snapshot.data!.listingName;
-          return Text(
-            productName,
-            style: style,
-          );
+          return Container(
+              margin: EdgeInsets.fromLTRB(
+                MediaQuery.of(context).size.width * 0.05,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.width * 0.02,
+              ),
+              child: Text(
+                productName,
+                style: style,
+              ));
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }
@@ -673,6 +673,39 @@ class ListingBids extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           int productName = snapshot.data!.listingBids;
+          return Text(
+            productName.toString(),
+            style:
+                TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055),
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ListingPic extends StatelessWidget {
+  ListingPic({required this.futureListing});
+
+  final Future<Listing> futureListing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineMedium!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
+    return FutureBuilder<Listing>(
+      future: futureListing,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String productName = snapshot.data!.listingPic;
           return Text(
             productName.toString(),
             style:
