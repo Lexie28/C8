@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'api.dart';
 import 'main.dart';
 import 'profile.dart';
+import 'createprofile.dart' as cp;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.userId});
@@ -22,10 +23,6 @@ class _EditProfileState extends State<EditProfile> {
 
   Api _api = Api();
 
-  String _userName = '';
-  String _userLocation = '';
-  String _userContact = '';
-
   String profilePicturePath = 'loading.png';
 
   @override
@@ -43,9 +40,9 @@ class _EditProfileState extends State<EditProfile> {
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
-        'name': '${_nameController.text}',
-        'location': '${_locationController.text}',
-        'phone_number': '${_contactController.text}',
+        'name': _nameController.text,
+        'location': _locationController.text,
+        'phone_number': _contactController.text,
       };
       final jsonBody = json.encode(body);
       final response = await http.patch(url, headers: headers, body: jsonBody);
@@ -72,7 +69,6 @@ class _EditProfileState extends State<EditProfile> {
 
     if (response.statusCode == 200) {
       User user = User.fromJson(jsonDecode(response.body));
-      print(user.profilePicturePath);
 
       setState(() {
         profilePicturePath = user.profilePicturePath;
@@ -124,9 +120,6 @@ class _EditProfileState extends State<EditProfile> {
                     labelText: 'Edit Name',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _userName = value;
-                  },
                 ),
               ),
 
@@ -141,9 +134,6 @@ class _EditProfileState extends State<EditProfile> {
                     labelText: 'Edit Location',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _userLocation = value;
-                  },
                 ),
               ),
 
@@ -174,12 +164,9 @@ class _EditProfileState extends State<EditProfile> {
                     labelText: 'Edit phone number',
                     border: OutlineInputBorder(),
                   ),
-                  onChanged: (value) {
-                    _userContact = value;
-                  },
                 ),
               ),
-              
+
               // Bio field
               // Save button
               Container(
@@ -193,7 +180,6 @@ class _EditProfileState extends State<EditProfile> {
                   child: Text('Save Changes'),
                 ),
               ),
-
             ],
           ),
         ),
