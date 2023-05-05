@@ -27,9 +27,18 @@ class _OffersPageState extends State<OffersPage> {
     try {
       final response =
           await http.get(Uri.parse('${_api.getApiHost()}/offer/$userId'));
-      final jsonData = jsonDecode(response.body);
+      final jsonData = jsonDecode(response.body) as List<dynamic>;
+
       setState(() {
-        _offersData = jsonData;
+        _offersData = jsonData.map((offer) {
+          return {
+            'bidId': offer['id'],
+            'bidMaker': offer['bid_maker']['name'],
+            'bidReceiver': offer['bid_receiver']['name'],
+            'bidMakerListings': offer['bid_maker']['listings'],
+            'bidReceiverListings': offer['bid_receiver']['listings']
+          };
+        }).toList();
       });
     } catch (error) {
       print(error);
@@ -45,9 +54,11 @@ class _OffersPageState extends State<OffersPage> {
       body: ListView.builder(
         itemCount: _offersData.length,
         itemBuilder: (context, index) {
-          final bidId = _offersData[index]['id'];
-          final bidMaker = _offersData[index]['user_making_offer'];
-          final bidReceiver = _offersData[index]['user_receiving_offer'];
+          final bidId = _offersData[index]['bidId'];
+          final bidMaker = _offersData[index]['bidMaker'];
+          final bidReceiver = _offersData[index]['bidReceiver'];
+          final bidMakerListings = _offersData[index]['bidMakerListings'];
+          final bidReceiverListings = _offersData[index]['bidReceiverListings'];
 
           return GestureDetector(
             onTap: () {
@@ -64,23 +75,18 @@ class _OffersPageState extends State<OffersPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Text('Bid Maker', style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          //Text('User ID: ${bidMaker['user_id']}'),
-                          Text('${bidMaker['name']}',
+                          Text('$bidMaker',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           Text('Listings:',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          ...bidMaker['listings']
+                          ...bidMakerListings
                               .map((listing) => Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      //Text('Listing ID: ${listing['listing_id']}'),
-                                      Text(
-                                          'Listing: ${listing['name']}'),
-                                      //Text('Description: ${listing['listing_description']}'),
+                                      Text('Listing: ${listing['name']}'),
                                       SizedBox(height: 8),
                                     ],
                                   ))
@@ -92,23 +98,18 @@ class _OffersPageState extends State<OffersPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Text('Bid Receiver', style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          //Text('User ID: ${bidReceiver['user_id']}'),
-                          Text('${bidReceiver['name']}',
+                          Text('$bidReceiver',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           Text('Listings:',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          ...bidReceiver['listings']
+                          ...bidReceiverListings
                               .map((listing) => Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      //Text('Listing ID: ${listing['listing_id']}'),
-                                      Text(
-                                          'Listing: ${listing['name']}'),
-                                      //Text('Description: ${listing['listing_description']}'),
+                                      Text('Listing: ${listing['name']}'),
                                       SizedBox(height: 8),
                                     ],
                                   ))
