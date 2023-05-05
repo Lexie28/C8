@@ -39,14 +39,13 @@ class _EditProfileState extends State<EditProfile> {
 
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(
-          '${_api.getApiHost()}/listing/${widget.userId}'); //TODO: ändra path NÄR DEN FINNS
+          '${_api.getApiHost()}/user/${widget.userId}'); //TODO: ändra path NÄR DEN FINNS
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
         'name': '${_nameController.text}',
-        'description': '${_locationController.text}',
-        'category': '${_contactController.text}',
-        'image_path': null,
+        'location': '${_locationController.text}',
+        'phone_number': '${_contactController.text}',
       };
       final jsonBody = json.encode(body);
       final response = await http.patch(url, headers: headers, body: jsonBody);
