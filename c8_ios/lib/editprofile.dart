@@ -87,7 +87,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
       ),
       body: Form(
         key: _formKey,
@@ -121,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    labelText: 'New Name',
+                    labelText: 'Edit Name',
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -138,7 +138,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _locationController,
                   decoration: InputDecoration(
-                    labelText: 'New Location',
+                    labelText: 'Edit Location',
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -171,7 +171,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _contactController,
                   decoration: InputDecoration(
-                    labelText: 'New Contact info',
+                    labelText: 'Edit phone number',
                     border: OutlineInputBorder(),
                   ),
                   onChanged: (value) {
@@ -179,6 +179,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                 ),
               ),
+              
               // Bio field
               // Save button
               Container(
@@ -192,6 +193,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: Text('Save Changes'),
                 ),
               ),
+
             ],
           ),
         ),

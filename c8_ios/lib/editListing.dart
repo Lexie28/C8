@@ -77,7 +77,7 @@ class _EditListingState extends State<EditListing> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Listing'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
       ),
       body: Form(
         key: _formKey,
