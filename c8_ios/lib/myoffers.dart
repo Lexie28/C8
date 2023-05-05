@@ -31,8 +31,9 @@ class _OffersPageState extends State<OffersPage> {
 
       setState(() {
         _offersData = jsonData.map((offer) {
+          final offerId = offer['bid_maker']['offer_id'];
           return {
-            'bidId': offer['id'],
+            'offerId': offerId,
             'bidMaker': offer['bid_maker']['name'],
             'bidReceiver': offer['bid_receiver']['name'],
             'bidMakerListings': offer['bid_maker']['listings'],
@@ -54,7 +55,8 @@ class _OffersPageState extends State<OffersPage> {
       body: ListView.builder(
         itemCount: _offersData.length,
         itemBuilder: (context, index) {
-          final bidId = _offersData[index]['bidId'];
+          final offerId = _offersData[index]['offerId'];
+          print(offerId);
           final bidMaker = _offersData[index]['bidMaker'];
           final bidReceiver = _offersData[index]['bidReceiver'];
           final bidMakerListings = _offersData[index]['bidMakerListings'];
@@ -63,7 +65,7 @@ class _OffersPageState extends State<OffersPage> {
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => CurrentOffer(bidId: bidId),
+                builder: (BuildContext context) => CurrentOffer(bidId: offerId),
               ));
             },
             child: Card(
@@ -86,7 +88,7 @@ class _OffersPageState extends State<OffersPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Listing: ${listing['name']}'),
+                                      Text('${listing['name']}'),
                                       SizedBox(height: 8),
                                     ],
                                   ))
@@ -109,7 +111,7 @@ class _OffersPageState extends State<OffersPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Listing: ${listing['name']}'),
+                                      Text('${listing['name']}'),
                                       SizedBox(height: 8),
                                     ],
                                   ))

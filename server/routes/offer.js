@@ -66,11 +66,13 @@ function offers_get(req, res) {
                     const bidReceiver = listings.find(function(listing) { return listing.user_id === offer.user_receiving_offer; });
                     const bidListings = {
                         bid_maker: {
+							offer_id: offer.id,
                             id: bidMaker.user_id,
                             name: bidMaker.user_name,
                             listings: []
                         },
                         bid_receiver: {
+							offer_id: offer.id,
                             id: bidReceiver.user_id,
                             name: bidReceiver.user_name,
                             listings: []
