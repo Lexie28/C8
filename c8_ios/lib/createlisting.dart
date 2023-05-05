@@ -116,7 +116,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
       'name': _listingName,
       'description': _listingDescription,
       'creation_date': null, //TODO! CREATION DATE
-      'image_path': uploadedImageName, //TODO
+      'image_path': uploadedImageName, 
       'category': _listingCategory,
       'owner_id': userId
     };
