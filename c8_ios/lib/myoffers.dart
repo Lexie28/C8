@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'currentoffer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OffersPage extends StatefulWidget {
   @override
@@ -21,9 +22,11 @@ class _OffersPageState extends State<OffersPage> {
   }
 
   Future<void> _getOffers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     try {
       final response =
-          await http.get(Uri.parse('${_api.getApiHost()}/offer/offers/1'));
+          await http.get(Uri.parse('${_api.getApiHost()}/offer/$userId'));
       final jsonData = jsonDecode(response.body);
       setState(() {
         _offersData = jsonData;
@@ -42,9 +45,9 @@ class _OffersPageState extends State<OffersPage> {
       body: ListView.builder(
         itemCount: _offersData.length,
         itemBuilder: (context, index) {
-          final bidId = _offersData[index]['bid_id'];
-          final bidMaker = _offersData[index]['bid_maker'];
-          final bidReceiver = _offersData[index]['bid_receiver'];
+          final bidId = _offersData[index]['id'];
+          final bidMaker = _offersData[index]['user_making_offer'];
+          final bidReceiver = _offersData[index]['user_receiving_offer'];
 
           return GestureDetector(
             onTap: () {
@@ -64,7 +67,7 @@ class _OffersPageState extends State<OffersPage> {
                           //Text('Bid Maker', style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           //Text('User ID: ${bidMaker['user_id']}'),
-                          Text('${bidMaker['user_name']}',
+                          Text('${bidMaker['name']}',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           Text('Listings:',
@@ -76,7 +79,7 @@ class _OffersPageState extends State<OffersPage> {
                                     children: [
                                       //Text('Listing ID: ${listing['listing_id']}'),
                                       Text(
-                                          'Listing: ${listing['listing_name']}'),
+                                          'Listing: ${listing['name']}'),
                                       //Text('Description: ${listing['listing_description']}'),
                                       SizedBox(height: 8),
                                     ],
@@ -92,7 +95,7 @@ class _OffersPageState extends State<OffersPage> {
                           //Text('Bid Receiver', style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           //Text('User ID: ${bidReceiver['user_id']}'),
-                          Text('${bidReceiver['user_name']}',
+                          Text('${bidReceiver['name']}',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           Text('Listings:',
@@ -104,7 +107,7 @@ class _OffersPageState extends State<OffersPage> {
                                     children: [
                                       //Text('Listing ID: ${listing['listing_id']}'),
                                       Text(
-                                          'Listing: ${listing['listing_name']}'),
+                                          'Listing: ${listing['name']}'),
                                       //Text('Description: ${listing['listing_description']}'),
                                       SizedBox(height: 8),
                                     ],
