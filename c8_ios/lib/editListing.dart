@@ -9,8 +9,6 @@ import 'package:simple_s3/simple_s3.dart';
 import 'api.dart';
 import 'main.dart';
 import 'package:path/path.dart' as p;
-import 'package:uuid/uuid.dart';
-import 'package:uuid/uuid_util.dart';
 
 SimpleS3 _simpleS3 = SimpleS3();
 Future<String?> _upload(File? fileToUpload) async {
@@ -121,13 +119,11 @@ class _EditListingState extends State<EditListing> {
   }
 
   Future<File> saveFilePermanently(String imagePath) async {
-    var uuid = Uuid();
-    var uuidCrypto =
-        uuid.v4(options: {'rng': UuidUtil.cryptoRNG}); //Brag about this
-
     final directory = await getApplicationDocumentsDirectory();
-    final ext = extension(imagePath);
-    final image = File('${directory.path}/$uuidCrypto$ext');
+    final ext = p.extension(imagePath);
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+    final image = File('${directory.path}/$userId$ext');
 
     imagePicked = true;
 
@@ -152,10 +148,12 @@ class _EditListingState extends State<EditListing> {
                   getImage(ImageSource.gallery);
                 },
                 child: Container(
+                  height: MediaQuery.of(context).size.width*0.6,
+                  width: MediaQuery.of(context).size.width*0.6,
                   margin:
                       EdgeInsets.all(MediaQuery.of(context).size.width * 0.1),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(120.0),
+                    borderRadius: BorderRadius.circular(17.0),
                     child: imagePicked
                         ? Image.file(
                             _image!,
