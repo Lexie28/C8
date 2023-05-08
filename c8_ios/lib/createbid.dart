@@ -35,9 +35,9 @@ class _CreateBidState extends State<CreateBid> {
     print(widget.userId);
 
     final myListingResponse =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/user/$userId'));
+        await http.get(Uri.parse('${_api.getApiHost()}/user/$userId/listings'));
     final theirListingResponse = await http
-        .get(Uri.parse('${_api.getApiHost()}/listing/user/${widget.userId}'));
+        .get(Uri.parse('${_api.getApiHost()}/user/${widget.userId}/listings'));
     print(myListingResponse.body);
     print(theirListingResponse.body);
     if (myListingResponse.statusCode == 200 &&

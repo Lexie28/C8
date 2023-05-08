@@ -241,7 +241,7 @@ router.get("/user/:id/offers", async (req, res) => {
 })
 
 
-router.get("/user/:id/listings", () => {
+router.get("/user/:id/listings", (req, res) => {
   const { id } = req.params;
 
     db
