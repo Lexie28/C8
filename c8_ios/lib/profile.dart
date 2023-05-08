@@ -248,6 +248,7 @@ class User {
   final String userName;
   final String location;
   final String profilePicturePath;
+  final String phoneNumber;
   final int likes;
   final int dislikes;
   final List listings;
@@ -257,6 +258,7 @@ class User {
     required this.userName,
     required this.location,
     required this.profilePicturePath,
+    required this.phoneNumber,
     required this.likes,
     required this.dislikes,
     required this.listings,
@@ -268,6 +270,7 @@ class User {
       userName: json['name'],
       location: json['location'],
       profilePicturePath: json['profile_picture_path'],
+      phoneNumber: json['phone_number'],
       likes: json['likes'],
       dislikes: json['dislikes'],
       listings: json['listings'],
@@ -293,7 +296,7 @@ class Item extends StatelessWidget {
       color: theme.colorScheme.onTertiary,
     );
 
-     return Material(
+    return Material(
       elevation: 7,
       child: Column(
         children: [
@@ -302,7 +305,6 @@ class Item extends StatelessWidget {
             child: SizedBox(
               height: MediaQuery.of(context).size.width * 0.4,
               width: MediaQuery.of(context).size.width * 0.4,
-
               child: Image.network(
                 'https://circle8.s3.eu-north-1.amazonaws.com/$picturePath',
                 fit: BoxFit.cover,

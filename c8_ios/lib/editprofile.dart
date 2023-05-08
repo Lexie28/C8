@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'api.dart';
 import 'main.dart';
 import 'profile.dart';
-import 'createprofile.dart' as cp;
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key, required this.userId});
@@ -24,6 +23,9 @@ class _EditProfileState extends State<EditProfile> {
   Api _api = Api();
 
   String profilePicturePath = 'loading.png';
+  String profileLocation = '';
+  String profilePhone = '';
+  String profileName = '';
 
   @override
   void initState() {
@@ -48,7 +50,7 @@ class _EditProfileState extends State<EditProfile> {
       final response = await http.patch(url, headers: headers, body: jsonBody);
       if (response.statusCode == 200) {
         // Success
-        print('Good! Listing uppdated!');
+        print('Good! Profile updated!');
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
@@ -58,7 +60,7 @@ class _EditProfileState extends State<EditProfile> {
       } else if (response.statusCode == 500) {
         print("Error 500");
       } else {
-        print('Failed to update listing');
+        print('Failed to update profile');
       }
     }
   }
@@ -72,14 +74,17 @@ class _EditProfileState extends State<EditProfile> {
 
       setState(() {
         profilePicturePath = user.profilePicturePath;
+        profileLocation = user.location;
+        profilePhone = user.phoneNumber;
       });
     } else {
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load profile picture');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    fetchPP(widget.userId);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
@@ -117,7 +122,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    labelText: 'Edit Name',
+                    labelText: profileName,
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -131,29 +136,12 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _locationController,
                   decoration: InputDecoration(
-                    labelText: 'Edit Location',
+                    labelText: profileLocation,
                     border: OutlineInputBorder(),
                   ),
                 ),
               ),
 
-              /*
-              DropdownButtonFormField(
-                  decoration: InputDecoration(labelText: 'Listing Category'),
-                  value: _categories[0],
-                  items: _categories.map((category) {
-                    return DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _listingCategory = value.toString();
-                    });
-                  },
-                ),
-                */
               Container(
                 margin: EdgeInsets.all(
                   MediaQuery.of(context).size.width * 0.01,
@@ -161,13 +149,12 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _contactController,
                   decoration: InputDecoration(
-                    labelText: 'Edit phone number',
+                    labelText: profilePhone,
                     border: OutlineInputBorder(),
                   ),
                 ),
               ),
 
-              // Bio field
               // Save button
               Container(
                 margin: EdgeInsets.all(
