@@ -1,33 +1,27 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'currentoffer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 class OffersPage extends StatefulWidget {
   @override
   State<OffersPage> createState() => _OffersPageState();
 }
-
 class _OffersPageState extends State<OffersPage> {
   List<dynamic> _offersData = [];
   Api _api = Api();
-  
-
   @override
   void initState() {
     super.initState();
     _getOffers();
   }
-
   Future<void> _getOffers() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
     try {
       final response =
-          await http.get(Uri.parse('${_api.getApiHost()}/offer/$userId'));
+          await http.get(Uri.parse('${_api.getApiHost()}/user/$userId/offers'));
       final jsonData = jsonDecode(response.body) as List<dynamic>;
 
       setState(() {
@@ -46,7 +40,6 @@ class _OffersPageState extends State<OffersPage> {
       print(error);
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,8 +55,6 @@ class _OffersPageState extends State<OffersPage> {
           final bidReceiver = _offersData[index]['bidReceiver'];
           final bidMakerListings = _offersData[index]['bidMakerListings'];
           final bidReceiverListings = _offersData[index]['bidReceiverListings'];
-
-
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -71,63 +62,58 @@ class _OffersPageState extends State<OffersPage> {
               ));
             },
             child: Card(
-              color: offerId == bidMaker ? Colors.green : Colors.red,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 8),
-                              Text('$bidMaker',
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: 8),
-                              Text('Listings:',
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
-                              ...bidMakerListings
-                                  .map((listing) => Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${listing['name']}'),
-                                          SizedBox(height: 8),
-                                        ],
-                                      ))
-                                  .toList(),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 8),
-                              Text('$bidReceiver',
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
-                              SizedBox(height: 8),
-                              Text('Listings:',
-                                  style: TextStyle(fontWeight: FontWeight.bold)),
-                              ...bidReceiverListings
-                                  .map((listing) => Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${listing['name']}'),
-                                          SizedBox(height: 8),
-                                        ],
-                                      ))
-                                  .toList(),
-                            ],
-                          ),
-                        ),
-                      ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8),
+                          Text('$bidMaker',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 8),
+                          Text('Listings:',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          ...bidMakerListings
+                              .map((listing) => Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${listing['name']}'),
+                                      SizedBox(height: 8),
+                                    ],
+                                  ))
+                              .toList(),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8),
+                          Text('$bidReceiver',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          SizedBox(height: 8),
+                          Text('Listings:',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          ...bidReceiverListings
+                              .map((listing) => Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${listing['name']}'),
+                                      SizedBox(height: 8),
+                                    ],
+                                  ))
+                              .toList(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -136,6 +122,7 @@ class _OffersPageState extends State<OffersPage> {
     );
   }
 }
+
 
                
 

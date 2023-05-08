@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../db-config.js");
-const {add_listing_objects_to_offer} = require("../utils.js");
+const { add_listing_objects_to_offer } = require("../utils.js");
 
 /**
 Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
@@ -10,11 +10,10 @@ Retrieves all records from the "user" table using Db.js and sends the result bac
 @param {Object} res - The response object to send data back to the client.
 @returns {undefined} This function does not return anything.
 */
-function get_users(req, res)
-{
-        db.select("*").from("user").then((result) => {
-          res.send(result)
-        })
+function get_users(req, res) {
+  db.select("*").from("user").then((result) => {
+    res.send(result)
+  })
 };
 
 
@@ -25,10 +24,10 @@ Registers a new user in the 'user' table.
 @returns {undefined} This function does not return anything.
 */
 function user_registration(req, res) {
-    const { id, name, profile_picture_path, phone_number, email, location } = req.body;
+  const { id, name, profile_picture_path, phone_number, email, location } = req.body;
 
   db('user')
-	.insert({id, name, profile_picture_path, phone_number, email, location})
+    .insert({ id, name, profile_picture_path, phone_number, email, location })
     .then(result => {
       if (result) {
         res.status(201).json({ message: 'User created successfully' });
@@ -129,7 +128,7 @@ function user_exists(req, res) {
       if (result) {
         res.status(200).json({ message: 'User found' });
       } else {
-	  res.status(404).json({ message: 'User not found' });
+        res.status(404).json({ message: 'User not found' });
       }
     })
     .catch(err => {
@@ -149,10 +148,10 @@ function get_user(req, res) {
   const { id } = req.params;
 
   db('user')
-  .where({ id })
-  .then((result) => {
-    res.send(result);
-  });
+    .where({ id })
+    .then((result) => {
+      res.send(result);
+    });
 }
 
 
@@ -202,6 +201,7 @@ router.patch('/user/:id/dislike', (req, res) => user_dislike(req, res));
 router.delete('/user/:id', (req, res) => user_delete(req, res));
 
 
+/*
 router.get("/user/:id/offers", async (req, res) => {
     //1. Hitta alla offers där användaren med id är involverad i.
     //   En lista för offers där användaren erbjuder, en annan för där
@@ -212,48 +212,110 @@ router.get("/user/:id/offers", async (req, res) => {
 
     user_query_result = await db("user").where({id: user_id});
     if (user_query_result.length == 0) {
-	res.status(404).json({ message: 'User not found' });
-	return;
+  res.status(404).json({ message: 'User not found' });
+  return;
     }
     
     const offers = new Object();
     
     offers.making_offer =
-	await db
-	.select("*")
-	.from("offer")
-	.where("user_making_offer", user_id);
+  await db
+  .select("*")
+  .from("offer")
+  .where("user_making_offer", user_id);
 
     offers.receiving_offer = 
-	await db("offer")
-	.select("*")
-	.where({user_receiving_offer: user_id});
+  await db("offer")
+  .select("*")
+  .where({user_receiving_offer: user_id});
 
     for (const offer of offers.making_offer) {
-	await add_listing_objects_to_offer(offer);
+  await add_listing_objects_to_offer(offer);
     }
 
     for (const offer of offers.receiving_offer) {
-	await add_listing_objects_to_offer(offer);
+  await add_listing_objects_to_offer(offer);
     }
 
     res.status(200).json(offers);
 })
+*/
 
-
-router.get("/user/:id/listings", () => {
+router.get("/user/:id/offers", async (req, res) => {
   const { id } = req.params;
 
-    db
-	.select("*")
-	.from("listing")
-	.where("owner_id", id)
-	.then((result) => {
-	    res.status(200).json(result)
-	}).catch((err) => {
-	    console.log(err);
-	    res.status(500).json({message: "Error!" + err})
-	});
+  db.select('offer.id', 'offer.user_making_offer', 'offer.user_receiving_offer')
+    .from('offer')
+    .where('offer.user_making_offer', id)
+    .orWhere('offer.user_receiving_offer', id)
+    .then(function (offers) {
+      const promises = offers.map(function (offer) {
+        return db.select('offer_listing.offer_id', 'listing.name', 'listing.description', 'user.id AS user_id', 'user.name AS user_name')
+          .from('offer_listing')
+          .innerJoin('listing', 'offer_listing.listing_id', 'listing.id')
+          .innerJoin('user', 'listing.owner_id', 'user.id')
+          .where('offer_listing.offer_id', offer.id)
+          .then(function (listings) {
+            const bidMaker = listings.find(function (listing) { return listing.user_id === offer.user_making_offer; });
+            const bidReceiver = listings.find(function (listing) { return listing.user_id === offer.user_receiving_offer; });
+            const bidListings = {
+              bid_maker: {
+                offer_id: offer.id,
+                id: bidMaker.user_id,
+                name: bidMaker.user_name,
+                listings: []
+              },
+              bid_receiver: {
+                offer_id: offer.id,
+                id: bidReceiver.user_id,
+                name: bidReceiver.user_name,
+                listings: []
+              }
+            };
+            listings.forEach(function (listing) {
+              if (listing.user_id === offer.user_making_offer) {
+                bidListings.bid_maker.listings.push({
+                  id: listing.offer_id,
+                  name: listing.name,
+                  description: listing.description
+                });
+              } else if (listing.user_id === offer.user_receiving_offer) {
+                bidListings.bid_receiver.listings.push({
+                  id: listing.offer_id,
+                  name: listing.name,
+                  description: listing.description
+                });
+              }
+            });
+            return bidListings;
+          });
+      });
+
+      Promise.all(promises)
+        .then(function (results) {
+          res.status(200).json(results);
+        })
+        .catch(function (err) {
+          console.log(err);
+          res.status(500).json({ message: 'An error occurred while retrieving trade offers' });
+        });
+    });
+})
+
+
+router.get("/user/:id/listings", (req, res) => {
+  const { id } = req.params;
+
+  db
+    .select("*")
+    .from("listing")
+    .where("owner_id", id)
+    .then((result) => {
+      res.status(200).json(result)
+    }).catch((err) => {
+      console.log(err);
+      res.status(500).json({ message: "Error!" + err })
+    });
 })
 
 module.exports = router;
