@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {
+    "scripts": {
+    "pretest": "./init_db.sh",
     "test": "jest",
     "prestart": "npm run swagger-autogen",
     "start": "node server.js",
-    "swagger-autogen": "node swagger.js"
+    "swagger-autogen": "node swagger.js"      
   },
   "author": "",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "knex": "^2.4.2",
     "mocha": "^10.2.0",
     "mysql2": "^3.2.0",
+    "start-server-and-test": "^2.0.0",
     "supertest": "^6.3.3",
     "swagger-autogen": "^2.23.1",
     "swagger-ui-express": "^4.6.2",

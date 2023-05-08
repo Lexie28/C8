@@ -1,13 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { currentDateTime, newId, amountOfQueryStrings } = require("../utils.js");
-
-
+const { currentDateTime, newId, amountOfQueryStrings, entryExists } = require("../utils.js");
 
 const db = require("../db-config.js");
-
-
-
 
 /**
 Retrieves all records from the "listing" table using Db.js and sends the result back to the client as a response.
@@ -48,13 +43,22 @@ async function get_listings(req, res) {
   }
 
   const amount = req.query.amount;
-  //TODO: edge case om amount inte är ett positivt heltal
-  if (amount != undefined) {
+
+    if (amount != undefined) {
+	if(isNaN(amount)) {
+	    res.status(400).json({message: "The parameter amount must have a value which is a number"});
+	    return;
+	}
+	if(parseInt(amount) <= 0) {
+	    res.status(400).json({message: "The parameter amount must have a value which is a postivie integer"});
+	    return;
+	}
     result = result.limit(amount);
   }
 
-  result = await result;
-  res.send(result);
+    result = await result;
+    res.status(200).json(result);
+
 }
 
 
@@ -77,6 +81,7 @@ function get_listing(req, res) {
         res.status(404).send("Listing not found");
       } else {
         const owner_id = listing[0].owner_id;
+
         db
           .select("*")
           .from("user")
@@ -108,14 +113,14 @@ Creates a new listing using imput received from the client.
 @returns {undefined} This function does not return anything.
 */
 function listing_create(req, res) {
-  const { name, description, category, image_path, owner_id } = req.body;
+    const { name, description, category, image_path, owner_id } = req.body;
   const id = newId();
   const creation_date = currentDateTime();
   db('listing')
     .insert({ id, name, description, creation_date, image_path, category, owner_id })
     .then(result => {
       if (result) {
-        res.status(200).json({ message: 'listing created successfully' });
+          res.status(201).json({ message: 'listing created successfully' , id: id});
       } else {
         res.status(500).json({ message: 'An error occurred while creating the listing' });
       }
@@ -132,19 +137,18 @@ Edits all editable fields in a listing (name, description and category)
 @param {Object} res - The response object to send data back to the client.
 @returns {undefined} This function does not return anything.
 */
-function edit_listing_all(req, res) {
+async function edit_listing_all(req, res) {
   const { id } = req.params;
   const { name, description, category, image_path } = req.body;
-
+    if(!(await entryExists("listing", id))) {
+	res.status(404).json({ message: 'listing not found' });
+	return;
+    };
   db('listing')
     .where({ id })
-    .update({ name, description, category, image_path })
+	.update({ name, description, category})
     .then(result => {
-      if (result === 1) {
         res.status(200).json({ message: 'listing updated successfully' });
-      } else {
-        res.status(404).json({ message: 'listing not found' });
-      }
     })
     .catch(err => {
       console.log(err);
@@ -180,24 +184,7 @@ function listing_delete(req, res) {
   //FIXME: allt som borde försvinna i offer_listing gör inte det
 };
 
-function listing_user(req, res) {
-  const { id } = req.params;
-
-  db.select("*").from("listing").where("owner_id", id).then((result) => {
-    res.send(result)
-  }).catch((err) => {
-    console.log(err);
-    res.sendStatus(500);
-  });
-}
-
-
-
 router.get("/listing", get_listings);
-
-router.get('/listing/category/:category', (req, res) => listing_category(req, res));
-
-router.get('/listing/user/:id', (req, res) => listing_user(req, res));
 
 router.get('/listing/:id', (req, res) => get_listing(req, res));
 

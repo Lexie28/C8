@@ -21,6 +21,7 @@ exports.up = function(knex) {
 		table.integer("dislikes")
 		    .defaultTo(0);
 		table.string("profile_picture_path");
+		//table.binary("profile_picture_path")
 		table.string("phone_number", 12);
 		table.string("email");
 		table.string("location");
@@ -40,6 +41,8 @@ exports.up = function(knex) {
 		table.string("category");
 		table.integer("number_of_bids")
 		    .defaultTo(0);
+		table.integer("available")
+		    .defaultTo(1);
 		//FK
 		table.string("owner_id")
 		    .notNullable()
@@ -57,7 +60,8 @@ exports.up = function(knex) {
 		    .primary();
 		table.integer("accepted")
 		    .defaultTo(0);
-		
+		table.integer("rejected")
+		    .defaultTo(0);
 		//FK
 		table.string("user_making_offer")
 		    .notNullable();

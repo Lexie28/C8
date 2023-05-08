@@ -21,3 +21,5 @@ i ```./init_db.sh``` där vanliga problem  bemöts.
 3. Gå in på routen "doc" (exempel på URL: http://localhost:3000/doc/). Där finns dokumentationen.
 
 
+## Tester och code coverage
+```npm test```. ./init_db.sh måste fungera för att kunna köra testerna.

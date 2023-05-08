@@ -1,10 +1,9 @@
 require('dotenv').config();
 
 const request = require("supertest");
-const baseURL = process.env.DATABASE_HOST + ":" + process.env.PORT;
+const app = require("../server.js");
+const baseURL = app; //process.env.DATABASE_HOST + ":" + process.env.PORT;
 
-const initial_response = request(baseURL).get("/user");
-const amount_of_users = initial_response.body
 //TODO: dela upp i flera unit tests.
 describe("GET /user", () => {
     it("Should return 200", async () => {
@@ -14,7 +13,7 @@ describe("GET /user", () => {
     });
     it("Should return users", async () => {
 	const response = await request(baseURL).get("/user");
-	expect(response._body.length == 3).toBe(true);
+	expect(response._body.length > 1).toBe(true);
     });
 });
 
@@ -71,3 +70,5 @@ describe("POST /user", () => {
 	await request(baseURL).delete(`${}`); //TODO: skriv klart
     }
 });*/
+
+

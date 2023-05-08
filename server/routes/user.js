@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../db-config.js");
-
+const {add_listing_objects_to_offer} = require("../utils.js");
 
 /**
 Retrieves all records from the "user" table using Db.js and sends the result back to the client as a response.
@@ -31,7 +31,7 @@ function user_registration(req, res) {
 	.insert({id, name, profile_picture_path, phone_number, email, location})
     .then(result => {
       if (result) {
-        res.status(200).json({ message: 'User created successfully' });
+        res.status(201).json({ message: 'User created successfully' });
       } else {
         res.status(500).json({ message: 'An error occurred while creating the user' });
       }
@@ -129,7 +129,7 @@ function user_exists(req, res) {
       if (result) {
         res.status(200).json({ message: 'User found' });
       } else {
-        res.status(404).json({ message: 'User not found' });
+	  res.status(404).json({ message: 'User not found' });
       }
     })
     .catch(err => {
@@ -201,14 +201,59 @@ router.patch('/user/:id/dislike', (req, res) => user_dislike(req, res));
 //Deleting user
 router.delete('/user/:id', (req, res) => user_delete(req, res));
 
+
 router.get("/user/:id/offers", async (req, res) => {
-    //TODO: flytta implementationen från offer.js hit    
-});
+    //1. Hitta alla offers där användaren med id är involverad i.
+    //   En lista för offers där användaren erbjuder, en annan för där
+    //   hen blir erbjuden
+    //2. Hitta alla items som är involverade i buden. I varje bud, lägg in
+    //   varje item i en lista som antingen är budgivar eller budtagar-items
+    const user_id  = req.params.id;
+
+    user_query_result = await db("user").where({id: user_id});
+    if (user_query_result.length == 0) {
+	res.status(404).json({ message: 'User not found' });
+	return;
+    }
+    
+    const offers = new Object();
+    
+    offers.making_offer =
+	await db
+	.select("*")
+	.from("offer")
+	.where("user_making_offer", user_id);
+
+    offers.receiving_offer = 
+	await db("offer")
+	.select("*")
+	.where({user_receiving_offer: user_id});
+
+    for (const offer of offers.making_offer) {
+	await add_listing_objects_to_offer(offer);
+    }
+
+    for (const offer of offers.receiving_offer) {
+	await add_listing_objects_to_offer(offer);
+    }
+
+    res.status(200).json(offers);
+})
 
 
+router.get("/user/:id/listings", () => {
+  const { id } = req.params;
+
+    db
+	.select("*")
+	.from("listing")
+	.where("owner_id", id)
+	.then((result) => {
+	    res.status(200).json(result)
+	}).catch((err) => {
+	    console.log(err);
+	    res.status(500).json({message: "Error!" + err})
+	});
+})
 
 module.exports = router;
-
-/*
-    
-*/
