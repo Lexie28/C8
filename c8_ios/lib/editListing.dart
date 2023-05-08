@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_s3/simple_s3.dart';
 import 'api.dart';
 import 'main.dart';
@@ -88,7 +87,8 @@ class _EditListingState extends State<EditListing> {
       final response = await http.patch(url, headers: headers, body: jsonBody);
       if (response.statusCode == 200) {
         // Success
-        print('Good! Listing uppdated!');
+        print('Good! Listing updated!');
+        print("!!!!!");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
@@ -113,6 +113,8 @@ class _EditListingState extends State<EditListing> {
       setState(() {
         _image = imagePermanent;
       });
+
+      imagePicked = true;
     } catch (e) {
       print('Failed to pick image: $e');
     }
@@ -121,17 +123,29 @@ class _EditListingState extends State<EditListing> {
   Future<File> saveFilePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final ext = p.extension(imagePath);
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('uid');
-    final image = File('${directory.path}/$userId$ext');
-
-    imagePicked = true;
+    final image = File('${directory.path}/${widget.itemId}$ext');
 
     return File(imagePath).copy(image.path);
   }
 
+  fetchListing() async {
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}'));
+    if (response.statusCode == 200) {
+      final listing = jsonDecode(response.body);
+      return listing;
+    } else {
+      throw Exception('Failed to load listing');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final listing = fetchListing();
+    String listingDesc = listing['description'];
+    String listingImg = listing['image_path'];
+    String listingCat = listing['category'];
+    String listingName = listing['name'];
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Listing'),
@@ -142,7 +156,6 @@ class _EditListingState extends State<EditListing> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Profile picture
               GestureDetector(
                 onTap: () {
                   getImage(ImageSource.gallery);
@@ -159,8 +172,9 @@ class _EditListingState extends State<EditListing> {
                             _image!,
                             fit: BoxFit.cover,
                           )
-                        : Image.asset(
-                            'images/noImage.jpg',
+                        : Image.network(
+                            'https://circle8.s3.eu-north-1.amazonaws.com/$listingImg',
+                            fit: BoxFit.cover,
                           ),
                   ),
                 ),
@@ -175,7 +189,7 @@ class _EditListingState extends State<EditListing> {
                 child: TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
-                    labelText: 'New Title',
+                    labelText: listingName,
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -189,7 +203,7 @@ class _EditListingState extends State<EditListing> {
                 child: TextField(
                   controller: _descController,
                   decoration: InputDecoration(
-                    labelText: 'New Description',
+                    labelText: listingDesc,
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -206,6 +220,7 @@ class _EditListingState extends State<EditListing> {
                     return DropdownMenuItem(
                       value: category,
                       child: Text(category),
+                      //TODO visa den kategorin som listingen redan ligger på
                     );
                   }).toList(),
                   onChanged: (value) {
