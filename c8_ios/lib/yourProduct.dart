@@ -107,7 +107,7 @@ class _YourProductState extends State<YourProduct> {
                   /*Align(
                     alignment: FractionalOffset.center,
                     // bitbutton
-                    child: BidButton(),
+                    //child: BidButton(),
                   )*/
                 ],
               ),

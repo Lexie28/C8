@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'currentoffer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OffersPage extends StatefulWidget {
   @override
@@ -21,12 +22,24 @@ class _OffersPageState extends State<OffersPage> {
   }
 
   Future<void> _getOffers() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
     try {
       final response =
-          await http.get(Uri.parse('${_api.getApiHost()}/offer/offers/1'));
-      final jsonData = jsonDecode(response.body);
+          await http.get(Uri.parse('${_api.getApiHost()}/offer/$userId'));
+      final jsonData = jsonDecode(response.body) as List<dynamic>;
+
       setState(() {
-        _offersData = jsonData;
+        _offersData = jsonData.map((offer) {
+          final offerId = offer['bid_maker']['offer_id'];
+          return {
+            'offerId': offerId,
+            'bidMaker': offer['bid_maker']['name'],
+            'bidReceiver': offer['bid_receiver']['name'],
+            'bidMakerListings': offer['bid_maker']['listings'],
+            'bidReceiverListings': offer['bid_receiver']['listings']
+          };
+        }).toList();
       });
     } catch (error) {
       print(error);
@@ -42,14 +55,17 @@ class _OffersPageState extends State<OffersPage> {
       body: ListView.builder(
         itemCount: _offersData.length,
         itemBuilder: (context, index) {
-          final bidId = _offersData[index]['bid_id'];
-          final bidMaker = _offersData[index]['bid_maker'];
-          final bidReceiver = _offersData[index]['bid_receiver'];
+          final offerId = _offersData[index]['offerId'];
+          print(offerId);
+          final bidMaker = _offersData[index]['bidMaker'];
+          final bidReceiver = _offersData[index]['bidReceiver'];
+          final bidMakerListings = _offersData[index]['bidMakerListings'];
+          final bidReceiverListings = _offersData[index]['bidReceiverListings'];
 
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => CurrentOffer(bidId: bidId),
+                builder: (BuildContext context) => CurrentOffer(bidId: offerId),
               ));
             },
             child: Card(
@@ -61,23 +77,18 @@ class _OffersPageState extends State<OffersPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Text('Bid Maker', style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          //Text('User ID: ${bidMaker['user_id']}'),
-                          Text('${bidMaker['user_name']}',
+                          Text('$bidMaker',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           Text('Listings:',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          ...bidMaker['listings']
+                          ...bidMakerListings
                               .map((listing) => Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      //Text('Listing ID: ${listing['listing_id']}'),
-                                      Text(
-                                          'Listing: ${listing['listing_name']}'),
-                                      //Text('Description: ${listing['listing_description']}'),
+                                      Text('${listing['name']}'),
                                       SizedBox(height: 8),
                                     ],
                                   ))
@@ -89,23 +100,18 @@ class _OffersPageState extends State<OffersPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          //Text('Bid Receiver', style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          //Text('User ID: ${bidReceiver['user_id']}'),
-                          Text('${bidReceiver['user_name']}',
+                          Text('$bidReceiver',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
                           Text('Listings:',
                               style: TextStyle(fontWeight: FontWeight.bold)),
-                          ...bidReceiver['listings']
+                          ...bidReceiverListings
                               .map((listing) => Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      //Text('Listing ID: ${listing['listing_id']}'),
-                                      Text(
-                                          'Listing: ${listing['listing_name']}'),
-                                      //Text('Description: ${listing['listing_description']}'),
+                                      Text('${listing['name']}'),
                                       SizedBox(height: 8),
                                     ],
                                   ))

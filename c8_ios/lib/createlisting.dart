@@ -104,7 +104,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
     if(imagePicked){
       uploadedImageName = await _upload(_image);
     } else{
-      uploadedImageName = 'defaultProfilePicture.png';    //ANNAN BILD!
+      uploadedImageName = 'noImage.jpg';    
     }
 
     final prefs = await SharedPreferences.getInstance();
@@ -115,7 +115,6 @@ class _CreateListingPageState extends State<CreateListingPage> {
     final body = {
       'name': _listingName,
       'description': _listingDescription,
-      'creation_date': null, //TODO! CREATION DATE
       'image_path': uploadedImageName, //TODO
       'category': _listingCategory,
       'owner_id': userId
@@ -150,7 +149,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.width*0.8,
                   width: MediaQuery.of(context).size.width*0.9,
                   child: imagePicked
@@ -207,7 +206,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
                     left: MediaQuery.of(context).size.width * 0.15,
                     right: MediaQuery.of(context).size.width * 0.15,
                   ),
-                  child: CustomButton(
+                  child: customButton(
                       title: 'Pick from Gallery',
                       icon: Icons.image_outlined,
                       onClick: () => getImage(ImageSource.gallery)),
@@ -218,7 +217,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
                     right: MediaQuery.of(context).size.width * 0.15,
                     bottom: MediaQuery.of(context).size.width * 0.05,
                   ),
-                  child: CustomButton(
+                  child: customButton(
                       title: 'Pick from Camera',
                       icon: Icons.camera,
                       onClick: () => getImage(ImageSource.camera)),

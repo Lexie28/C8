@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'api.dart';
 import 'otherProfile.dart';
@@ -69,7 +68,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: Color.fromARGB(255, 142, 219, 250),
         title: Text('Listing'),
       ),
       body: SingleChildScrollView(
@@ -229,7 +228,7 @@ class _BidButtonState extends State<BidButton> {
           color: Colors.white,
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFA2BABF),
+          backgroundColor: Color.fromARGB(255, 142, 219, 250),
 
           //elevated btton background color
         ),

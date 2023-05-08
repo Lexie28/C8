@@ -58,11 +58,15 @@ class _PopularItemsState extends State<PopularItems> {
                     itemBuilder: (BuildContext context, int index) {
                       final listing = listings[index];
                       return Container(
+                        margin: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width*0.01,
+                          right: MediaQuery.of(context).size.width*0.01,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: Color.fromARGB(255, 255, 254, 254),
                           border: Border.all(width: 1, color: Colors.grey),
                           borderRadius: BorderRadius.all(
-                            Radius.circular(0.0),
+                            Radius.circular(10),
                           ),
                         ),
                         child: GestureDetector(
@@ -76,13 +80,27 @@ class _PopularItemsState extends State<PopularItems> {
                               ),
                             );
                           },
-                          child: ListTile(
-                            leading: Image.network(
-                              'https://circle8.s3.eu-north-1.amazonaws.com/${listing['image_path']}',
+                          child: Container(
+                            height: MediaQuery.of(context).size.width*0.3,
+                                width: MediaQuery.of(context).size.width*0.3,
+                          
+                            child: Align(
+                              alignment: FractionalOffset.center,
+                              child: ListTile(
+                                leading: Container(
+                                  height: MediaQuery.of(context).size.width*0.5,
+                                  width: MediaQuery.of(context).size.width*0.3,
+                                                      
+                                  child: Image.network(
+                                    'https://circle8.s3.eu-north-1.amazonaws.com/${listing['image_path']}',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                title: Text(listing['name']),
+                                subtitle: Text(listing['description']),
+                                trailing: Icon(Icons.arrow_forward_ios),
+                              ),
                             ),
-                            title: Text(listing['name']),
-                            subtitle: Text(listing['description']),
-                            trailing: Icon(Icons.arrow_forward_ios),
                           ),
                         ),
                       );
