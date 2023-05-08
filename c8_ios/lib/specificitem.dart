@@ -77,7 +77,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
             children: [
               Align(
                 alignment: FractionalOffset.topCenter,
-                child: ProductListing(
+                child: ListingImage(
                   imagePath: imagePath,
                 ),
               ),
@@ -251,8 +251,8 @@ class _BidButtonState extends State<BidButton> {
   }
 }
 
-class ProductListing extends StatelessWidget {
-  const ProductListing({
+class ListingImage extends StatelessWidget {
+  const ListingImage({
     required this.imagePath,
   });
 
@@ -359,7 +359,7 @@ class ListingProfile extends StatelessWidget {
               ),
             ),
             Container(
-              width: MediaQuery.of(context).size.width * 0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 margin: EdgeInsets.only(
                     top: MediaQuery.of(context).size.width * 0.01,
                     bottom: MediaQuery.of(context).size.width * 0.05,
@@ -398,14 +398,14 @@ class ListingProfile extends StatelessWidget {
                               margin: EdgeInsets.only(
                                   left:
                                       MediaQuery.of(context).size.width * 0.12),
-                              child: likes), //TODO
+                              child: likes),
                           Container(
                             margin: EdgeInsets.only(
                                 left: MediaQuery.of(context).size.width * 0.04),
                             height: MediaQuery.of(context).size.height * 0.05,
                             width: MediaQuery.of(context).size.width * 0.07,
                             child: Image.asset(
-                              'images/like.png', //TODO
+                              'images/like.png',
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -672,9 +672,9 @@ class ListingBids extends StatelessWidget {
       future: futureListing,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          int productName = snapshot.data!.listingBids;
+          int productBids = snapshot.data!.listingBids;
           return Text(
-            productName.toString(),
+            productBids.toString(),
             style:
                 TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055),
             textAlign: TextAlign.center,
