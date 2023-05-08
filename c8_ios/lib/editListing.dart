@@ -9,6 +9,8 @@ import 'package:simple_s3/simple_s3.dart';
 import 'api.dart';
 import 'main.dart';
 import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 SimpleS3 _simpleS3 = SimpleS3();
 Future<String?> _upload(File? fileToUpload) async {
@@ -119,11 +121,13 @@ class _EditListingState extends State<EditListing> {
   }
 
   Future<File> saveFilePermanently(String imagePath) async {
+    var uuid = Uuid();
+    var uuidCrypto =
+        uuid.v4(options: {'rng': UuidUtil.cryptoRNG}); //Brag about this
+
     final directory = await getApplicationDocumentsDirectory();
-    final ext = p.extension(imagePath);
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('uid');
-    final image = File('${directory.path}/$userId$ext');
+    final ext = extension(imagePath);
+    final image = File('${directory.path}/$uuidCrypto$ext');
 
     imagePicked = true;
 
