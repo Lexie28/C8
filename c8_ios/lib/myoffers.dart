@@ -4,10 +4,12 @@ import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'currentoffer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 class OffersPage extends StatefulWidget {
   @override
   State<OffersPage> createState() => _OffersPageState();
 }
+
 class _OffersPageState extends State<OffersPage> {
   List<dynamic> _offersData = [];
   Api _api = Api();

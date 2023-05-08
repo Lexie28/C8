@@ -146,7 +146,7 @@ async function edit_listing_all(req, res) {
     };
   db('listing')
     .where({ id })
-	.update({ name, description, category})
+	.update({ name, description, category, image_path})
     .then(result => {
         res.status(200).json({ message: 'listing updated successfully' });
     })
