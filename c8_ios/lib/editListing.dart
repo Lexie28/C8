@@ -126,7 +126,7 @@ class _EditListingState extends State<EditListing> {
         uuid.v4(options: {'rng': UuidUtil.cryptoRNG}); //Brag about this
 
     final directory = await getApplicationDocumentsDirectory();
-    final ext = extension(imagePath);
+    final ext = p.extension(imagePath);
     final image = File('${directory.path}/$uuidCrypto$ext');
 
     imagePicked = true;
