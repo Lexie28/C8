@@ -1,6 +1,6 @@
 import 'package:c8_ios/api.dart';
-import 'package:c8_ios/myoffers.dart';
-import 'package:c8_ios/signin.dart';
+import 'package:c8_ios/myOffers.dart';
+import 'package:c8_ios/signIn.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'authentication.dart';
@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'profile.dart';
 import 'hometest.dart';
-import 'createlisting.dart';
+import 'createListing.dart';
 
 void main() {
   runApp(C8());

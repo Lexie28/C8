@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'api.dart';
-import 'specificitem.dart';
+import 'specificItem.dart';
 import 'profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;

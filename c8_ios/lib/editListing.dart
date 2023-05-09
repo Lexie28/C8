@@ -41,9 +41,9 @@ class EditListing extends StatefulWidget {
 }
 
 class _EditListingState extends State<EditListing> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descController = TextEditingController();
-  final TextEditingController _catController = TextEditingController();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descController = TextEditingController();
+  TextEditingController _catController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   String _listingDesc = '';
@@ -69,8 +69,6 @@ class _EditListingState extends State<EditListing> {
   void initState() {
     super.initState();
     fetchListing();
-    _titleController.text = _listingName;
-    _descController.text = _listingDesc;
   }
 
   File? _image;
@@ -98,9 +96,7 @@ class _EditListingState extends State<EditListing> {
       final jsonBody = json.encode(body);
       final response = await http.patch(url, headers: headers, body: jsonBody);
       if (response.statusCode == 200) {
-        // Success
         print('Good! Listing updated!');
-        print("!!!!!");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
@@ -150,6 +146,8 @@ class _EditListingState extends State<EditListing> {
         _listingImg = listing['image_path'];
         _listingCat = listing['category'];
         _listingName = listing['name'];
+        _titleController.text = _listingName;
+        _descController.text = _listingDesc;
       });
       return listing;
     } else {
@@ -228,16 +226,18 @@ class _EditListingState extends State<EditListing> {
                 ),
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(labelText: 'Listing Category'),
-                  value: _categories[_categories.indexOf(_listingCat)],
+                  value: _listingCat,
                   items: _categories.map((category) {
                     return DropdownMenuItem(
                       value: category,
                       child: Text(category),
-                      //TODO visa den kategorin som listingen just nu ligger på
                     );
                   }).toList(),
                   onChanged: (value) {
-                    setState(() {});
+                    setState(() {
+                      _listingCat = value!;
+                      _catController.text = value;
+                    });
                   },
                 ),
               ),

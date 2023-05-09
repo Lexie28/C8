@@ -15,17 +15,14 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _contactController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _locationController = TextEditingController();
+  TextEditingController _contactController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   Api _api = Api();
 
   String profilePicturePath = 'loading.png';
-  String profileLocation = '';
-  String profilePhone = '';
-  String profileName = '';
 
   @override
   void initState() {
@@ -38,7 +35,9 @@ class _EditProfileState extends State<EditProfile> {
 
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse(
-          '${_api.getApiHost()}/user/${widget.userId}'); //TODO: ändra path NÄR DEN FINNS
+          '${_api.getApiHost()}/user/${widget.userId}'); 
+      
+      //TODO: ändra profile picture!!
 
       final headers = {'Content-Type': 'application/json'};
       final body = {
@@ -74,9 +73,11 @@ class _EditProfileState extends State<EditProfile> {
 
       setState(() {
         profilePicturePath = user.profilePicturePath;
-        profileLocation = user.location;
-        profilePhone = user.phoneNumber;
+        _nameController.text = user.userName;
+        _locationController.text = user.location;
+        _contactController.text = user.phoneNumber;
       });
+
     } else {
       throw Exception('Failed to load profile picture');
     }
@@ -84,7 +85,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    fetchPP(widget.userId);
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
@@ -113,7 +113,6 @@ class _EditProfileState extends State<EditProfile> {
                 ),
               ),
 
-              // TODO: knapp för ändra profil
               // Name field
               Container(
                 margin: EdgeInsets.all(
@@ -122,13 +121,13 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _nameController,
                   decoration: InputDecoration(
-                    labelText: profileName,
+                    labelText: 'New Name',
                     border: OutlineInputBorder(),
                   ),
                 ),
               ),
 
-              // Name field
+              // Location field
               Container(
                 margin: EdgeInsets.all(
                   MediaQuery.of(context).size.width * 0.01,
@@ -136,7 +135,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _locationController,
                   decoration: InputDecoration(
-                    labelText: profileLocation,
+                    labelText: 'New Location',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -149,7 +148,7 @@ class _EditProfileState extends State<EditProfile> {
                 child: TextField(
                   controller: _contactController,
                   decoration: InputDecoration(
-                    labelText: profilePhone,
+                    labelText: 'New Phone Number',
                     border: OutlineInputBorder(),
                   ),
                 ),
