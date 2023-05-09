@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
+import 'profile.dart';
+import 'specificItem.dart';
 
 class CurrentOffer extends StatefulWidget {
-  final int bidId;
+  final String bidId;
 
   CurrentOffer({required this.bidId});
 
@@ -13,23 +16,75 @@ class CurrentOffer extends StatefulWidget {
 }
 
 class _CurrentOfferState extends State<CurrentOffer> {
-  late Future<Map<String, dynamic>> _futureOffer;
+  List<dynamic> _futureOffer = [];
   Api _api = Api();
+  String myID = '';
+  String bidMakerName = '';
+  String bidReceiverName = '';
+  int makerLikes = 0;
+  int makerDislikes = 0;
+  int recLikes = 0;
+  int recDislikes = 0;
 
   @override
   void initState() {
     super.initState();
-    _futureOffer = fetchOffer(widget.bidId);
+    fetchOffer(widget.bidId);
+    print('futureoffer: $_futureOffer');
   }
 
-  Future<Map<String, dynamic>> fetchOffer(int bidId) async {
+  Future<void> fetchOffer(String bidId) async {
     final response =
-        await http.get(Uri.parse('${_api.getApiHost()}/offer/get/$bidId'));
+        await http.get(Uri.parse('${_api.getApiHost()}/offer/$bidId'));
+    print(bidId);
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      var jsonData = jsonDecode(response.body);
+
+      setState(() {
+        _futureOffer = jsonData.map((bid) {
+          final bidId = bid['user_making_offer'];
+          final bidRec = bid['user_receiving_offer'];
+          fetchUser(bidId, bidRec);
+
+          return {
+            'offerId': bid['id'],
+            'bidMakerId': bid['user_making_offer'],
+            'bidReceiverId': bid['user_receiving_offer'],
+            'offered_items': bid['offered_items'],
+            'wanted_items': bid['wanted_items'],
+          };
+        }).toList();
+      });
     } else {
       throw Exception('Failed to load offer');
+    }
+  }
+
+  Future<void> fetchUser(String bidMaker, String bidRec) async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('uid');
+
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$bidMaker'));
+
+    final response2 = await http
+        .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$bidRec'));
+
+    if (response.statusCode == 200) {
+      User maker = User.fromJson(jsonDecode(response.body));
+      User rec = User.fromJson(jsonDecode(response2.body));
+      setState(() {
+        bidMakerName = maker.userName;
+        bidReceiverName = rec.userName;
+        makerLikes = maker.likes;
+        makerDislikes = maker.dislikes;
+        recLikes = rec.likes;
+        recDislikes = rec.dislikes;
+        myID = userId!;
+      });
+    } else {
+      throw Exception('Failed to load album');
     }
   }
 
@@ -39,75 +94,108 @@ class _CurrentOfferState extends State<CurrentOffer> {
       appBar: AppBar(
         title: Text('Current Offer'),
       ),
-      body: Center(
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: _futureOffer,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final bidId = snapshot.data!['bid_id'];
-              final bidMaker = snapshot.data!['bid_maker'];
-              final bidReceiver = snapshot.data!['bid_receiver'];
+      body: ListView.builder(
+          itemCount: _futureOffer.length,
+          itemBuilder: (context, index) {
+            final offerId = _futureOffer[index]['offerId'];
+            print(offerId);
+            final bidMakerId = _futureOffer[index]['bidMakerId'];
+            final bidReceiverId = _futureOffer[index]['bidReceiverId'];
+            final offered_items = _futureOffer[index]['offered_items'];
+            final wanted_items = _futureOffer[index]['wanted_items'];
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+            return myID == bidMakerId
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text('Bid Maker'),
-                          SizedBox(height: 8),
-                          Text(
-                              '${bidMaker['user_name']} (${bidMaker['user_location']})'),
-                          SizedBox(height: 8),
-                          Text(
-                              '${bidMaker['user_num_likes']} likes | ${bidMaker['user_num_dislikes']} dislikes'),
+                          Column(
+                            children: [
+                              Text('Bid Maker:'),
+                              SizedBox(height: 8),
+                              Text(bidMakerName),
+                              SizedBox(height: 8),
+                              Text(
+                                  '$makerLikes likes | $makerDislikes dislikes'),
+                              SizedBox(height: 8),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Bid Receiver:'),
+                              SizedBox(height: 8),
+                              Text(bidReceiverName),
+                              SizedBox(height: 8),
+                              Text('$recLikes likes | $recDislikes dislikes'),
+                              SizedBox(height: 8),
+                            ],
+                          ),
                         ],
                       ),
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Bid Receiver'),
                           SizedBox(height: 8),
                           Text(
-                              '${bidReceiver['user_name']} (${bidReceiver['user_location']})'),
+                            'Offering:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...offered_items.map(
+                            (offered_items) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                offered_items.length,
+                                (index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ListingDetailPage(
+                                                listingId: offered_items[index]
+                                                        ['listing_id']
+                                                    .toString()),
+                                      ));
+                                    },
+                                    child: Text(
+                                      offered_items[index]['name'].toString(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           SizedBox(height: 8),
                           Text(
-                              '${bidReceiver['user_num_likes']} likes | ${bidReceiver['user_num_dislikes']} dislikes'),
+                            'Want:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...wanted_items.map(
+                            (wanted_items) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                wanted_items.length,
+                                (index) {
+                                  return Text(
+                                    wanted_items[index]['name'].toString(),
+                                  );
+                                },
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ],
-                  ),
-                  SizedBox(height: 16),
-                  Text('Listings'),
-                  SizedBox(height: 8),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: bidMaker['listings'].length +
-                          bidReceiver['listings'].length,
-                      itemBuilder: (context, index) {
-                        final listing = index < bidMaker['listings'].length
-                            ? bidMaker['listings'][index]
-                            : bidReceiver['listings']
-                                [index - bidMaker['listings'].length];
-
-                        return ListTile(
-                          title: Text(listing['listing_name']),
-                          subtitle: Text(listing['listing_description']),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            } else {
-              return CircularProgressIndicator();
-            }
-          },
-        ),
-      ),
+                  )
+                : Text("you are not bidmaker");
+          }),
     );
   }
 }
