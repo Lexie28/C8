@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
 import 'profile.dart';
 import 'specificItem.dart';
+import 'main.dart';
 
 class CurrentOffer extends StatefulWidget {
   final String bidId;
@@ -88,6 +89,30 @@ class _CurrentOfferState extends State<CurrentOffer> {
       throw Exception('Failed to load album');
     }
   }
+
+  void deleteOffer(String offerId) async {
+    final url = '${_api.getApiHost()}/offer/$offerId';
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to delete offer'),
+        ),
+      );
+    }
+  }
+
+  void acceptOffer() {}
+
+  void declineOffer() {}
 
   @override
   Widget build(BuildContext context) {
@@ -216,12 +241,31 @@ class _CurrentOfferState extends State<CurrentOffer> {
                                 },
                               ),
                             ),
-                          )
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                deleteOffer(widget.bidId);
+                              },
+                              child: Text('Delete offer')),
                         ],
                       ),
                     ],
                   )
-                : Text("you are NOT bidmaker");
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        Text("You are NOT bidmaker"),
+                        ElevatedButton(
+                            onPressed: () {
+                              acceptOffer();
+                            },
+                            child: Text('Accept offer')),
+                        ElevatedButton(
+                            onPressed: () {
+                              declineOffer();
+                            },
+                            child: Text('Decline offer')),
+                      ]);
           }),
     );
   }
