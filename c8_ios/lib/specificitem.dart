@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'api.dart';
 import 'otherProfile.dart';
@@ -19,6 +20,7 @@ class ListingDetailPage extends StatefulWidget {
 class _ListingDetailPageState extends State<ListingDetailPage> {
   late Future<Listing> futureListing;
   late String userId = '';
+  late String myID = '';
   String imagePath = 'loading.png';
   String profilePicturePath = 'loading.png';
   Api _api = Api();
@@ -30,6 +32,9 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
   }
 
   Future<Listing> fetchListingDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    final myId = prefs.getString('uid');
+
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/listing/${widget.listingId}'));
 
@@ -38,6 +43,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
 
       setState(() {
         userId = listing.user['id'];
+        myID = myId!;
         imagePath = listing.listingPic.toString();
         fetchPP(userId);
       });
@@ -100,11 +106,12 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
                         string: ListingBids(futureListing: futureListing)),
                   ),
                   Align(
-                    alignment: FractionalOffset.center,
-                    // bitbutton
-                    child:
-                        BidButton(listingId: widget.listingId, userId: userId),
-                  )
+                      alignment: FractionalOffset.center,
+                      // bitbutton
+                      child: userId != myID
+                          ? BidButton(
+                              listingId: widget.listingId, userId: userId)
+                          : Text('hej'))
                 ],
               ),
               Container(
