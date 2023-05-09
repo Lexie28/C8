@@ -181,7 +181,105 @@ class _CurrentOfferState extends State<CurrentOffer> {
                 ),
               ],
             ) : 
-            Text("you are not bidmaker");
+            Column(
+              children: [
+                Text(
+                  "You have received an offer!",
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.06),
+                  ),
+                Container(
+                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.03),
+                  height: MediaQuery.of(context).size.width*0.75,
+                  width: MediaQuery.of(context).size.width*0.73,
+                  color: Color.fromARGB(255, 205, 217, 228),
+                  child: Container(
+                    
+                    child: Text(
+                      '$bidMakerName is offering:',
+                    ),
+                  ),
+                )
+              ],
+            );
+            /*
+             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        Text('Bid Maker:'),
+                        SizedBox(height: 8),
+                        Text(bidMakerName),
+                        SizedBox(height: 8),
+                        Text('$makerLikes likes | $makerDislikes dislikes'),
+                        SizedBox(height: 8),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text('Bid Receiver:'),
+                        SizedBox(height: 8),
+                        Text(bidReceiverName),
+                        SizedBox(height: 8),
+                        Text('$recLikes likes | $recDislikes dislikes'),
+                        SizedBox(height: 8),
+                      ],
+                    ),
+                  ],
+                ),
+                
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8),
+                    Text(
+                      '$bidMakerName is offering:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    ...offered_items.map(
+                      (offered_items) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                          offered_items.length,
+                          (index) {
+                            return Text(
+                              offered_items[index]['name'].toString(),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 8),
+                    Text(
+                      'In return they want your:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    ...wanted_items.map(
+                      (wanted_items) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                          wanted_items.length,
+                          (index) {
+                            return Text(
+                              wanted_items[index]['name'].toString(),
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                
+              ],
+            ); */
           }),
     );
   }
