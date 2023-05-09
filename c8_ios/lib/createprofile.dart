@@ -75,7 +75,7 @@ class _CreateProfileState extends State<CreateProfile> {
             'profile_picture_path': uploadedImageName
           }));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         // registration successful, navigate to main page
         Navigator.pushReplacement(
           _formKey.currentContext!,

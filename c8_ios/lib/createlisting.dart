@@ -122,7 +122,7 @@ class _CreateListingPageState extends State<CreateListingPage> {
     final jsonBody = json.encode(body);
 
     final response = await http.post(url, headers: headers, body: jsonBody);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       // Success
       print('Good! New listing created!');
       Navigator.pushReplacement(
