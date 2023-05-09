@@ -91,7 +91,7 @@ class _EditListingState extends State<EditListing> {
         'name': _titleController.text,
         'description': _descController.text,
         'category': _catController.text,
-        'image_path': uploadedImageName,
+        'image_path': uploadedImageName
       };
       final jsonBody = json.encode(body);
       final response = await http.patch(url, headers: headers, body: jsonBody);
