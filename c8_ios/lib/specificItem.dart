@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher_string.dart';
 import 'api.dart';
 import 'otherProfile.dart';
-import 'createbid.dart';
+import 'createBid.dart';
 import 'profile.dart';
 
 class ListingDetailPage extends StatefulWidget {

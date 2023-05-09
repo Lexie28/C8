@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:c8_ios/editprofile.dart';
+import 'package:c8_ios/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'settings.dart';
 import 'yourProduct.dart';
