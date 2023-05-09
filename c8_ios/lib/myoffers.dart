@@ -59,6 +59,7 @@ class _OffersPageState extends State<OffersPage> {
           final bidReceiver = _offersData[index]['bidReceiver'];
           final bidMakerListings = _offersData[index]['bidMakerListings'];
           final bidReceiverListings = _offersData[index]['bidReceiverListings'];
+
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
@@ -78,7 +79,7 @@ class _OffersPageState extends State<OffersPage> {
                           Text('$bidMaker',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          Text('Listings:',
+                          Text('Offering:',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           ...bidMakerListings
                               .map((listing) => Column(
@@ -101,7 +102,7 @@ class _OffersPageState extends State<OffersPage> {
                           Text('$bidReceiver',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           SizedBox(height: 8),
-                          Text('Listings:',
+                          Text('Want:',
                               style: TextStyle(fontWeight: FontWeight.bold)),
                           ...bidReceiverListings
                               .map((listing) => Column(

@@ -78,6 +78,8 @@ class _CreateListingPageState extends State<CreateListingPage> {
       setState(() {
         _image = imagePermanent;
       });
+
+      imagePicked = true;
     } catch (e) {
       print('Failed to pick image: $e');
     }
@@ -92,8 +94,6 @@ class _CreateListingPageState extends State<CreateListingPage> {
     final ext = extension(imagePath);
     final image = File('${directory.path}/$uuidCrypto$ext');
 
-    imagePicked = true;
-
     return File(imagePath).copy(image.path);
   }
 
@@ -101,10 +101,10 @@ class _CreateListingPageState extends State<CreateListingPage> {
     _formKey.currentState!.save();
     final String? uploadedImageName;
 
-    if(imagePicked){
+    if (imagePicked) {
       uploadedImageName = await _upload(_image);
-    } else{
-      uploadedImageName = 'noImage.jpg';    
+    } else {
+      uploadedImageName = 'noImage.jpg';
     }
 
     final prefs = await SharedPreferences.getInstance();
@@ -115,14 +115,14 @@ class _CreateListingPageState extends State<CreateListingPage> {
     final body = {
       'name': _listingName,
       'description': _listingDescription,
-      'image_path': uploadedImageName, //TODO
+      'image_path': uploadedImageName,
       'category': _listingCategory,
       'owner_id': userId
     };
     final jsonBody = json.encode(body);
 
     final response = await http.post(url, headers: headers, body: jsonBody);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       // Success
       print('Good! New listing created!');
       Navigator.pushReplacement(
@@ -150,16 +150,16 @@ class _CreateListingPageState extends State<CreateListingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.width*0.8,
-                  width: MediaQuery.of(context).size.width*0.9,
+                  height: MediaQuery.of(context).size.width * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.9,
                   child: imagePicked
-                        ? Image.file(
-                            _image!,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            'images/noImage.jpg',
-                          ),
+                      ? Image.file(
+                          _image!,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          'images/noImage.jpg',
+                        ),
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'Listing Name'),
