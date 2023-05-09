@@ -46,6 +46,10 @@ class _EditListingState extends State<EditListing> {
   final TextEditingController _catController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  String _listingDesc = '';
+  String _listingImg = 'noImage.jpg';
+  String _listingCat = 'Clothing';
+  String _listingName = '';
   Api _api = Api();
 
   List<String> _categories = [
@@ -61,6 +65,14 @@ class _EditListingState extends State<EditListing> {
     'Sports'
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    fetchListing();
+    _titleController.text = _listingName;
+    _descController.text = _listingDesc;
+  }
+
   File? _image;
   bool imagePicked = false;
 
@@ -71,7 +83,7 @@ class _EditListingState extends State<EditListing> {
     if (imagePicked) {
       uploadedImageName = await _upload(_image);
     } else {
-      uploadedImageName = 'noImage.jpg';
+      uploadedImageName = _listingImg;
     }
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}');
@@ -133,6 +145,12 @@ class _EditListingState extends State<EditListing> {
         .get(Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}'));
     if (response.statusCode == 200) {
       final listing = jsonDecode(response.body);
+      setState(() {
+        _listingDesc = listing['description'];
+        _listingImg = listing['image_path'];
+        _listingCat = listing['category'];
+        _listingName = listing['name'];
+      });
       return listing;
     } else {
       throw Exception('Failed to load listing');
@@ -141,11 +159,6 @@ class _EditListingState extends State<EditListing> {
 
   @override
   Widget build(BuildContext context) {
-    final listing = fetchListing();
-    String listingDesc = listing['description'];
-    String listingImg = listing['image_path'];
-    String listingCat = listing['category'];
-    String listingName = listing['name'];
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Listing'),
@@ -173,7 +186,7 @@ class _EditListingState extends State<EditListing> {
                             fit: BoxFit.cover,
                           )
                         : Image.network(
-                            'https://circle8.s3.eu-north-1.amazonaws.com/$listingImg',
+                            'https://circle8.s3.eu-north-1.amazonaws.com/$_listingImg',
                             fit: BoxFit.cover,
                           ),
                   ),
@@ -189,7 +202,7 @@ class _EditListingState extends State<EditListing> {
                 child: TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
-                    labelText: listingName,
+                    labelText: 'Item Name',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -203,7 +216,7 @@ class _EditListingState extends State<EditListing> {
                 child: TextField(
                   controller: _descController,
                   decoration: InputDecoration(
-                    labelText: listingDesc,
+                    labelText: 'Item Description',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -215,12 +228,12 @@ class _EditListingState extends State<EditListing> {
                 ),
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(labelText: 'Listing Category'),
-                  value: _categories[0],
+                  value: _categories[_categories.indexOf(_listingCat)],
                   items: _categories.map((category) {
                     return DropdownMenuItem(
                       value: category,
                       child: Text(category),
-                      //TODO visa den kategorin som listingen redan ligger på
+                      //TODO visa den kategorin som listingen just nu ligger på
                     );
                   }).toList(),
                   onChanged: (value) {
