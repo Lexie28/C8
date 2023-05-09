@@ -219,7 +219,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
                       ),
                     ],
                   )
-                : Text("you are not bidmaker");
+                : Text("you are NOT bidmaker");
           }),
     );
   }
