@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
 import 'profile.dart';
-import 'specificitem.dart';
+import 'specificItem.dart';
 
 class CurrentOffer extends StatefulWidget {
   final String bidId;
