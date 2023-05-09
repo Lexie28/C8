@@ -1,6 +1,6 @@
 import 'package:c8_ios/offers.dart';
 import 'package:flutter/material.dart';
-import 'specificitem.dart';
+import 'specificItem.dart';
 //import 'popularItems.dart';
 //import 'hometest.dart';
 import 'package:http/http.dart' as http;

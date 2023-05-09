@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'createprofile.dart';
+import 'createProfile.dart';
 import 'main.dart';
 import 'dart:convert';
 import 'api.dart';

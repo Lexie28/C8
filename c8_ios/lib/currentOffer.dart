@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:c8_ios/yourProduct.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,6 +91,11 @@ class _CurrentOfferState extends State<CurrentOffer> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.headlineSmall!.copyWith(
+      color: theme.colorScheme.onBackground,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Current Offer'),
@@ -113,10 +119,14 @@ class _CurrentOfferState extends State<CurrentOffer> {
                         children: [
                           Column(
                             children: [
-                              Text('Bid Maker:'),
+                              Text('Bid Maker:',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(height: 8),
-                              Text(bidMakerName),
-                              SizedBox(height: 8),
+                              Text(
+                                bidMakerName,
+                                style: style,
+                              ),
                               Text(
                                   '$makerLikes likes | $makerDislikes dislikes'),
                               SizedBox(height: 8),
@@ -124,15 +134,22 @@ class _CurrentOfferState extends State<CurrentOffer> {
                           ),
                           Column(
                             children: [
-                              Text('Bid Receiver:'),
+                              Text('Bid Receiver:',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(height: 8),
-                              Text(bidReceiverName),
-                              SizedBox(height: 8),
+                              Text(
+                                bidReceiverName,
+                                style: style,
+                              ),
                               Text('$recLikes likes | $recDislikes dislikes'),
                               SizedBox(height: 8),
                             ],
                           ),
                         ],
+                      ),
+                      SizedBox(
+                        height: 30,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,10 +170,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            ListingDetailPage(
-                                                listingId: offered_items[index]
-                                                        ['listing_id']
-                                                    .toString()),
+                                            YourProduct(itemIndex: 0),
                                       ));
                                     },
                                     child: Text(
@@ -183,9 +197,20 @@ class _CurrentOfferState extends State<CurrentOffer> {
                               children: List.generate(
                                 wanted_items.length,
                                 (index) {
-                                  return Text(
-                                    wanted_items[index]['name'].toString(),
-                                  );
+                                  return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ListingDetailPage(
+                                                  listingId: wanted_items[index]
+                                                          ['listing_id']
+                                                      .toString()),
+                                        ));
+                                      },
+                                      child: Text(
+                                        wanted_items[index]['name'].toString(),
+                                      ));
                                 },
                               ),
                             ),
