@@ -18,6 +18,7 @@ class _OffersPageState extends State<OffersPage> {
     super.initState();
     _getOffers();
   }
+
   Future<void> _getOffers() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
@@ -42,6 +43,7 @@ class _OffersPageState extends State<OffersPage> {
       print(error);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -92,6 +92,7 @@ class _CreateBidState extends State<CreateBid> {
           builder: (BuildContext context) => MyBottomNavigationbar()));
       // Bid created successfully, do something here
     } else {
+      print(response.statusCode);
       throw Exception('Failed to create bid');
     }
   }

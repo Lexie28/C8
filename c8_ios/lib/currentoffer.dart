@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
 import 'profile.dart';
+import 'specificItem.dart';
 
 class CurrentOffer extends StatefulWidget {
   final String bidId;
@@ -63,7 +64,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
   Future<void> fetchUser(String bidMaker, String bidRec) async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('uid');
-    
+
     final response = await http
         .get(Uri.parse('${_api.getApiHost()}/pages/profilepage/$bidMaker'));
 
@@ -89,7 +90,6 @@ class _CurrentOfferState extends State<CurrentOffer> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Current Offer'),
@@ -104,184 +104,98 @@ class _CurrentOfferState extends State<CurrentOffer> {
             final offered_items = _futureOffer[index]['offered_items'];
             final wanted_items = _futureOffer[index]['wanted_items'];
 
-            return myID == bidMakerId ?
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Text('Bid Maker:'),
-                        SizedBox(height: 8),
-                        Text(bidMakerName),
-                        SizedBox(height: 8),
-                        Text('$makerLikes likes | $makerDislikes dislikes'),
-                        SizedBox(height: 8),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text('Bid Receiver:'),
-                        SizedBox(height: 8),
-                        Text(bidReceiverName),
-                        SizedBox(height: 8),
-                        Text('$recLikes likes | $recDislikes dislikes'),
-                        SizedBox(height: 8),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      'Offering:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    ...offered_items.map(
-                      (offered_items) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          offered_items.length,
-                          (index) {
-                            return Text(
-                              offered_items[index]['name'].toString(),
-                            );
-                          },
-                        ),
+            return myID == bidMakerId
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text('Bid Maker:'),
+                              SizedBox(height: 8),
+                              Text(bidMakerName),
+                              SizedBox(height: 8),
+                              Text(
+                                  '$makerLikes likes | $makerDislikes dislikes'),
+                              SizedBox(height: 8),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Bid Receiver:'),
+                              SizedBox(height: 8),
+                              Text(bidReceiverName),
+                              SizedBox(height: 8),
+                              Text('$recLikes likes | $recDislikes dislikes'),
+                              SizedBox(height: 8),
+                            ],
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      'Want:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    ...wanted_items.map(
-                      (wanted_items) => Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          wanted_items.length,
-                          (index) {
-                            return Text(
-                              wanted_items[index]['name'].toString(),
-                            );
-                          },
-                        ),
+                        children: [
+                          SizedBox(height: 8),
+                          Text(
+                            'Offering:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...offered_items.map(
+                            (offered_items) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                offered_items.length,
+                                (index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ListingDetailPage(
+                                                listingId: offered_items[index]
+                                                        ['listing_id']
+                                                    .toString()),
+                                      ));
+                                    },
+                                    child: Text(
+                                      offered_items[index]['name'].toString(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ) : 
-            Column(
-              children: [
-                Text(
-                  "You have received an offer!",
-                  style: TextStyle(fontSize: MediaQuery.of(context).size.width*0.06),
-                  ),
-                Container(
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.03),
-                  height: MediaQuery.of(context).size.width*0.75,
-                  width: MediaQuery.of(context).size.width*0.73,
-                  color: Color.fromARGB(255, 205, 217, 228),
-                  child: Container(
-                    
-                    child: Text(
-                      '$bidMakerName is offering:',
-                    ),
-                  ),
-                )
-              ],
-            );
-            /*
-             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Text('Bid Maker:'),
-                        SizedBox(height: 8),
-                        Text(bidMakerName),
-                        SizedBox(height: 8),
-                        Text('$makerLikes likes | $makerDislikes dislikes'),
-                        SizedBox(height: 8),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text('Bid Receiver:'),
-                        SizedBox(height: 8),
-                        Text(bidReceiverName),
-                        SizedBox(height: 8),
-                        Text('$recLikes likes | $recDislikes dislikes'),
-                        SizedBox(height: 8),
-                      ],
-                    ),
-                  ],
-                ),
-                
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      '$bidMakerName is offering:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    ...offered_items.map(
-                      (offered_items) => Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          offered_items.length,
-                          (index) {
-                            return Text(
-                              offered_items[index]['name'].toString(),
-                            );
-                          },
-                        ),
+                        children: [
+                          SizedBox(height: 8),
+                          Text(
+                            'Want:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...wanted_items.map(
+                            (wanted_items) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                wanted_items.length,
+                                (index) {
+                                  return Text(
+                                    wanted_items[index]['name'].toString(),
+                                  );
+                                },
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 8),
-                    Text(
-                      'In return they want your:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    ...wanted_items.map(
-                      (wanted_items) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          wanted_items.length,
-                          (index) {
-                            return Text(
-                              wanted_items[index]['name'].toString(),
-                            );
-                          },
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                
-              ],
-            ); */
+                    ],
+                  )
+                : Text("you are not bidmaker");
           }),
     );
   }
 }
-
