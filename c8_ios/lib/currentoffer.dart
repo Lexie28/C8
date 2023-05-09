@@ -194,7 +194,15 @@ class _CurrentOfferState extends State<CurrentOffer> {
                       ),
                     ],
                   )
-                : Text("you are not bidmaker");
+                : Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.width*0.7,
+                      width: MediaQuery.of(context).size.width*0.7,
+                      color: Color.fromARGB(255, 196, 215, 230),
+                    )
+                  ],
+                );
           }),
     );
   }
