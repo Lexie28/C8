@@ -87,7 +87,7 @@ class _CreateBidState extends State<CreateBid> {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => MyBottomNavigationbar()));
       // Bid created successfully, do something here
