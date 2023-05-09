@@ -35,9 +35,9 @@ class _CreateBidState extends State<CreateBid> {
     print(widget.userId);
 
     final myListingResponse =
-        await http.get(Uri.parse('${_api.getApiHost()}/listing/user/$userId'));
+        await http.get(Uri.parse('${_api.getApiHost()}/user/$userId/listings'));
     final theirListingResponse = await http
-        .get(Uri.parse('${_api.getApiHost()}/listing/user/${widget.userId}'));
+        .get(Uri.parse('${_api.getApiHost()}/user/${widget.userId}/listings'));
     print(myListingResponse.body);
     print(theirListingResponse.body);
     if (myListingResponse.statusCode == 200 &&
@@ -87,7 +87,7 @@ class _CreateBidState extends State<CreateBid> {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(data),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => MyBottomNavigationbar()));
       // Bid created successfully, do something here
