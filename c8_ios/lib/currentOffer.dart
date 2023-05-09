@@ -170,7 +170,9 @@ class _CurrentOfferState extends State<CurrentOffer> {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            YourProduct(itemIndex: 0),
+                                            ListingDetailPage(
+                                                listingId: offered_items[index]
+                                                    ['listing_id']),
                                       ));
                                     },
                                     child: Text(
