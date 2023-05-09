@@ -129,7 +129,7 @@ class _CreateBidState extends State<CreateBid> {
                             children: [
                               Row(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Image.network(
@@ -139,14 +139,16 @@ class _CreateBidState extends State<CreateBid> {
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(
-                                          left:
-                                              MediaQuery.of(context).size.width *
-                                                  0.03,
-                                          bottom:
-                                              MediaQuery.of(context).size.width *
-                                                  0.02),
-                                      width:
-                                          MediaQuery.of(context).size.width * 0.4,
+                                          left: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.03,
+                                          bottom: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.02),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
                                       child: Text(theirListingData[index]
                                           ['description'])),
                                 ],
@@ -175,9 +177,10 @@ class _CreateBidState extends State<CreateBid> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.01),
+                  margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).size.width * 0.01),
                   width: MediaQuery.of(context).size.width * 1,
-                 color: Color.fromARGB(73, 122, 202, 231),
+                  color: Color.fromARGB(73, 122, 202, 231),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text('Mine:', style: TextStyle(fontSize: 24)),
@@ -201,7 +204,7 @@ class _CreateBidState extends State<CreateBid> {
                             children: [
                               Row(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height:
                                         MediaQuery.of(context).size.width * 0.2,
                                     child: Image.network(

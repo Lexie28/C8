@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_s3/simple_s3.dart';
 import 'api.dart';
 import 'main.dart';
@@ -47,6 +46,10 @@ class _EditListingState extends State<EditListing> {
   final TextEditingController _catController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  String _listingDesc = '';
+  String _listingImg = 'noImage.jpg';
+  String _listingCat = 'Clothing';
+  String _listingName = '';
   Api _api = Api();
 
   List<String> _categories = [
@@ -62,6 +65,14 @@ class _EditListingState extends State<EditListing> {
     'Sports'
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    fetchListing();
+    _titleController.text = _listingName;
+    _descController.text = _listingDesc;
+  }
+
   File? _image;
   bool imagePicked = false;
 
@@ -72,7 +83,7 @@ class _EditListingState extends State<EditListing> {
     if (imagePicked) {
       uploadedImageName = await _upload(_image);
     } else {
-      uploadedImageName = 'noImage.jpg';
+      uploadedImageName = _listingImg;
     }
     if (_formKey.currentState!.validate()) {
       final url = Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}');
@@ -88,7 +99,8 @@ class _EditListingState extends State<EditListing> {
       final response = await http.patch(url, headers: headers, body: jsonBody);
       if (response.statusCode == 200) {
         // Success
-        print('Good! Listing uppdated!');
+        print('Good! Listing updated!');
+        print("!!!!!");
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
@@ -113,6 +125,8 @@ class _EditListingState extends State<EditListing> {
       setState(() {
         _image = imagePermanent;
       });
+
+      imagePicked = true;
     } catch (e) {
       print('Failed to pick image: $e');
     }
@@ -121,13 +135,26 @@ class _EditListingState extends State<EditListing> {
   Future<File> saveFilePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final ext = p.extension(imagePath);
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('uid');
-    final image = File('${directory.path}/$userId$ext');
-
-    imagePicked = true;
+    final image = File('${directory.path}/${widget.itemId}$ext');
 
     return File(imagePath).copy(image.path);
+  }
+
+  fetchListing() async {
+    final response = await http
+        .get(Uri.parse('${_api.getApiHost()}/listing/${widget.itemId}'));
+    if (response.statusCode == 200) {
+      final listing = jsonDecode(response.body);
+      setState(() {
+        _listingDesc = listing['description'];
+        _listingImg = listing['image_path'];
+        _listingCat = listing['category'];
+        _listingName = listing['name'];
+      });
+      return listing;
+    } else {
+      throw Exception('Failed to load listing');
+    }
   }
 
   @override
@@ -142,7 +169,6 @@ class _EditListingState extends State<EditListing> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Profile picture
               GestureDetector(
                 onTap: () {
                   getImage(ImageSource.gallery);
@@ -159,8 +185,9 @@ class _EditListingState extends State<EditListing> {
                             _image!,
                             fit: BoxFit.cover,
                           )
-                        : Image.asset(
-                            'images/noImage.jpg',
+                        : Image.network(
+                            'https://circle8.s3.eu-north-1.amazonaws.com/$_listingImg',
+                            fit: BoxFit.cover,
                           ),
                   ),
                 ),
@@ -175,7 +202,7 @@ class _EditListingState extends State<EditListing> {
                 child: TextField(
                   controller: _titleController,
                   decoration: InputDecoration(
-                    labelText: 'New Title',
+                    labelText: 'Item Name',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -189,7 +216,7 @@ class _EditListingState extends State<EditListing> {
                 child: TextField(
                   controller: _descController,
                   decoration: InputDecoration(
-                    labelText: 'New Description',
+                    labelText: 'Item Description',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -201,11 +228,12 @@ class _EditListingState extends State<EditListing> {
                 ),
                 child: DropdownButtonFormField(
                   decoration: InputDecoration(labelText: 'Listing Category'),
-                  value: _categories[0],
+                  value: _categories[_categories.indexOf(_listingCat)],
                   items: _categories.map((category) {
                     return DropdownMenuItem(
                       value: category,
                       child: Text(category),
+                      //TODO visa den kategorin som listingen just nu ligger på
                     );
                   }).toList(),
                   onChanged: (value) {
