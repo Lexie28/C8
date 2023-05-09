@@ -436,11 +436,11 @@ class ListingProfile extends StatelessWidget {
                       Container(
                           margin: EdgeInsets.only(
                               left: MediaQuery.of(context).size.width * 0.07),
-                          child: location), //TODO
+                          child: location),
                       GestureDetector(
                         onTap: () {
                           launchUrlString(
-                            'https://www.google.com/maps/search/?api=1&query=$location',
+                            'https://www.google.com/maps/search/?api=1&query=${location.toString()}',
                           );
                         },
                         child: Container(
