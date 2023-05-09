@@ -191,7 +191,6 @@ class _EditListingState extends State<EditListing> {
                 ),
               ),
 
-              // TODO: knapp för ändra profil
               // Name field
               Container(
                 margin: EdgeInsets.all(
