@@ -75,7 +75,7 @@ class _CreateProfileState extends State<CreateProfile> {
             'profile_picture_path': uploadedImageName
           }));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         // registration successful, navigate to main page
         Navigator.pushReplacement(
           _formKey.currentContext!,
@@ -129,7 +129,7 @@ class _CreateProfileState extends State<CreateProfile> {
               children: <Widget>[
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.6,
-                width: MediaQuery.of(context).size.width * 0.6,
+                  width: MediaQuery.of(context).size.width * 0.6,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(120),
                     child: imagePicked
