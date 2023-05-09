@@ -535,7 +535,7 @@ class ListingProfile extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           launchUrlString(
-                            'https://www.google.com/maps/search/?api=1&query=location',
+                            'https://www.google.com/maps/search/?api=1&query=$location',
                           );
                         },
                         child: Container(
@@ -544,7 +544,7 @@ class ListingProfile extends StatelessWidget {
                           height: MediaQuery.of(context).size.height * 0.05,
                           width: MediaQuery.of(context).size.width * 0.07,
                           child: Image.asset(
-                            'images/locationicon.png', //TODO
+                            'images/locationicon.png',
                             fit: BoxFit.contain,
                           ),
                         ),
