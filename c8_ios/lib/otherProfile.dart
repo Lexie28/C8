@@ -4,6 +4,7 @@ import 'specificItem.dart';
 import 'profile.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'color.dart' as color;
 
 class OtherProfile extends StatefulWidget {
   OtherProfile({required this.userId});
@@ -52,7 +53,7 @@ class _OtherProfileState extends State<OtherProfile> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
         title: Text('Circle Eight'),
       ),
       body: SingleChildScrollView(

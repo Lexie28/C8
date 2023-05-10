@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
 import 'authentication.dart';
 import 'main.dart';
+import 'color.dart' as colo;
 
 class Settings extends StatelessWidget {
   Future<void> _deleteUserId(BuildContext context) async {
@@ -28,7 +29,7 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
-        backgroundColor: Color.fromARGB(255, 142, 219, 250),
+        backgroundColor: colo.primary,
         actions: [
           IconButton(
               onPressed: () {
@@ -150,7 +151,7 @@ class SettingsOption extends StatelessWidget {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
     final color = isDarkMode ? Color(0xFF1E1E1E) : Colors.white;
-    final accentColor = Color(0xFFA2BABF);
+    final accentColor = colo.primary;
     final textColor = isDarkMode ? accentColor : Colors.black;
 
     return GestureDetector(

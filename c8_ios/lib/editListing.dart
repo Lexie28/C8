@@ -8,6 +8,7 @@ import 'package:simple_s3/simple_s3.dart';
 import 'api.dart';
 import 'main.dart';
 import 'package:path/path.dart' as p;
+import 'color.dart' as color;
 
 SimpleS3 _simpleS3 = SimpleS3();
 Future<String?> _upload(File? fileToUpload) async {
@@ -160,7 +161,7 @@ class _EditListingState extends State<EditListing> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Listing'),
-        backgroundColor: Color.fromARGB(255, 142, 219, 250),
+        backgroundColor: color.primary,
       ),
       body: Form(
         key: _formKey,
