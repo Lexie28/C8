@@ -1,4 +1,4 @@
-import 'package:c8_ios/offers.dart';
+import 'package:c8_ios/myOffers.dart';
 import 'package:flutter/material.dart';
 import 'specificItem.dart';
 //import 'popularItems.dart';
@@ -211,7 +211,7 @@ class _MakeBidState extends State<MakeBid> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => Offers(),
+                        builder: (BuildContext context) => OffersPage(),
                       ),
                     );
                   },
