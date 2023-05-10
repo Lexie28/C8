@@ -78,7 +78,10 @@ class _OffersPageState extends State<OffersPage> {
                     ))
                   : Navigator.of(context).push(MaterialPageRoute(
                       builder: (BuildContext context) => AcceptedOffer(
-                          makerId: bidMakerId, recieverId: bidReceiverId),
+                        makerId: bidMakerId,
+                        recieverId: bidReceiverId,
+                        offerId: offerId,
+                      ),
                     ));
             },
             child: Card(

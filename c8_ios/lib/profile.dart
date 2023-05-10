@@ -252,6 +252,7 @@ class User {
   final int likes;
   final int dislikes;
   final List listings;
+  final String email;
 
   const User({
     required this.userId,
@@ -262,19 +263,20 @@ class User {
     required this.likes,
     required this.dislikes,
     required this.listings,
+    required this.email,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['id'],
-      userName: json['name'],
-      location: json['location'],
-      profilePicturePath: json['profile_picture_path'],
-      phoneNumber: json['phone_number'],
-      likes: json['likes'],
-      dislikes: json['dislikes'],
-      listings: json['listings'],
-    );
+        userId: json['id'],
+        userName: json['name'],
+        location: json['location'],
+        profilePicturePath: json['profile_picture_path'],
+        phoneNumber: json['phone_number'],
+        likes: json['likes'],
+        dislikes: json['dislikes'],
+        listings: json['listings'],
+        email: json['email']);
   }
 }
 
