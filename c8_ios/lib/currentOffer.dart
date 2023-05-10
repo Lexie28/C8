@@ -122,8 +122,11 @@ class _CurrentOfferState extends State<CurrentOffer> {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) =>
-            AcceptedOffer(makerId: makerId, recieverId: receiverId),
+        builder: (BuildContext context) => AcceptedOffer(
+          makerId: makerId,
+          recieverId: receiverId,
+          offerId: offerId,
+        ),
       ));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
