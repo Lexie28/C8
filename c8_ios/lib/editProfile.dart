@@ -9,6 +9,7 @@ import 'api.dart';
 import 'main.dart';
 import 'profile.dart';
 import 'package:path/path.dart' as p;
+import 'color.dart' as color;
 
 SimpleS3 _simpleS3 = SimpleS3();
 Future<String?> _upload(File? fileToUpload) async {
@@ -146,7 +147,7 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Profile'),
-        backgroundColor: Color.fromARGB(255, 142, 219, 250),
+        backgroundColor: color.primary,
       ),
       body: Form(
         key: _formKey,

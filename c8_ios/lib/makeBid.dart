@@ -6,6 +6,7 @@ import 'specificItem.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api.dart';
+import 'color.dart' as color;
 
 class MakeBid extends StatefulWidget {
   // TODO markera produkter!!!
@@ -51,7 +52,7 @@ class _MakeBidState extends State<MakeBid> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Make bid'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
       ),
       body: Column(
         children: [

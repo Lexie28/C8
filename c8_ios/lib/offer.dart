@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'otherProfile.dart';
+import 'color.dart' as color;
 
 class Offer extends StatelessWidget {
   @override
@@ -8,7 +9,7 @@ class Offer extends StatelessWidget {
       appBar: AppBar(
         //automaticallyImplyLeading: false,
         title: Text('Offer'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
       ),
       body: SingleChildScrollView(
         child: Column(

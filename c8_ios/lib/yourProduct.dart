@@ -8,7 +8,7 @@ import 'api.dart';
 import 'editListing.dart';
 import 'main.dart';
 import 'profile.dart';
-import 'color.dart';
+import 'color.dart' as color;
 
 class YourProduct extends StatefulWidget {
   const YourProduct({super.key, required this.itemIndex});
@@ -63,7 +63,7 @@ class _YourProductState extends State<YourProduct> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       appBar: AppBar(
-        backgroundColor: primary,
+        backgroundColor: color.primary,
         title: Text('Listing'),
         actions: [
           IconButton(
@@ -264,7 +264,7 @@ class _BidButtonState extends State<BidButton> {
           color: Colors.white,
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFA2BABF),
+          backgroundColor: color.primary,
 
           //elevated btton background color
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'otherProfile.dart';
+import 'color.dart' as color;
 
 class CompletedOffer extends StatelessWidget {
   @override
@@ -7,7 +8,7 @@ class CompletedOffer extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Completed offer'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
       ),
       body: SingleChildScrollView(
         child: Column(

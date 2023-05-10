@@ -2,20 +2,21 @@ import 'package:c8_ios/categories.dart';
 import 'package:c8_ios/offer.dart';
 import 'package:flutter/material.dart';
 import 'completedOffer.dart';
+import 'color.dart' as color;
 
 class Offers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.headlineLarge!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Offers'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
       ),
 
       body: SingleChildScrollView(
