@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'api.dart';
 import 'currentOffer.dart';
+import 'acceptedOffer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OffersPage extends StatefulWidget {
@@ -35,7 +36,9 @@ class _OffersPageState extends State<OffersPage> {
             'bidMaker': offer['bid_maker']['name'],
             'bidReceiver': offer['bid_receiver']['name'],
             'bidMakerListings': offer['bid_maker']['listings'],
-            'bidReceiverListings': offer['bid_receiver']['listings']
+            'bidReceiverListings': offer['bid_receiver']['listings'],
+            'acceptedStatus': offer['accepted'],
+            'rejectedStatus': offer['rejected'],
           };
         }).toList();
       });
@@ -54,19 +57,29 @@ class _OffersPageState extends State<OffersPage> {
         itemCount: _offersData.length,
         itemBuilder: (context, index) {
           final offerId = _offersData[index]['offerId'];
-          print(offerId);
           final bidMaker = _offersData[index]['bidMaker'];
           final bidReceiver = _offersData[index]['bidReceiver'];
           final bidMakerListings = _offersData[index]['bidMakerListings'];
           final bidReceiverListings = _offersData[index]['bidReceiverListings'];
+          final acceptedStatus = _offersData[index]['acceptedStatus'];
+          final rejectedStatus = _offersData[index]['rejectedStatus'];
 
           return GestureDetector(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) => CurrentOffer(bidId: offerId),
-              ));
+              acceptedStatus != 1
+                  ? Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          CurrentOffer(bidId: offerId),
+                    ))
+                  : Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => AcceptedOffer(
+                          makerId: bidMaker, recieverId: bidReceiver),
+                    ));
             },
             child: Card(
+              color: acceptedStatus == 0
+                  ? Color.fromARGB(255, 219, 235, 242)
+                  : Color.fromARGB(255, 148, 228, 151),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

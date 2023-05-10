@@ -7,6 +7,7 @@ import 'api.dart';
 import 'profile.dart';
 import 'specificItem.dart';
 import 'main.dart';
+import 'acceptedOffer.dart';
 
 class CurrentOffer extends StatefulWidget {
   final String bidId;
@@ -22,7 +23,9 @@ class _CurrentOfferState extends State<CurrentOffer> {
   Api _api = Api();
   String myID = '';
   String bidMakerName = '';
+  String makerId = '';
   String bidReceiverName = '';
+  String receiverId = '';
   int makerLikes = 0;
   int makerDislikes = 0;
   int recLikes = 0;
@@ -47,6 +50,9 @@ class _CurrentOfferState extends State<CurrentOffer> {
         _futureOffer = jsonData.map((bid) {
           final bidId = bid['user_making_offer'];
           final bidRec = bid['user_receiving_offer'];
+          makerId = bidId;
+          receiverId = bidRec;
+
           fetchUser(bidId, bidRec);
 
           return {
@@ -110,9 +116,45 @@ class _CurrentOfferState extends State<CurrentOffer> {
     }
   }
 
-  void acceptOffer() {}
+  void acceptOffer(String offerId) async {
+    final url = '${_api.getApiHost()}/offer/$offerId/accept';
+    final response = await http.patch(Uri.parse(url));
 
-  void declineOffer() {}
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) =>
+            AcceptedOffer(makerId: makerId, recieverId: receiverId),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to accept offer'),
+        ),
+      );
+    }
+  }
+
+  void declineOffer(String offerId) async {
+    // TODO vi deletar nu när vi declinear
+    final url = '${_api.getApiHost()}/offer/$offerId';
+    final response = await http.delete(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyBottomNavigationbar()),
+        // TODO ändra till annan page
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to decline offer'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,18 +296,123 @@ class _CurrentOfferState extends State<CurrentOffer> {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                        Text("You are NOT bidmaker"),
-                        ElevatedButton(
-                            onPressed: () {
-                              acceptOffer();
-                            },
-                            child: Text('Accept offer')),
-                        ElevatedButton(
-                            onPressed: () {
-                              declineOffer();
-                            },
-                            child: Text('Decline offer')),
-                      ]);
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text('Bid Maker:',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: 8),
+                              Text(
+                                bidMakerName,
+                                style: style,
+                              ),
+                              Text(
+                                  '$makerLikes likes | $makerDislikes dislikes'),
+                              SizedBox(height: 8),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Bid Receiver:',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: 8),
+                              Text(
+                                bidReceiverName,
+                                style: style,
+                              ),
+                              Text('$recLikes likes | $recDislikes dislikes'),
+                              SizedBox(height: 8),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8),
+                          Text(
+                            'Offering:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...offered_items.map(
+                            (offered_items) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                offered_items.length,
+                                (index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            ListingDetailPage(
+                                                listingId: offered_items[index]
+                                                    ['listing_id']),
+                                      ));
+                                    },
+                                    child: Text(
+                                      offered_items[index]['name'].toString(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8),
+                          Text(
+                            'Want:',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          ...wanted_items.map(
+                            (wanted_items) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: List.generate(
+                                wanted_items.length,
+                                (index) {
+                                  return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ListingDetailPage(
+                                                  listingId: wanted_items[index]
+                                                          ['listing_id']
+                                                      .toString()),
+                                        ));
+                                      },
+                                      child: Text(
+                                        wanted_items[index]['name'].toString(),
+                                      ));
+                                },
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                acceptOffer(widget.bidId);
+                              },
+                              child: Text('Accept offer')),
+                          ElevatedButton(
+                              onPressed: () {
+                                declineOffer(widget.bidId);
+                              },
+                              child: Text('Decline offer')),
+                        ],
+                      ),
+                    ],
+                  );
           }),
     );
   }
