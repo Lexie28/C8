@@ -39,6 +39,8 @@ class _OffersPageState extends State<OffersPage> {
             'bidReceiverListings': offer['bid_receiver']['listings'],
             'acceptedStatus': offer['accepted'],
             'rejectedStatus': offer['rejected'],
+            'bidMakerID': offer['bid_maker']['id'],
+            'bidReceiverID': offer['bid_receiver']['id']
           };
         }).toList();
       });
@@ -64,6 +66,9 @@ class _OffersPageState extends State<OffersPage> {
           final acceptedStatus = _offersData[index]['acceptedStatus'];
           final rejectedStatus = _offersData[index]['rejectedStatus'];
 
+          final bidMakerId = _offersData[index]['bidMakerID'];
+          final bidReceiverId = _offersData[index]['bidReceiverID'];
+
           return GestureDetector(
             onTap: () {
               acceptedStatus != 1
@@ -71,10 +76,12 @@ class _OffersPageState extends State<OffersPage> {
                       builder: (BuildContext context) =>
                           CurrentOffer(bidId: offerId),
                     ))
-                  : Navigator.of(context).push(MaterialPageRoute(
-                      builder: (BuildContext context) => AcceptedOffer(
-                          makerId: bidMaker, recieverId: bidReceiver),
-                    ));
+                  : print('bidMaker: ' + bidMaker);
+              print('bidrec: ' + bidReceiver);
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => AcceptedOffer(
+                    makerId: bidMakerId, recieverId: bidReceiverId),
+              ));
             },
             child: Card(
               color: acceptedStatus == 0

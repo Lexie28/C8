@@ -48,9 +48,9 @@ class _CurrentOfferState extends State<CurrentOffer> {
 
       setState(() {
         _futureOffer = jsonData.map((bid) {
-          final bidId = bid['user_making_offer'];
+          final user_making_offerId = bid['user_making_offer'];
           final bidRec = bid['user_receiving_offer'];
-          makerId = bidId;
+          makerId = user_making_offerId;
           receiverId = bidRec;
 
           fetchUser(bidId, bidRec);
