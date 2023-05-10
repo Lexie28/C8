@@ -8,7 +8,7 @@ import 'specificItem.dart';
 import 'api.dart';
 import 'popularItems.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'color.dart';
+import 'color.dart' as color;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                     ))),
         ),
         foregroundColor: Color.fromARGB(255, 0, 0, 0),
-        backgroundColor: primary,
+        backgroundColor: color.primary,
       ),
       body: SingleChildScrollView(
         child: Container(color:Color.fromARGB(255, 245, 253, 255),
@@ -239,7 +239,7 @@ class _HomePageState extends State<HomePage> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4.0),
-                                  color: Color.fromARGB(255, 142, 219, 250),
+                                  color: color.primary,
                                 ),
                                 child: Center(
                                   child: Padding(

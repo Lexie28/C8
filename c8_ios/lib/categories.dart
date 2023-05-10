@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'listingsCategory.dart';
+import 'color.dart' as color;
 //import 'package:provider/provider.dart';
 //import 'secondmain.dart';
 
@@ -10,7 +11,7 @@ class Categories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
         title: Text('Circle Eight'),
       ),
       body: Center(

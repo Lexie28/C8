@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'profile.dart';
 import 'homeTest.dart';
 import 'createListing.dart';
+import 'color.dart' as color;
 
 void main() {
   runApp(C8());
@@ -25,7 +26,7 @@ class C8 extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 142, 219, 250)),
+            ColorScheme.fromSeed(seedColor: color.primary),
       ),
       home: FirstPage(),
     );
@@ -62,7 +63,7 @@ class _MyBottomNavigationbarState extends State<MyBottomNavigationbar> {
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromARGB(255, 142, 219, 250),
+        backgroundColor: color.primary,
         selectedItemColor: Color.fromARGB(255, 80, 102, 106),
         unselectedItemColor: Color.fromARGB(255, 0, 0, 0),
         showSelectedLabels: false,

@@ -7,6 +7,7 @@ import 'api.dart';
 import 'otherProfile.dart';
 import 'createBid.dart';
 import 'profile.dart';
+import 'color.dart' as color;
 
 class ListingDetailPage extends StatefulWidget {
   final String listingId;
@@ -74,7 +75,7 @@ class _ListingDetailPageState extends State<ListingDetailPage> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(249, 253, 255, 1),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 142, 219, 250),
+        backgroundColor: color.primary,
         title: Text('Listing'),
       ),
       body: SingleChildScrollView(
@@ -149,7 +150,7 @@ class ProductInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displayMedium!.copyWith(
-        //color: theme.colorScheme.onPrimary,
+        color: color.primary
         );
 
     return FittedBox(
@@ -235,7 +236,7 @@ class _BidButtonState extends State<BidButton> {
           color: Colors.white,
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(255, 142, 219, 250),
+          backgroundColor: color.primary,
 
           //elevated btton background color
         ),
@@ -511,7 +512,7 @@ class UserName extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.headlineMedium!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return FutureBuilder<Listing>(
@@ -542,7 +543,7 @@ class Location extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.headlineMedium!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return FutureBuilder<Listing>(
@@ -641,7 +642,7 @@ class ListingDesc extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.headlineSmall!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return FutureBuilder<Listing>(
@@ -672,7 +673,7 @@ class ListingBids extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.headlineMedium!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return FutureBuilder<Listing>(
@@ -705,7 +706,7 @@ class ListingPic extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.headlineMedium!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return FutureBuilder<Listing>(

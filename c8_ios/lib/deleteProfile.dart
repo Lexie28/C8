@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'settings.dart';
 import 'deletion.dart';
+import 'color.dart' as color;
 
 class DeleteProfile extends StatelessWidget {
   //Variabler som namn och bilder
@@ -15,7 +16,7 @@ class DeleteProfile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
         actions: [
           IconButton(
               onPressed: () {

@@ -6,7 +6,7 @@ import 'yourProduct.dart';
 import 'api.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'color.dart';
+import 'color.dart' as color;
 
 class Profile extends StatefulWidget {
   @override
@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = theme.textTheme.displaySmall!.copyWith(
-      color: theme.colorScheme.onBackground,
+      color: color.primary,
     );
 
     return Scaffold(
@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text('Your Profile'),
-        backgroundColor: primary,
+        backgroundColor: color.primary,
         actions: [
           IconButton(
               onPressed: () {

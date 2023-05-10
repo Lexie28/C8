@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'api.dart';
 import 'specificItem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'color.dart' as color;
 
 class PopularItems extends StatefulWidget {
   const PopularItems({Key? key});
@@ -39,7 +40,7 @@ class _PopularItemsState extends State<PopularItems> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFA2BABF),
+        backgroundColor: color.primary,
         title: Text('Popular Items'),
       ),
       body: SingleChildScrollView(

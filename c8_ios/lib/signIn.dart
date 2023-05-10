@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'authentication.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'color.dart' as color;
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 20, 41, 159),
+      backgroundColor: color.primary,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
