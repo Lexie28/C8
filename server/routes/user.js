@@ -241,6 +241,7 @@ router.get("/user/:id/offers", async (req, res) => {
 })
 */
 
+/*
 router.get("/user/:id/offers", async (req, res) => {
   const { id } = req.params;
 
@@ -300,7 +301,71 @@ router.get("/user/:id/offers", async (req, res) => {
           res.status(500).json({ message: 'An error occurred while retrieving trade offers' });
         });
     });
+})*/
+
+router.get("/user/:id/offers", async (req, res) => {
+  const { id } = req.params;
+
+  db.select('offer.id', 'offer.user_making_offer', 'offer.user_receiving_offer', 'offer.accepted', 'offer.rejected')
+    .from('offer')
+    .where('offer.user_making_offer', id)
+    .orWhere('offer.user_receiving_offer', id)
+    .then(function (offers) {
+      const promises = offers.map(function (offer) {
+        return db.select('offer_listing.offer_id', 'listing.name', 'listing.description', 'user.id AS user_id', 'user.name AS user_name')
+          .from('offer_listing')
+          .innerJoin('listing', 'offer_listing.listing_id', 'listing.id')
+          .innerJoin('user', 'listing.owner_id', 'user.id')
+          .where('offer_listing.offer_id', offer.id)
+          .then(function (listings) {
+            const bidMaker = listings.find(function (listing) { return listing.user_id === offer.user_making_offer; });
+            const bidReceiver = listings.find(function (listing) { return listing.user_id === offer.user_receiving_offer; });
+            const bidListings = {
+              bid_maker: {
+                offer_id: offer.id,
+                id: bidMaker.user_id,
+                name: bidMaker.user_name,
+                listings: []
+              },
+              bid_receiver: {
+                offer_id: offer.id,
+                id: bidReceiver.user_id,
+                name: bidReceiver.user_name,
+                listings: []
+              }
+            };
+            listings.forEach(function (listing) {
+              if (listing.user_id === offer.user_making_offer) {
+                bidListings.bid_maker.listings.push({
+                  id: listing.offer_id,
+                  name: listing.name,
+                  description: listing.description
+                });
+              } else if (listing.user_id === offer.user_receiving_offer) {
+                bidListings.bid_receiver.listings.push({
+                  id: listing.offer_id,
+                  name: listing.name,
+                  description: listing.description
+                });
+              }
+            });
+            bidListings.accepted = offer.accepted;
+            bidListings.rejected = offer.rejected;
+            return bidListings;
+          });
+      });
+
+      Promise.all(promises)
+        .then(function (results) {
+          res.status(200).json(results);
+        })
+        .catch(function (err) {
+          console.log(err);
+          res.status(500).json({ message: 'An error occurred while retrieving trade offers' });
+        });
+    });
 })
+
 
 
 router.get("/user/:id/listings", (req, res) => {
