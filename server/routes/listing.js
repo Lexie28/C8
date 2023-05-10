@@ -15,7 +15,7 @@ async function get_listings(req, res) {
   /*
     #swagger.description = 'Gets all listings. Use query strings to filter and sort. \\nPossible values for sort: popular.'
   */
-  var all_listings = db.select("*").from("listing");
+  var all_listings = db.select("*").from("listing").where('available', '>', 0);
 
   if (amountOfQueryStrings(req) === 0) {
     res.send(await all_listings);
