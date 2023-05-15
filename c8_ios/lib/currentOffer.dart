@@ -34,13 +34,11 @@ class _CurrentOfferState extends State<CurrentOffer> {
   void initState() {
     super.initState();
     fetchOffer(widget.bidId);
-    print('futureoffer: $_futureOffer');
   }
 
   Future<void> fetchOffer(String bidId) async {
     final response =
         await http.get(Uri.parse('${_api.getApiHost()}/offer/$bidId'));
-    print(bidId);
 
     if (response.statusCode == 200) {
       var jsonData = jsonDecode(response.body);
@@ -52,7 +50,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
           makerId = user_making_offerId;
           receiverId = bidRec;
 
-          fetchUser(bidId, bidRec);
+          fetchUser(makerId, bidRec);
 
           return {
             'offerId': bid['id'],
@@ -173,7 +171,6 @@ class _CurrentOfferState extends State<CurrentOffer> {
           itemCount: _futureOffer.length,
           itemBuilder: (context, index) {
             final offerId = _futureOffer[index]['offerId'];
-            print(offerId);
             final bidMakerId = _futureOffer[index]['bidMakerId'];
             final bidReceiverId = _futureOffer[index]['bidReceiverId'];
             final offered_items = _futureOffer[index]['offered_items'];
