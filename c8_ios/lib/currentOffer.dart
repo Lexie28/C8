@@ -53,7 +53,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
           makerId = user_making_offerId;
           receiverId = bidRec;
 
-          fetchUser(bidId, bidRec);
+          fetchUser(makerId, bidRec);
 
           return {
             'offerId': bid['id'],
@@ -222,7 +222,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
                         height: 30,
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: 8),
                           Text(
@@ -231,7 +231,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
                           ),
                           ...offered_items.map(
                             (offered_items) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: List.generate(
                                 offered_items.length,
                                 (index) {
@@ -256,12 +256,14 @@ class _CurrentOfferState extends State<CurrentOffer> {
                         ],
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 8),
-                          Text(
-                            'Want:',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Container(
+                            margin: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.03),
+                            child: Text(
+                              'Want:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           ...wanted_items.map(
                             (wanted_items) => Column(
@@ -287,11 +289,15 @@ class _CurrentOfferState extends State<CurrentOffer> {
                               ),
                             ),
                           ),
-                          ElevatedButton(
-                              onPressed: () {
-                                deleteOffer(widget.bidId);
-                              },
-                              child: Text('Delete offer')),
+                          Container(
+                            margin: EdgeInsets.only(top: MediaQuery.of(context).size.width*0.05),
+
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  deleteOffer(widget.bidId);
+                                },
+                                child: Text('Delete offer')),
+                          ),
                         ],
                       ),
                     ],
@@ -346,7 +352,7 @@ class _CurrentOfferState extends State<CurrentOffer> {
                           ),
                           ...offered_items.map(
                             (offered_items) => Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: List.generate(
                                 offered_items.length,
                                 (index) {
@@ -371,12 +377,16 @@ class _CurrentOfferState extends State<CurrentOffer> {
                         ],
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: 8),
-                          Text(
-                            'Want:',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.width * 0.03),
+                            child: Text(
+                              'Want:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
                           ),
                           ...wanted_items.map(
                             (wanted_items) => Column(
@@ -402,16 +412,34 @@ class _CurrentOfferState extends State<CurrentOffer> {
                               ),
                             ),
                           ),
-                          ElevatedButton(
-                              onPressed: () {
-                                acceptOffer(widget.bidId);
-                              },
-                              child: Text('Accept offer')),
-                          ElevatedButton(
-                              onPressed: () {
-                                declineOffer(widget.bidId);
-                              },
-                              child: Text('Decline offer')),
+                          Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.15,
+                                    top: MediaQuery.of(context).size.width *
+                                        0.1),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      declineOffer(widget.bidId);
+                                    },
+                                    child: Text('Decline offer')),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: MediaQuery.of(context).size.width *
+                                        0.07,
+                                    top: MediaQuery.of(context).size.width *
+                                        0.1),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      acceptOffer(widget.bidId);
+                                    },
+                                    child: Text('Accept offer')),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ],

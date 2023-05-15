@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
         title: Align(
           alignment: FractionalOffset.center,
           child: Text('Circle 8',
-              style: GoogleFonts.kalam(
+              style: GoogleFonts.karla(
                     textStyle: TextStyle(
                       fontSize: MediaQuery.of(context).size.height * 0.045,
                       fontWeight: FontWeight.bold,
@@ -72,10 +72,10 @@ class _HomePageState extends State<HomePage> {
                 alignment: FractionalOffset.topCenter,
                 child: Text(
                   'Categories',
-                  style: GoogleFonts.kalam(
+                  style: GoogleFonts.karla(
                     textStyle: TextStyle(
                       fontSize: MediaQuery.of(context).size.height * 0.04,
-                      fontWeight: FontWeight.bold,
+                      //fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     )),
                 )),
@@ -180,10 +180,10 @@ class _HomePageState extends State<HomePage> {
             Align(
               child: Text(
                 'Popular Items',
-                style: GoogleFonts.kalam(
+                style: GoogleFonts.karla(
                     textStyle: TextStyle(
                       fontSize: MediaQuery.of(context).size.height * 0.04,
-                      fontWeight: FontWeight.bold,
+                      //fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     )),
               ),
