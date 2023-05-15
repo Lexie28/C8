@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'listingsCategory.dart';
 import 'color.dart' as color;
-//import 'package:provider/provider.dart';
-//import 'secondmain.dart';
 
 class Categories extends StatelessWidget {
   const Categories({super.key});

@@ -1,13 +1,10 @@
 import 'package:c8_ios/main.dart';
-import 'package:c8_ios/specificItem.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid_util.dart';
 import 'dart:convert';
-import 'homeTest.dart';
 import 'api.dart';
-import 'editProfile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';

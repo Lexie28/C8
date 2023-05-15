@@ -1,15 +1,12 @@
-import 'package:c8_ios/offers.dart';
+import 'package:c8_ios/myOffers.dart';
 import 'package:flutter/material.dart';
 import 'specificItem.dart';
-//import 'popularItems.dart';
-//import 'hometest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'api.dart';
 import 'color.dart' as color;
 
 class MakeBid extends StatefulWidget {
-  // TODO markera produkter!!!
   const MakeBid({Key? key}) : super(key: key);
 
   @override
@@ -211,7 +208,7 @@ class _MakeBidState extends State<MakeBid> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (BuildContext context) => Offers(),
+                        builder: (BuildContext context) => OffersPage(),
                       ),
                     );
                   },

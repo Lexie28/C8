@@ -60,8 +60,8 @@ class _PopularItemsState extends State<PopularItems> {
                       final listing = listings[index];
                       return Container(
                         margin: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width*0.01,
-                          right: MediaQuery.of(context).size.width*0.01,
+                          left: MediaQuery.of(context).size.width * 0.01,
+                          right: MediaQuery.of(context).size.width * 0.01,
                         ),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 255, 254, 254),
@@ -82,16 +82,16 @@ class _PopularItemsState extends State<PopularItems> {
                             );
                           },
                           child: Container(
-                            height: MediaQuery.of(context).size.width*0.3,
-                                width: MediaQuery.of(context).size.width*0.3,
-                          
+                            height: MediaQuery.of(context).size.width * 0.3,
+                            width: MediaQuery.of(context).size.width * 0.3,
                             child: Align(
                               alignment: FractionalOffset.center,
                               child: ListTile(
                                 leading: Container(
-                                  height: MediaQuery.of(context).size.width*0.5,
-                                  width: MediaQuery.of(context).size.width*0.3,
-                                                      
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
                                   child: Image.network(
                                     'https://circle8.s3.eu-north-1.amazonaws.com/${listing['image_path']}',
                                     fit: BoxFit.cover,
@@ -115,37 +115,6 @@ class _PopularItemsState extends State<PopularItems> {
               },
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class Category extends StatelessWidget {
-  const Category({
-    required this.string,
-  });
-
-  final String string;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.15,
-      width: MediaQuery.of(context).size.width * 1,
-      child: Card(
-        color: theme.colorScheme.primary,
-        elevation: 10,
-        child: Align(
-          alignment: FractionalOffset.center,
-          child: Text(
-            string,
-            style: style,
-          ),
         ),
       ),
     );
