@@ -125,11 +125,11 @@ class _FirstPageState extends State<FirstPage> {
                 elevation: 0,
                 child: Text(
                   'Circle 8',
-                  style: GoogleFonts.kalam(
+                  style: GoogleFonts.karla(
                     //kalam
                     textStyle: TextStyle(
                       fontSize: MediaQuery.of(context).size.height * 0.065,
-                      fontWeight: FontWeight.bold,
+                      //fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
                   ),
@@ -239,10 +239,10 @@ class _FirstPageState extends State<FirstPage> {
               */
             Container(
               margin: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0,
-                MediaQuery.of(context).size.width * 0.55,
-                MediaQuery.of(context).size.width * 0,
-                MediaQuery.of(context).size.width * 0,
+                MediaQuery.of(context).size.height * 0,
+                MediaQuery.of(context).size.height * 0.38,
+                MediaQuery.of(context).size.height* 0,
+                MediaQuery.of(context).size.height * 0,
               ),
               child: Text(
                 'Circle 8 2023',

@@ -103,22 +103,22 @@ class _AcceptedOfferState extends State<AcceptedOffer> {
               child: Column(
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.width*0.7,
-                    width: MediaQuery.of(context).size.width*0.7,
+                    height: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.7,
                     child: Image.asset(
-                    'images/highfive.png',
-                    fit: BoxFit.cover,
-                  ),
+                      'images/highfive.png',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   Container(
                     alignment: Alignment.center,
                     color: Color.fromARGB(255, 227, 235, 241),
-                    height: MediaQuery.of(context).size.width * 0.54,
+                    height: MediaQuery.of(context).size.width * 0.34,
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        "This offer is accepted! Please contact eachother to move forward with the trade. When offer is complete, please press the 'Offer completed' button",
+                        "This offer is accepted! Please contact eachother to move forward with the trade.",
                         style: TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05),
                       ),
@@ -129,12 +129,16 @@ class _AcceptedOfferState extends State<AcceptedOffer> {
             ),
             myID == widget.recieverId
                 ? SizedBox(
-                    child: Column(
-                      children: [
-                        Text("Contact this user: $bidMakerName"),
-                        Text("Phone number: $bidMakerNumber"),
-                        Text("Email: $bidMakerMail"),
-                      ],
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.03),
+                      child: Column(
+                        children: [
+                          Text("Contact this user: $bidMakerName"),
+                          Text("Phone number: $bidMakerNumber"),
+                          Text("Email: $bidMakerMail"),
+                        ],
+                      ),
                     ),
                   )
                 : Container(
@@ -147,7 +151,8 @@ class _AcceptedOfferState extends State<AcceptedOffer> {
                             fontSize: MediaQuery.of(context).size.width * 0.08),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.25 ),
+                        margin: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.25),
                         child: Row(
                           children: [
                             Text(
@@ -159,7 +164,8 @@ class _AcceptedOfferState extends State<AcceptedOffer> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.25 ),
+                        margin: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * 0.25),
                         child: Row(
                           children: [
                             Text(
