@@ -313,7 +313,7 @@ class ListingProfile extends StatelessWidget {
   final UserName name;
   final String id;
   final Likes likes;
-  final Location location;
+  final String location;
   final String profilePicturePath;
 
   @override
@@ -448,7 +448,7 @@ class ListingProfile extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           launchUrlString(
-                            'https://www.google.com/maps/search/?api=1&query=${location.toString()}',
+                            'https://www.google.com/maps/search/?api=1&query=$location',
                           );
                         },
                         child: Container(
@@ -457,7 +457,7 @@ class ListingProfile extends StatelessWidget {
                           height: MediaQuery.of(context).size.height * 0.05,
                           width: MediaQuery.of(context).size.width * 0.07,
                           child: Image.asset(
-                            'images/locationicon.png', //TODO
+                            'images/locationicon.png',
                             fit: BoxFit.contain,
                           ),
                         ),
